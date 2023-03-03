@@ -31,7 +31,6 @@ header button {
 
 header button:hover {
 	color: rgb(247, 82, 82);
-
 	transition: 250ms ease;
 }
 
@@ -50,4 +49,9 @@ section {
 	width: 100vw;
 	height: 400px;
 	border: 1px solid black;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
 }

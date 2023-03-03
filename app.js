@@ -16,6 +16,8 @@ let playerOne;
 let playerTwo;
 let yourArmyDiv;
 
+let isPlayerTurn = true;
+
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
@@ -35,8 +37,6 @@ startBattleButton.addEventListener('click', () => {
 });
 
 //Based on whose turn it is, the game runs once and changes the turn to the opposite player
-let isPlayerTurn = true;
-
 function playGame() {
 	if (isPlayerTurn) {
 		makeTurn(playerOne);
@@ -57,11 +57,103 @@ function makeTurn(player) {
 }
 
 //Dice rolling that will impact the turns players make, for example damage,defense,evasion
-let dice1;
-let dice2;
 
 function rollDice() {
-	dice1 = Math.round(Math.random() * 5) + 1;
-	dice2 = Math.round(Math.random() * 5) + 1;
+	dice1 = Math.round(Math.random() * 19) + 1;
+	dice2 = Math.round(Math.random() * 19) + 1;
 	return [dice1, dice2];
+}
+
+class Viking {
+	constructor(name, health, strength) {
+		this.name = name;
+		this.health = health;
+		this.strength = strength;
+	}
+
+	attack(target) {
+		const damage = Math.floor(Math.random() * this.strength) + 1;
+		target.health -= damage;
+		console.log(`${this.name} attacked ${target.name} and dealt ${damage} damage.`);
+	}
+
+	defend() {}
+
+	evade() {}
+}
+
+class Saxon {
+	constructor(name, health, strength) {
+		this.name = name;
+		this.health = health;
+		this.strength = strength;
+	}
+
+	attack(target) {
+		const damage = Math.floor(Math.random() * this.strength) + 1;
+		target.health -= damage;
+		console.log(`${this.name} attacked ${target.name} and dealt ${damage} damage.`);
+	}
+
+	defend() {}
+
+	evade() {}
+}
+
+function getRandomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+//Creation of the armies
+
+const vikingNames = [
+	'Bjorn',
+	'Eirik',
+	'Freya',
+	'Gudrun',
+	'Hilda',
+	'Ivar',
+	'Jorgen',
+	'Kari',
+	'Leif',
+	'Magnus',
+	'Njal',
+	'Olaf',
+	'Ragnar',
+	'Sven',
+	'Thorstein',
+	'Ulf',
+	'Valdis',
+	'Wulfgar',
+	'Ylva',
+	'Zephyr',
+];
+const saxonNames = [
+	'Aelfric',
+	'Beornwulf',
+	'Ceolwulf',
+	'Dunstan',
+	'Eadgar',
+	'Frithuwulf',
+	'Godwin',
+	'Hengist',
+	'Ivo',
+	'Jocelyn',
+	'Kentigern',
+	'Leofric',
+	'Morcar',
+	'Oswin',
+	'Penda',
+	'Quenby',
+	'Raedwald',
+	'Seaxburh',
+	'Theobald',
+	'Uhtred',
+];
+
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(75, 125), getRandomNumber(10, 25)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(75, 125), getRandomNumber(10, 25)));
+
+function getRandomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
