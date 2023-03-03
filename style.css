@@ -1,0 +1,53 @@
+body {
+	margin: 0;
+	font-family: sans-serif;
+	font-size: 20px;
+	text-align: center;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	width: 500px;
+	margin: 10% auto;
+}
+
+select {
+	font-size: xx-large;
+	text-align: center;
+	margin: 85px;
+	cursor: pointer;
+}
+
+header button {
+	margin: auto;
+	padding: 5px 35px;
+	font-size: 1.2em;
+	background: transparent;
+	cursor: pointer;
+	border: 1px solid black;
+	border-radius: 10px;
+}
+
+header button:hover {
+	color: rgb(247, 82, 82);
+
+	transition: 250ms ease;
+}
+
+h1 {
+	color: rgb(247, 82, 82);
+}
+
+section {
+	display: none;
+	flex-direction: column;
+	height: 100vh;
+	align-items: center;
+	justify-content: space-between;
+}
+.armies {
+	width: 100vw;
+	height: 400px;
+	border: 1px solid black;
+}
