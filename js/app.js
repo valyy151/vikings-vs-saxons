@@ -24,8 +24,6 @@ let yourArmyDiv;
 let playerOneHealth;
 let playerTwoHealth;
 
-let isPlayerTurn = true;
-
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
@@ -46,6 +44,8 @@ startBattleButton.addEventListener('click', () => {
 		updateArmies();
 	}
 });
+let turnCount = 1;
+let isPlayerTurn = turnCount % 2 === 1;
 
 //Based on whose turn it is, the game runs once and changes the turn to the opposite player
 function playGame() {
@@ -59,133 +59,20 @@ function playGame() {
 }
 
 //Based on whose turn it is, one set of functions will run for the player, the other one for the enemy
-function makeTurn(player) {
-	if (player === playerOne) {
-		//code that player does
+function makeTurn() {
+	if (isPlayerTurn) {
+		displayOptions();
 	} else {
+		enemyTurn();
 		//code that enemy does
 	}
 }
 
 //Dice rolling that will impact the turns players make, for example damage,defense,evasion
-
 function rollDice() {
 	dice1 = Math.round(Math.random() * 5) + 1;
 	dice2 = Math.round(Math.random() * 5) + 1;
 	return [dice1, dice2];
-}
-
-class Soldier {
-	constructor(name, health, strength) {
-		this.name = name;
-		this.health = health;
-		this.strength = strength;
-	}
-
-	attack(target) {
-		const damage = Math.floor(Math.random() * this.strength) + 1;
-		target.receiveDamage(damage);
-
-		console.log(`${this.name} attacked ${target.name}.`);
-		updateArmies();
-	}
-
-	receiveDamage(damage) {
-		const evaded = this.evade();
-		const defended = this.defend();
-		if (evaded) {
-			damage = 0;
-			console.log('Attack Evaded!');
-		} else if (defended) {
-			damage = Math.floor(damage * 0.8);
-			console.log(`Attack Defended! Received ${damage} damage.`);
-		} else {
-			console.log(`Received ${damage} damage.`);
-			this.health -= damage;
-			if (this.health <= 0) {
-				console.log(`${this.name} has died.`);
-				updateArmies();
-			}
-		}
-	}
-
-	defend() {
-		return Math.random() > 0.8;
-	}
-
-	evade() {
-		return Math.random() > 0.95;
-	}
-}
-
-class Viking extends Soldier {
-	constructor(name, health, strength) {
-		super(name, health, strength);
-	}
-
-	berserk() {}
-}
-
-class Saxon extends Soldier {
-	constructor(name, health, strength) {
-		super(name, health, strength);
-	}
-
-	poison() {}
-}
-
-//Creation of the armies
-
-const vikingNames = [
-	'Bjorn',
-	'Eirik',
-	'Freya',
-	'Gudrun',
-	'Hilda',
-	'Ivar',
-	'Jorgen',
-	'Kari',
-	'Leif',
-	'Magnus',
-	'Njal',
-	'Olaf',
-	'Ragnar',
-	'Sven',
-	'Thorstein',
-	'Ulf',
-	'Valdis',
-	'Wulfgar',
-	'Ylva',
-	'Zephyr',
-];
-const saxonNames = [
-	'Aelfric',
-	'Beornwulf',
-	'Ceolwulf',
-	'Dunstan',
-	'Eadgar',
-	'Frithuwulf',
-	'Godwin',
-	'Hengist',
-	'Ivo',
-	'Jocelyn',
-	'Kentigern',
-	'Leofric',
-	'Morcar',
-	'Oswin',
-	'Penda',
-	'Quenby',
-	'Raedwald',
-	'Seaxburh',
-	'Theobald',
-	'Uhtred',
-];
-
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(75, 125), getRandomNumber(10, 25)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(75, 125), getRandomNumber(10, 25)));
-
-function getRandomNumber(min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 // Function to create a new soldier element
@@ -228,7 +115,6 @@ function renderSoldiers(army) {
 }
 
 // Function to update the soldiers' health values in the DOM
-
 function updateArmies() {
 	let vikingHealthSum = 0;
 	let saxonHealthSum = 0;
@@ -249,5 +135,72 @@ function updateArmies() {
 	totalHealthSaxon.innerText = saxonHealthSum;
 }
 
+//Function to display the buttons and gold
+const playersGold = {
+	one: 0,
+	two: 0,
+};
+
+function displayOptions() {
+	const rollDiceButton = document.createElement('button');
+	rollDiceButton.textContent = 'Roll Dice';
+	rollDiceButton.addEventListener('click', () => {
+		const [dice1, dice2] = rollDice();
+		const gold = dice1 * dice2;
+		playersGold.one += gold;
+		console.log(`You rolled ${dice1} and ${dice2}`);
+		console.log(`You gained ${gold} gold.`);
+		updateGold();
+	});
+
+	const attackButton = document.createElement('button');
+	attackButton.textContent = 'Attack';
+	attackButton.addEventListener('click', () => {
+		// Implement the attack logic here
+	});
+
+	const skipTurnButton = document.createElement('button');
+	skipTurnButton.textContent = 'Skip Turn';
+	skipTurnButton.addEventListener('click', () => {
+		// Do nothing
+	});
+
+	const shopButton = document.createElement('button');
+	shopButton.textContent = 'Shop';
+	shopButton.addEventListener('click', () => {
+		// Implement the shop logic here
+	});
+
+	const playerGold = document.createElement('h4');
+	const enemyGold = document.createElement('h4');
+	playerGold.innerText = `Gold: ${playersGold.one}`;
+	enemyGold.innerText = `Gold: ${playersGold.two}`;
+	document.getElementById('pointsDiv').append(playerGold, enemyGold);
+
+	if (playerOne === 'Vikings') {
+		rollDiceButton.classList.add('red');
+		attackButton.classList.add('red');
+		skipTurnButton.classList.add('red');
+		shopButton.classList.add('red');
+		enemyGold.classList.add('red');
+		playerGold.classList.add('yellow');
+	} else {
+		rollDiceButton.classList.add('yellow');
+		attackButton.classList.add('yellow');
+		skipTurnButton.classList.add('yellow');
+		shopButton.classList.add('yellow');
+		enemyGold.classList.add('yellow');
+		playerGold.classList.add('red');
+	}
+
+	const buttonContainer = document.getElementById('buttonContainer');
+	buttonContainer.append(attackButton, rollDiceButton, shopButton, skipTurnButton);
+}
+
+function updateGold() {
+	const gold = document.querySelectorAll('h4');
+	gold[0].innerText = `Gold: ${playersGold.two}`;
+	gold[1].innerText = `Gold: ${playersGold.one}`;
+}
 const testSoldierViking = vikings[0];
 const testSoldierSaxon = saxons[0];

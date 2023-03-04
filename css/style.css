@@ -80,10 +80,12 @@ h3 {
 
 .red {
 	color: rgb(241, 33, 33);
+	border-color: rgb(241, 33, 33);
 }
 
 .yellow {
 	color: rgb(219, 199, 19);
+	border-color: rgb(219, 199, 19);
 }
 
 #vikingH2 {
@@ -100,4 +102,40 @@ h3 {
 
 #saxonArmy {
 	width: 95vw;
+}
+
+#buttonContainer {
+	display: flex;
+	width: 250px;
+	flex-wrap: wrap;
+	position: relative;
+	right: 41.25vw;
+	top: 6vw;
+}
+
+#buttonContainer button {
+	margin: 5px;
+	width: 100px;
+	height: 70px;
+	cursor: pointer;
+	background: transparent;
+	border: 2px solid;
+	border-radius: 10px;
+
+	font-size: larger;
+}
+
+#pointsDiv {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 465px;
+	position: absolute;
+	bottom: 26vh;
+	left: 89.5vw;
+	font-size: 30px;
+}
+
+h4 {
+	font-weight: 400;
 }
