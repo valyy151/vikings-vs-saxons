@@ -10,6 +10,9 @@ const saxonDiv = document.getElementById('saxonDiv');
 const vikingArmy = document.getElementById('vikingArmy');
 const saxonArmy = document.getElementById('saxonArmy');
 
+const totalHealthViking = document.getElementById('totalHealthViking');
+const totalHealthSaxon = document.getElementById('totalHealthSaxon');
+
 const players = {
 	1: { playerOne: 'Vikings', playerTwo: 'Saxons', yourArmyDiv: vikingDiv },
 	2: { playerOne: 'Saxons', playerTwo: 'Vikings', yourArmyDiv: saxonDiv },
@@ -18,6 +21,8 @@ const players = {
 let playerOne;
 let playerTwo;
 let yourArmyDiv;
+let playerOneHealth;
+let playerTwoHealth;
 
 let isPlayerTurn = true;
 
@@ -34,10 +39,11 @@ startBattleButton.addEventListener('click', () => {
 
 		header.style.display = 'none';
 		section.style.display = 'flex';
-		yourArmyDiv.style.order = 1;
+
 		playGame();
 		renderSoldiers(vikings);
 		renderSoldiers(saxons);
+		updateArmies();
 	}
 });
 
@@ -80,11 +86,14 @@ class Viking {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
 		target.health -= damage;
 		console.log(`${this.name} attacked ${target.name} and dealt ${damage} damage.`);
+		updateArmies();
 	}
 
 	defend() {}
 
 	evade() {}
+
+	berserk() {}
 }
 
 class Saxon {
@@ -98,11 +107,14 @@ class Saxon {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
 		target.health -= damage;
 		console.log(`${this.name} attacked ${target.name} and dealt ${damage} damage.`);
+		updateArmies();
 	}
 
 	defend() {}
 
 	evade() {}
+
+	poison() {}
 }
 
 function getRandomNumber(min, max) {
@@ -163,22 +175,66 @@ function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Function to create a new soldier element
+function createSoldierElement(soldier) {
+	const newSoldier = document.createElement('ul');
+	newSoldier.setAttribute('id', soldier.name);
+
+	const name = document.createElement('li');
+	name.innerText = soldier.name;
+	newSoldier.appendChild(name);
+
+	const strength = document.createElement('li');
+	strength.innerText = soldier.strength;
+	strength.classList.add('red');
+	newSoldier.appendChild(strength);
+
+	const health = document.createElement('li');
+	health.innerText = soldier.health;
+	health.classList.add('green');
+	newSoldier.appendChild(health);
+
+	return newSoldier;
+}
+
+// Function to render the soldiers to the DOM
 function renderSoldiers(army) {
 	army.forEach((soldier) => {
-		const newSoldier = document.createElement('ul');
-		const name = document.createElement('li');
-		const health = document.createElement('li');
-		const strength = document.createElement('li');
-
-		name.innerText = soldier.name;
-		health.innerText = soldier.health;
-		strength.innerText = soldier.strength;
-
-		newSoldier.append(name, health, strength);
+		const newSoldier = createSoldierElement(soldier);
 		if (army === saxons) {
 			saxonArmy.appendChild(newSoldier);
 		} else if (army === vikings) {
 			vikingArmy.appendChild(newSoldier);
 		}
 	});
+
+	// Set styles for the army display
+	yourArmyDiv.style.order = 1;
+	yourArmyDiv.style.flexDirection = 'column-reverse';
+	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 }
+
+// Function to update the soldiers' health values in the DOM
+
+function updateArmies() {
+	let vikingHealthSum = 0;
+	let saxonHealthSum = 0;
+
+	vikings.forEach((viking) => {
+		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
+		vikingHealthElement.innerText = viking.health;
+		vikingHealthSum += viking.health;
+	});
+
+	saxons.forEach((saxon) => {
+		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
+		saxonHealthElement.innerText = saxon.health;
+		saxonHealthSum += saxon.health;
+	});
+
+	totalHealthViking.innerText = vikingHealthSum;
+	totalHealthSaxon.innerText = saxonHealthSum;
+}
+
+const testSoldierViking = vikings[0];
+const testSoldierSaxon = saxons[0];

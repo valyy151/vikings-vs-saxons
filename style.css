@@ -49,21 +49,55 @@ section {
 ul {
 	list-style: none;
 	padding: 0;
+	display: flex;
+	flex-direction: column;
 }
 
-h2 {
+h2,
+h3 {
 	font-weight: 400;
+	margin: 3px;
+	font-size: 32px;
 }
 
 .armies {
 	border: 1px solid black;
 	width: 95vw;
+	display: flex;
+	flex-direction: column;
 }
 
 .soldiers {
 	display: flex;
-	justify-content: space-between;
-	width: 85vw;
+	justify-content: space-evenly;
 	flex-wrap: wrap;
 	margin: auto;
+}
+
+.green {
+	color: rgb(34, 219, 9);
+}
+
+.red {
+	color: rgb(241, 33, 33);
+}
+
+.yellow {
+	color: rgb(219, 199, 19);
+}
+
+#vikingH2 {
+	color: rgb(241, 33, 33);
+}
+
+#saxonH2 {
+	color: rgb(219, 199, 19);
+}
+
+#vikingArmy {
+	width: 95vw;
+}
+
+#saxonArmy {
+	width: 95vw;
 }
