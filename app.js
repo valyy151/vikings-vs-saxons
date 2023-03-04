@@ -7,6 +7,9 @@ const section = document.querySelector('section');
 const vikingDiv = document.getElementById('vikingDiv');
 const saxonDiv = document.getElementById('saxonDiv');
 
+const vikingArmy = document.getElementById('vikingArmy');
+const saxonArmy = document.getElementById('saxonArmy');
+
 const players = {
 	1: { playerOne: 'Vikings', playerTwo: 'Saxons', yourArmyDiv: vikingDiv },
 	2: { playerOne: 'Saxons', playerTwo: 'Vikings', yourArmyDiv: saxonDiv },
@@ -33,6 +36,8 @@ startBattleButton.addEventListener('click', () => {
 		section.style.display = 'flex';
 		yourArmyDiv.style.order = 1;
 		playGame();
+		renderSoldiers(vikings);
+		renderSoldiers(saxons);
 	}
 });
 
@@ -156,4 +161,24 @@ const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(75, 125)
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function renderSoldiers(army) {
+	army.forEach((soldier) => {
+		const newSoldier = document.createElement('ul');
+		const name = document.createElement('li');
+		const health = document.createElement('li');
+		const strength = document.createElement('li');
+
+		name.innerText = soldier.name;
+		health.innerText = soldier.health;
+		strength.innerText = soldier.strength;
+
+		newSoldier.append(name, health, strength);
+		if (army === saxons) {
+			saxonArmy.appendChild(newSoldier);
+		} else if (army === vikings) {
+			vikingArmy.appendChild(newSoldier);
+		}
+	});
 }
