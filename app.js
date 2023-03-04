@@ -75,7 +75,7 @@ function rollDice() {
 	return [dice1, dice2];
 }
 
-class Viking {
+class Soldier {
 	constructor(name, health, strength) {
 		this.name = name;
 		this.health = health;
@@ -91,79 +91,47 @@ class Viking {
 	}
 
 	receiveDamage(damage) {
-		const defendAttack = this.defend();
-		console.log('Damage: ', damage);
-		if (defendAttack) {
-			damage = parseInt(damage * 0.8);
+		const evaded = this.evade();
+		const defended = this.defend();
+		if (evaded) {
+			damage = 0;
+			console.log('Attack Evaded!');
+		} else if (defended) {
+			damage = Math.floor(damage * 0.8);
 			console.log(`Attack Defended! Received ${damage} damage.`);
-		} else if (!defendAttack) {
+		} else {
 			console.log(`Received ${damage} damage.`);
-		}
-
-		this.health -= damage;
-		if (this.health <= 0) {
-			console.log(`${this.name} has died.`);
-			updateArmies();
+			this.health -= damage;
+			if (this.health <= 0) {
+				console.log(`${this.name} has died.`);
+				updateArmies();
+			}
 		}
 	}
 
 	defend() {
-		const number = Math.floor(Math.random() * 10) + 1;
-		if (number >= 8) {
-			return true;
-		} else return false;
+		return Math.random() > 0.8;
 	}
 
-	evade() {}
+	evade() {
+		return Math.random() > 0.95;
+	}
+}
+
+class Viking extends Soldier {
+	constructor(name, health, strength) {
+		super(name, health, strength);
+	}
 
 	berserk() {}
 }
 
-class Saxon {
+class Saxon extends Soldier {
 	constructor(name, health, strength) {
-		this.name = name;
-		this.health = health;
-		this.strength = strength;
+		super(name, health, strength);
 	}
-
-	attack(target) {
-		const damage = Math.floor(Math.random() * this.strength) + 1;
-		target.receiveDamage(damage);
-
-		console.log(`${this.name} attacked ${target.name}.`);
-		updateArmies();
-	}
-
-	receiveDamage(damage) {
-		const defendAttack = this.defend();
-		console.log('Damage: ', damage);
-		if (defendAttack) {
-			damage = parseInt(damage * 0.8);
-			console.log(`Attack Defended! Received ${damage} damage.`);
-		} else if (!defendAttack) {
-			console.log(`Received ${damage} damage.`);
-		}
-
-		this.health -= damage;
-		if (this.health <= 0) {
-			console.log(`${this.name} has died.`);
-			updateArmies();
-		}
-	}
-	defend() {
-		const number = Math.floor(Math.random() * 10) + 1;
-		if (number >= 8) {
-			return true;
-		} else return false;
-	}
-
-	evade() {}
 
 	poison() {}
-}
-
-function getRandomNumber(min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //Creation of the armies
