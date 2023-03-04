@@ -33,6 +33,9 @@ let playerTwoHealth;
 let myArmy;
 let enemyArmy;
 
+let vikingHealthSum = 0;
+let saxonHealthSum = 0;
+
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
@@ -77,25 +80,32 @@ function makeTurn() {
 	}
 }
 
+//Behavior that enemy does when its his turn
 function enemyTurn() {
-	const [dice1, dice2] = rollDice();
-	const gold = dice1 * dice2;
-	playersGold.two += gold;
-	setTimeout(() => {
-		console.log(`Enemy rolled ${dice1} and ${dice2}`);
-		console.log(`Enemy gained ${gold} gold.`);
-		updateGold();
-	}, 2000);
-	setTimeout(() => {
-		if (playersGold.two >= 15) {
-			playersGold.two -= 15;
-			battle(enemyArmy, myArmy);
+	if (saxonHealthSum == 0 || vikingHealthSum == 0) {
+		return null;
+	} else {
+		const [dice1, dice2] = rollDice();
+		const gold = dice1 * dice2;
+
+		playersGold.two += gold;
+
+		setTimeout(() => {
+			console.log(`Enemy rolled ${dice1} and ${dice2}`);
+			console.log(`Enemy gained ${gold} gold.`);
 			updateGold();
-			setTimeout(() => endPlayerTurn(), 2000);
-		} else {
-			endPlayerTurn();
-		}
-	}, 5000);
+		}, 2000);
+		setTimeout(() => {
+			if (playersGold.two >= 15) {
+				playersGold.two -= 15;
+				battle(enemyArmy, myArmy);
+				updateGold();
+				setTimeout(() => endPlayerTurn(), 6000);
+			} else {
+				endPlayerTurn();
+			}
+		}, 4000);
+	}
 }
 
 //Dice rolling that will impact the turns players make, for example damage,defense,evasion
@@ -151,12 +161,22 @@ function updateArmies() {
 
 	vikings.forEach((viking) => {
 		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
+
+		if (vikingHealthElement.innerText == 0) {
+			vikingHealthElement.parentNode.remove();
+		}
+
 		vikingHealthElement.innerText = viking.health;
 		vikingHealthSum += viking.health;
 	});
 
 	saxons.forEach((saxon) => {
 		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
+
+		if (saxonHealthElement.innerText == 0) {
+			saxonHealthElement.parentNode.remove();
+		}
+
 		saxonHealthElement.innerText = saxon.health;
 		saxonHealthSum += saxon.health;
 	});
@@ -183,13 +203,6 @@ function displayOptions() {
 			console.log(`You rolled ${dice1} and ${dice2}`);
 			console.log(`You gained ${gold} gold.`);
 			updateGold();
-		} else {
-			const [dice1, dice2] = rollDice();
-			const gold = dice1 * dice2;
-			playersGold.two += gold;
-			console.log(`Enemy rolled ${dice1} and ${dice2}`);
-			console.log(`Enemy gained ${gold} gold.`);
-			updateGold();
 		}
 	});
 
@@ -202,7 +215,7 @@ function displayOptions() {
 				playersGold.one -= 15;
 				battle(myArmy, enemyArmy);
 				updateGold();
-				setTimeout(() => endPlayerTurn(), 2000);
+				setTimeout(() => endPlayerTurn(), 6000);
 			} else {
 				console.log('Not enough gold');
 			}
@@ -261,14 +274,19 @@ function updateGold() {
 
 //Function where one army attack the other
 function battle(soldiers1, soldiers2) {
-	const attackers = soldiers1;
-	let targets = soldiers2.slice(); // create a copy of the targets array
-	attackers.forEach((attacker) => {
-		const targetIndex = Math.floor(Math.random() * targets.length);
-		const target = targets[targetIndex];
+	for (let i = 0; i < soldiers1.length; i++) {
+		const attacker = soldiers1[i];
+		const targetIndex = Math.floor(Math.random() * soldiers2.length);
+		const target = soldiers2[targetIndex];
 		attacker.attack(target);
-		targets.splice(targetIndex, 1); // remove the target from the targets array so he wont get targeted again
-	});
+		if (target.health <= 0) {
+			soldiers2.splice(targetIndex, 1);
+			if (soldiers2.length === 0) {
+				break; // stop the loop if all targets are dead
+			}
+		}
+	}
+
 	updateArmies();
 }
 

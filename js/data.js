@@ -27,6 +27,7 @@ class Soldier {
 			this.health -= damage;
 			if (this.health <= 0) {
 				console.log(`${this.name} has died.`);
+				this.health = 0;
 				updateArmies();
 			}
 		}
@@ -104,8 +105,8 @@ const saxonNames = [
 	'Uhtred',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(25, 50), getRandomNumber(10, 15)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(25, 50), getRandomNumber(10, 15)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(25, 30), getRandomNumber(10, 15)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(25, 30), getRandomNumber(10, 15)));
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
