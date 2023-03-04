@@ -70,8 +70,8 @@ function makeTurn(player) {
 //Dice rolling that will impact the turns players make, for example damage,defense,evasion
 
 function rollDice() {
-	dice1 = Math.round(Math.random() * 19) + 1;
-	dice2 = Math.round(Math.random() * 19) + 1;
+	dice1 = Math.round(Math.random() * 5) + 1;
+	dice2 = Math.round(Math.random() * 5) + 1;
 	return [dice1, dice2];
 }
 
@@ -84,12 +84,35 @@ class Viking {
 
 	attack(target) {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
-		target.health -= damage;
-		console.log(`${this.name} attacked ${target.name} and dealt ${damage} damage.`);
+		target.receiveDamage(damage);
+
+		console.log(`${this.name} attacked ${target.name}.`);
 		updateArmies();
 	}
 
-	defend() {}
+	receiveDamage(damage) {
+		const defendAttack = this.defend();
+		console.log('Damage: ', damage);
+		if (defendAttack) {
+			damage = parseInt(damage * 0.8);
+			console.log(`Attack Defended! Received ${damage} damage.`);
+		} else if (!defendAttack) {
+			console.log(`Received ${damage} damage.`);
+		}
+
+		this.health -= damage;
+		if (this.health <= 0) {
+			console.log(`${this.name} has died.`);
+			updateArmies();
+		}
+	}
+
+	defend() {
+		const number = Math.floor(Math.random() * 10) + 1;
+		if (number >= 8) {
+			return true;
+		} else return false;
+	}
 
 	evade() {}
 
@@ -105,12 +128,34 @@ class Saxon {
 
 	attack(target) {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
-		target.health -= damage;
-		console.log(`${this.name} attacked ${target.name} and dealt ${damage} damage.`);
+		target.receiveDamage(damage);
+
+		console.log(`${this.name} attacked ${target.name}.`);
 		updateArmies();
 	}
 
-	defend() {}
+	receiveDamage(damage) {
+		const defendAttack = this.defend();
+		console.log('Damage: ', damage);
+		if (defendAttack) {
+			damage = parseInt(damage * 0.8);
+			console.log(`Attack Defended! Received ${damage} damage.`);
+		} else if (!defendAttack) {
+			console.log(`Received ${damage} damage.`);
+		}
+
+		this.health -= damage;
+		if (this.health <= 0) {
+			console.log(`${this.name} has died.`);
+			updateArmies();
+		}
+	}
+	defend() {
+		const number = Math.floor(Math.random() * 10) + 1;
+		if (number >= 8) {
+			return true;
+		} else return false;
+	}
 
 	evade() {}
 
