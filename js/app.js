@@ -14,8 +14,14 @@ const totalHealthViking = document.getElementById('totalHealthViking');
 const totalHealthSaxon = document.getElementById('totalHealthSaxon');
 
 const players = {
-	1: { playerOne: 'Vikings', playerTwo: 'Saxons', yourArmyDiv: vikingDiv },
-	2: { playerOne: 'Saxons', playerTwo: 'Vikings', yourArmyDiv: saxonDiv },
+	1: {
+		playerOne: 'Vikings',
+		playerTwo: 'Saxons',
+		yourArmyDiv: vikingDiv,
+		myArmy: vikings,
+		enemyArmy: saxons,
+	},
+	2: { playerOne: 'Saxons', playerTwo: 'Vikings', yourArmyDiv: saxonDiv, myArmy: saxons, enemyArmy: vikings },
 };
 
 let playerOne;
@@ -24,38 +30,41 @@ let yourArmyDiv;
 let playerOneHealth;
 let playerTwoHealth;
 
+let myArmy;
+let enemyArmy;
+
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
-
 	if (team) {
 		playerOne = team.playerOne;
 		playerTwo = team.playerTwo;
 		yourArmyDiv = team.yourArmyDiv;
+		myArmy = team.myArmy;
+		enemyArmy = team.enemyArmy;
 
 		console.log(`Your Team is ${playerOne} and the Enemy Team is ${playerTwo}`);
 
 		header.style.display = 'none';
 		section.style.display = 'flex';
 
-		playGame();
+		makeTurn();
 		renderSoldiers(vikings);
 		renderSoldiers(saxons);
 		updateArmies();
 	}
 });
-let turnCount = 1;
-let isPlayerTurn = turnCount % 2 === 1;
 
-//Based on whose turn it is, the game runs once and changes the turn to the opposite player
-function playGame() {
-	if (isPlayerTurn) {
-		makeTurn(playerOne);
-	} else {
-		makeTurn(playerTwo);
-	}
+let isPlayerTurn = true;
 
+function endPlayerTurn() {
 	isPlayerTurn = !isPlayerTurn;
+	if (isPlayerTurn) {
+		console.log('Your Turn');
+	} else {
+		console.log('Enemy Turn');
+		enemyTurn();
+	}
 }
 
 //Based on whose turn it is, one set of functions will run for the player, the other one for the enemy
@@ -66,6 +75,27 @@ function makeTurn() {
 		enemyTurn();
 		//code that enemy does
 	}
+}
+
+function enemyTurn() {
+	const [dice1, dice2] = rollDice();
+	const gold = dice1 * dice2;
+	playersGold.two += gold;
+	setTimeout(() => {
+		console.log(`Enemy rolled ${dice1} and ${dice2}`);
+		console.log(`Enemy gained ${gold} gold.`);
+		updateGold();
+	}, 2000);
+	setTimeout(() => {
+		if (playersGold.two >= 15) {
+			playersGold.two -= 15;
+			battle(enemyArmy, myArmy);
+			updateGold();
+			setTimeout(() => endPlayerTurn(), 2000);
+		} else {
+			endPlayerTurn();
+		}
+	}, 5000);
 }
 
 //Dice rolling that will impact the turns players make, for example damage,defense,evasion
@@ -144,57 +174,83 @@ const playersGold = {
 function displayOptions() {
 	const rollDiceButton = document.createElement('button');
 	rollDiceButton.textContent = 'Roll Dice';
+
 	rollDiceButton.addEventListener('click', () => {
-		const [dice1, dice2] = rollDice();
-		const gold = dice1 * dice2;
-		playersGold.one += gold;
-		console.log(`You rolled ${dice1} and ${dice2}`);
-		console.log(`You gained ${gold} gold.`);
-		updateGold();
+		if (isPlayerTurn) {
+			const [dice1, dice2] = rollDice();
+			const gold = dice1 * dice2;
+			playersGold.one += gold;
+			console.log(`You rolled ${dice1} and ${dice2}`);
+			console.log(`You gained ${gold} gold.`);
+			updateGold();
+		} else {
+			const [dice1, dice2] = rollDice();
+			const gold = dice1 * dice2;
+			playersGold.two += gold;
+			console.log(`Enemy rolled ${dice1} and ${dice2}`);
+			console.log(`Enemy gained ${gold} gold.`);
+			updateGold();
+		}
 	});
 
 	const attackButton = document.createElement('button');
 	attackButton.textContent = 'Attack';
+
 	attackButton.addEventListener('click', () => {
-		// Implement the attack logic here
+		if (isPlayerTurn) {
+			if (playersGold.one >= 15) {
+				playersGold.one -= 15;
+				battle(myArmy, enemyArmy);
+				updateGold();
+				setTimeout(() => endPlayerTurn(), 2000);
+			} else {
+				console.log('Not enough gold');
+			}
+		} else console.log('Not your turn!');
 	});
 
-	const skipTurnButton = document.createElement('button');
-	skipTurnButton.textContent = 'Skip Turn';
-	skipTurnButton.addEventListener('click', () => {
-		// Do nothing
+	const endTurnButton = document.createElement('button');
+	endTurnButton.textContent = 'End Turn';
+
+	endTurnButton.addEventListener('click', () => {
+		if (isPlayerTurn) {
+			endPlayerTurn();
+		}
 	});
 
 	const shopButton = document.createElement('button');
 	shopButton.textContent = 'Shop';
+
 	shopButton.addEventListener('click', () => {
 		// Implement the shop logic here
 	});
 
 	const playerGold = document.createElement('h4');
 	const enemyGold = document.createElement('h4');
+
 	playerGold.innerText = `Gold: ${playersGold.one}`;
 	enemyGold.innerText = `Gold: ${playersGold.two}`;
+
 	document.getElementById('pointsDiv').append(playerGold, enemyGold);
 
 	if (playerOne === 'Vikings') {
 		rollDiceButton.classList.add('red');
 		attackButton.classList.add('red');
-		skipTurnButton.classList.add('red');
+		endTurnButton.classList.add('red');
 		shopButton.classList.add('red');
 		enemyGold.classList.add('red');
 		playerGold.classList.add('yellow');
 	} else {
 		rollDiceButton.classList.add('yellow');
 		attackButton.classList.add('yellow');
-		skipTurnButton.classList.add('yellow');
+		endTurnButton.classList.add('yellow');
 		shopButton.classList.add('yellow');
 		enemyGold.classList.add('yellow');
 		playerGold.classList.add('red');
 	}
 
 	const buttonContainer = document.getElementById('buttonContainer');
-	buttonContainer.append(attackButton, rollDiceButton, shopButton, skipTurnButton);
+	buttonContainer.append(attackButton, rollDiceButton, shopButton, endTurnButton);
 }
 
 function updateGold() {
@@ -202,5 +258,21 @@ function updateGold() {
 	gold[0].innerText = `Gold: ${playersGold.two}`;
 	gold[1].innerText = `Gold: ${playersGold.one}`;
 }
-const testSoldierViking = vikings[0];
-const testSoldierSaxon = saxons[0];
+
+//Function where one army attack the other
+function battle(soldiers1, soldiers2) {
+	const attackers = soldiers1;
+	let targets = soldiers2.slice(); // create a copy of the targets array
+	attackers.forEach((attacker) => {
+		const targetIndex = Math.floor(Math.random() * targets.length);
+		const target = targets[targetIndex];
+		attacker.attack(target);
+		targets.splice(targetIndex, 1); // remove the target from the targets array so he wont get targeted again
+	});
+	updateArmies();
+}
+
+function randomSoldier(soldiers) {
+	const index = Math.floor(Math.random() * soldiers.length);
+	return soldiers[index];
+}

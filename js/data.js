@@ -104,8 +104,8 @@ const saxonNames = [
 	'Uhtred',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(75, 125), getRandomNumber(10, 25)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(75, 125), getRandomNumber(10, 25)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(25, 50), getRandomNumber(10, 15)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(25, 50), getRandomNumber(10, 15)));
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
