@@ -1,8 +1,10 @@
 const startBattleButton = document.getElementById('startBattle');
+const newGameButton = document.getElementById('newGame');
 const selectTeam = document.getElementById('selectTeam');
 
 const header = document.querySelector('header');
 const section = document.querySelector('section');
+const footer = document.querySelector('footer');
 
 const vikingDiv = document.getElementById('vikingDiv');
 const saxonDiv = document.getElementById('saxonDiv');
@@ -36,6 +38,8 @@ let enemyArmy;
 let vikingHealthSum = 0;
 let saxonHealthSum = 0;
 
+let gameFinished = false;
+
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
@@ -51,7 +55,7 @@ startBattleButton.addEventListener('click', () => {
 		header.style.display = 'none';
 		section.style.display = 'flex';
 
-		makeTurn();
+		renderButtons();
 		renderSoldiers(vikings);
 		renderSoldiers(saxons);
 		updateArmies();
@@ -60,52 +64,51 @@ startBattleButton.addEventListener('click', () => {
 
 let isPlayerTurn = true;
 
+//Function that ends the players turn
 function endPlayerTurn() {
-	isPlayerTurn = !isPlayerTurn;
-	if (isPlayerTurn) {
-		console.log('Your Turn');
+	if (totalHealthSaxon.innerText == 0 || totalHealthViking.innerText == 0) {
+		return null;
 	} else {
-		console.log('Enemy Turn');
-		enemyTurn();
-	}
-}
-
-//Based on whose turn it is, one set of functions will run for the player, the other one for the enemy
-function makeTurn() {
-	if (isPlayerTurn) {
-		displayOptions();
-	} else {
-		enemyTurn();
-		//code that enemy does
+		isPlayerTurn = !isPlayerTurn;
+		if (isPlayerTurn) {
+			console.log('Your Turn');
+			diceThrowCount = 0;
+			attackCount = 0;
+		} else {
+			console.log('Enemy Turn');
+			enemyTurn();
+		}
 	}
 }
 
 //Behavior that enemy does when its his turn
 function enemyTurn() {
-	if (saxonHealthSum == 0 || vikingHealthSum == 0) {
-		return null;
-	} else {
-		const [dice1, dice2] = rollDice();
-		const gold = dice1 * dice2;
+	const [dice1, dice2] = rollDice();
+	const gold = dice1 * dice2;
 
-		playersGold.two += gold;
+	playersGold.two += gold;
 
-		setTimeout(() => {
-			console.log(`Enemy rolled ${dice1} and ${dice2}`);
-			console.log(`Enemy gained ${gold} gold.`);
+	setTimeout(() => {
+		console.log(`Enemy rolled ${dice1} and ${dice2}`);
+		console.log(`Enemy gained ${gold} gold.`);
+
+		updateGold();
+	}, 2000);
+	setTimeout(() => {
+		if (playersGold.two >= 15) {
+			playersGold.two -= 15;
+
+			battle(enemyArmy, myArmy);
+
 			updateGold();
-		}, 2000);
-		setTimeout(() => {
-			if (playersGold.two >= 15) {
-				playersGold.two -= 15;
-				battle(enemyArmy, myArmy);
-				updateGold();
-				setTimeout(() => endPlayerTurn(), 6000);
-			} else {
+
+			setTimeout(() => {
 				endPlayerTurn();
-			}
-		}, 4000);
-	}
+			}, 2000);
+		} else {
+			endPlayerTurn();
+		}
+	}, 4000);
 }
 
 //Dice rolling that will impact the turns players make, for example damage,defense,evasion
@@ -126,7 +129,7 @@ function createSoldierElement(soldier) {
 
 	const strength = document.createElement('li');
 	strength.innerText = soldier.strength;
-	strength.classList.add('red');
+	strength.classList.add('strength');
 	newSoldier.appendChild(strength);
 
 	const health = document.createElement('li');
@@ -183,6 +186,21 @@ function updateArmies() {
 
 	totalHealthViking.innerText = vikingHealthSum;
 	totalHealthSaxon.innerText = saxonHealthSum;
+	if (gameFinished) {
+		return;
+	} else {
+		if (totalHealthViking.innerText == 0) {
+			displayVictoryText('Saxons win!');
+			section.style.display = 'none';
+			footer.style.display = 'flex';
+			gameFinished = true;
+		} else if (totalHealthSaxon.innerText == 0) {
+			displayVictoryText('Vikings win!');
+			section.style.display = 'none';
+			footer.style.display = 'flex';
+			gameFinished = true;
+		}
+	}
 }
 
 //Function to display the buttons and gold
@@ -191,17 +209,21 @@ const playersGold = {
 	two: 0,
 };
 
-function displayOptions() {
+let diceThrowCount = 0;
+let attackCount = 0;
+
+function renderButtons() {
 	const rollDiceButton = document.createElement('button');
 	rollDiceButton.textContent = 'Roll Dice';
 
 	rollDiceButton.addEventListener('click', () => {
-		if (isPlayerTurn) {
+		if (diceThrowCount === 0 && isPlayerTurn) {
 			const [dice1, dice2] = rollDice();
 			const gold = dice1 * dice2;
 			playersGold.one += gold;
 			console.log(`You rolled ${dice1} and ${dice2}`);
 			console.log(`You gained ${gold} gold.`);
+			diceThrowCount++;
 			updateGold();
 		}
 	});
@@ -210,12 +232,13 @@ function displayOptions() {
 	attackButton.textContent = 'Attack';
 
 	attackButton.addEventListener('click', () => {
-		if (isPlayerTurn) {
+		if (isPlayerTurn && attackCount === 0) {
 			if (playersGold.one >= 15) {
 				playersGold.one -= 15;
 				battle(myArmy, enemyArmy);
+				attackCount++;
 				updateGold();
-				setTimeout(() => endPlayerTurn(), 6000);
+				setTimeout(() => endPlayerTurn(), 2000);
 			} else {
 				console.log('Not enough gold');
 			}
@@ -251,6 +274,7 @@ function displayOptions() {
 		attackButton.classList.add('red');
 		endTurnButton.classList.add('red');
 		shopButton.classList.add('red');
+		shopButton.classList.add('not-implemented');
 		enemyGold.classList.add('red');
 		playerGold.classList.add('yellow');
 	} else {
@@ -258,6 +282,7 @@ function displayOptions() {
 		attackButton.classList.add('yellow');
 		endTurnButton.classList.add('yellow');
 		shopButton.classList.add('yellow');
+		shopButton.classList.add('not-implemented');
 		enemyGold.classList.add('yellow');
 		playerGold.classList.add('red');
 	}
@@ -294,3 +319,14 @@ function randomSoldier(soldiers) {
 	const index = Math.floor(Math.random() * soldiers.length);
 	return soldiers[index];
 }
+
+function displayVictoryText(value) {
+	const h1 = document.createElement('h1');
+	h1.innerText = value;
+
+	footer.appendChild(h1);
+}
+
+newGameButton.addEventListener('click', () => {
+	location.reload();
+});

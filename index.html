@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Vikings vs Saxons</title>
-        <link rel="stylesheet" href="./css/style.css">
-        <script src="./js/data.js" defer></script>
-        <script src="./js/app.js" defer></script>
-    </head>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Vikings vs Saxons</title>
+		<link rel="stylesheet" href="./css/style.css" />
+		<script src="./js/data.js" defer></script>
+		<script src="./js/app.js" defer></script>
+	</head>
 
-    <body>
-        <header>
-            <h1>Vikings vs Saxons</h1>
+	<body>
 
-            <select name="" id="selectTeam">
-                <option value="" hidden>Choose your Team</option>
-                <option value="1">Vikings</option>
-                <option value="2">Saxons</option>
-            </select>
+		<header>
+			<h1>Vikings vs Saxons</h1>
 
-            <button id="startBattle">To War!</button>
-        </header>
-        <section>
-            <div class="armies" id="vikingDiv">
-                <h2 id="vikingH2">Viking Army</h2>
-                <h3 class="green" id="totalHealthViking"></h3>
-                <div class="soldiers" id="vikingArmy"></div>
-            </div>
+			<select name="" id="selectTeam">
+				<option value="" hidden>
+					Choose your Team
+				</option>
+				<option value="1">Vikings</option>
+				<option value="2">Saxons</option>
+			</select>
 
-            <div class="armies" id="saxonDiv">
-                <h2 id="saxonH2">Saxon Army</h2>
-                <h3 class="green" id="totalHealthSaxon"></h3>
-                <div class="soldiers" id="saxonArmy"></div>
-            </div>
-            <div id="buttonContainer"></div>
-            <div id="pointsDiv"></div>
-        </section>
+			<button id="startBattle">To War!</button>
+		</header>
 
+		<section>
+			<div class="armies" id="vikingDiv">
+				<h2 id="vikingH2">Viking Army</h2>
+				<h3 class="green" id="totalHealthViking"></h3>
+				<div class="soldiers" id="vikingArmy"></div>
+			</div>
 
-    </body>
+			<div class="armies" id="saxonDiv">
+				<h2 id="saxonH2">Saxon Army</h2>
+				<h3 class="green" id="totalHealthSaxon"></h3>
+				<div class="soldiers" id="saxonArmy"></div>
+			</div>
+
+			<div id="buttonContainer"></div>
+			<div id="pointsDiv"></div>
+		</section>
+
+		<footer>
+			<button id="newGame">New Game</button>
+		</footer>
+	</body>
 
 </html>

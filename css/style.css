@@ -60,9 +60,34 @@ h3 {
 	font-size: 32px;
 }
 
-.armies {
+footer {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	height: 75vh;
+	flex-direction: column-reverse;
+}
+
+footer button {
+	margin-top: 50px;
+	padding: 5px 35px;
+	font-size: 1.2em;
+	background: transparent;
+	cursor: pointer;
 	border: 1px solid black;
+	border-radius: 10px;
+}
+
+footer button:hover {
+	color: rgb(247, 82, 82);
+	transition: 250ms ease;
+}
+
+.armies {
+	border: 2px solid black;
+	border-radius: 15px;
 	width: 95vw;
+	height: 21vh;
 	display: flex;
 	flex-direction: column;
 }
@@ -74,18 +99,40 @@ h3 {
 	margin: auto;
 }
 
+.strength {
+	color: rgb(248, 99, 99);
+}
+
 .green {
 	color: rgb(34, 219, 9);
 }
 
 .red {
-	color: rgb(241, 33, 33);
-	border-color: rgb(241, 33, 33);
+	color: rgb(248, 99, 99);
+}
+
+.red:hover {
+	color: rgb(189, 56, 56);
+	transition: 100ms;
 }
 
 .yellow {
 	color: rgb(219, 199, 19);
-	border-color: rgb(219, 199, 19);
+}
+
+.yellow:hover {
+	transition: 100ms;
+	color: rgb(185, 170, 30);
+}
+
+.not-implemented {
+	color: gray;
+	border-color: gray;
+}
+
+.not-implemented:hover {
+	color: gray;
+	border-color: gray;
 }
 
 #vikingH2 {
@@ -132,10 +179,11 @@ h3 {
 	height: 465px;
 	position: absolute;
 	bottom: 26vh;
-	left: 89.5vw;
+	left: 89vw;
 	font-size: 30px;
 }
 
 h4 {
-	font-weight: 400;
+	font-weight: 600;
+	width: 200px;
 }

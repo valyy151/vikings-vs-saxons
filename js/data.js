@@ -9,7 +9,6 @@ class Soldier {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
 		target.receiveDamage(damage);
 
-		console.log(`${this.name} attacked ${target.name}.`);
 		updateArmies();
 	}
 
@@ -18,12 +17,12 @@ class Soldier {
 		const defended = this.defend();
 		if (evaded) {
 			damage = 0;
-			console.log('Attack Evaded!');
+			console.log(`Attack Evaded! ${this.name} received 0 damage!`);
 		} else if (defended) {
 			damage = Math.floor(damage * 0.8);
-			console.log(`Attack Defended! Received ${damage} damage.`);
+			console.log(`Attack Defended!${this.name} received ${damage} damage!`);
 		} else {
-			console.log(`Received ${damage} damage.`);
+			console.log(`${this.name} received ${damage} damage!`);
 			this.health -= damage;
 			if (this.health <= 0) {
 				console.log(`${this.name} has died.`);
@@ -105,8 +104,8 @@ const saxonNames = [
 	'Uhtred',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(25, 30), getRandomNumber(10, 15)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(25, 30), getRandomNumber(10, 15)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(10, 15)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(10, 15), getRandomNumber(10, 15)));
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
