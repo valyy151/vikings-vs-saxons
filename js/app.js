@@ -78,7 +78,7 @@ function endPlayerTurn() {
 		} else {
 			yourTurnText.style.visibility = 'hidden';
 			enemyTurnText.style.visibility = 'visible';
-
+			battle();
 			enemyTurn();
 		}
 	}
@@ -119,7 +119,7 @@ function enemyTurn() {
 
 			setTimeout(() => {
 				endPlayerTurn();
-			}, 2000);
+			}, (myArmy.length + 2) * 600);
 		} else {
 			endPlayerTurn();
 		}
@@ -193,7 +193,7 @@ function renderButtons() {
 				battle(myArmy, enemyArmy);
 				attackCount++;
 				updateGold();
-				setTimeout(() => endPlayerTurn(), 2000);
+				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 2) * 600);
 			} else {
 				console.log('Not enough gold');
 			}
@@ -221,7 +221,7 @@ function renderButtons() {
 			}, 4100);
 			setTimeout(() => {
 				youGained.remove();
-			}, 6100);
+			}, 5100);
 
 			diceThrowCount++;
 			setTimeout(() => updateGold(), 1200);
@@ -329,20 +329,30 @@ function updateGold() {
 //Simulates a battle between two armies by randomly selecting targets for soldiers in one army
 //and removing them from the other army if their health drops to or below 0.
 function battle(soldiers1, soldiers2) {
-	for (let i = 0; i < soldiers1.length; i++) {
-		const attacker = soldiers1[i];
-		const targetIndex = Math.floor(Math.random() * soldiers2.length);
-		const target = soldiers2[targetIndex];
-		attacker.attack(target);
-		if (target.health <= 0) {
-			soldiers2.splice(targetIndex, 1);
-			if (soldiers2.length === 0) {
-				break; // stops the loop if all targets are dead
-			}
-		}
-	}
+	let currentTargetIndex = 0;
 
-	updateArmies();
+	const intervalId = setInterval(() => {
+		if (currentTargetIndex >= soldiers2.length) {
+			clearInterval(intervalId);
+			updateArmies();
+			return;
+		}
+
+		const attacker = soldiers1[Math.floor(Math.random() * soldiers1.length)];
+		const target = soldiers2[currentTargetIndex];
+		attacker.attack(target);
+
+		if (target.health <= 0) {
+			soldiers2.splice(currentTargetIndex, 1);
+		} else {
+			currentTargetIndex++;
+		}
+
+		if (soldiers2.length === 0) {
+			clearInterval(intervalId);
+			updateArmies();
+		}
+	}, 400);
 }
 
 function displayVictoryText(value) {

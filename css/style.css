@@ -45,10 +45,21 @@ section {
 
 ul {
 	list-style: none;
-	padding: 0;
+	padding: 0px;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 	font-weight: 600;
+}
+
+ul li:nth-child(3) {
+	border: 2px solid rgb(48, 201, 28);
+	border-radius: 10px;
+	width: 60px;
+}
+
+h1 {
+	font-weight: 500;
 }
 
 h2,
@@ -99,7 +110,11 @@ h6 {
 	position: relative;
 	font-size: 1em;
 	margin: 10px 0;
-	bottom: 12vh;
+	bottom: 6vh;
+}
+
+p {
+	font-weight: 600;
 }
 
 .armies {
@@ -225,4 +240,17 @@ h6 {
 	width: 200px;
 	height: 50px;
 	position: absolute;
+}
+
+#h1Div {
+	display: flex;
+	justify-content: space-evenly;
+}
+
+#damageContainer {
+	position: absolute;
+
+	width: 400px;
+	height: 400px;
+	right: 20vw;
 }

@@ -1,3 +1,41 @@
+function renderDamageMessage(message) {
+	const damageElement = document.createElement('p');
+
+	if (isPlayerTurn && playerOne === 'Vikings') {
+		damageElement.classList.add('dexterity');
+	}
+
+	if (isPlayerTurn && playerOne === 'Saxons') {
+		damageElement.classList.add('strength');
+	}
+
+	if (!isPlayerTurn && playerTwo === 'Vikings') {
+		damageElement.classList.add('dexterity');
+	}
+	if (!isPlayerTurn && playerTwo === 'Saxons') {
+		damageElement.classList.add('strength');
+	}
+
+	damageElement.innerText = message;
+
+	damageContainer.appendChild(damageElement);
+
+	damageElement.style.transition = 'opacity 0.3s ease-in-out';
+
+	damageElement.getBoundingClientRect();
+
+	damageElement.style.opacity = 1;
+
+	setTimeout(() => {
+		damageElement.style.opacity = 0;
+
+		// add transitionend event listener to remove the element after the transition
+		damageElement.addEventListener('transitionend', () => {
+			damageElement.remove();
+		});
+	}, 1600);
+}
+
 class Soldier {
 	constructor(name, health, strength) {
 		this.name = name;
@@ -17,15 +55,15 @@ class Soldier {
 		const defended = this.defend();
 		if (evaded) {
 			damage = 0;
-			console.log(`Attack Evaded! ${this.name} received 0 damage!`);
+			renderDamageMessage(`${this.name} evades the attack !`);
 		} else if (defended) {
-			damage = Math.floor(damage * 0.5);
-			console.log(`Attack Defended!${this.name} received ${damage} damage!`);
+			damage = Math.floor(damage * 0.75);
+			renderDamageMessage(`${this.name} deflects some of the attack and receives ${damage} damage!`);
 		} else {
-			console.log(`${this.name} received ${damage} damage!`);
+			renderDamageMessage(`${this.name} receives ${damage} damage!`);
 			this.health -= damage;
 			if (this.health <= 0) {
-				console.log(`${this.name} has died.`);
+				renderDamageMessage(`${this.name} has died.`);
 				this.health = 0;
 				updateArmies();
 			}
@@ -104,8 +142,8 @@ const saxonNames = [
 	'Uhtred',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(10, 15)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(10, 15), getRandomNumber(10, 15)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(75, 100), getRandomNumber(25, 50)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(75, 100), getRandomNumber(25, 50)));
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -132,3 +170,5 @@ const yourTurnText = document.getElementById('yourTurnText');
 const enemyTurnText = document.getElementById('enemyTurnText');
 
 const diceRollText = document.getElementById('diceRollText');
+
+damageContainer = document.getElementById('damageContainer');
