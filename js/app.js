@@ -55,7 +55,7 @@ startBattleButton.addEventListener('click', () => {
 	renderButtons();
 	updateArmies();
 
-	setTimeout(() => decideTurn(), 2000);
+	setTimeout(() => decideTurn(), 3000);
 });
 
 //Button that refreshes the page
@@ -89,13 +89,25 @@ function enemyTurn() {
 	const [dice1, dice2] = rollDice();
 	const gold = dice1 * dice2;
 
-	playersGold.two += gold;
-
 	setTimeout(() => {
-		console.log(`Enemy rolled ${dice1} and ${dice2}`);
-		console.log(`Enemy gained ${gold} gold.`);
+		const enemyRolled = document.createElement('h6');
+		const enemyGained = document.createElement('h6');
 
-		updateGold();
+		enemyRolled.innerText = `Enemy rolled ${dice1} and ${dice2} `;
+		enemyGained.innerText = `Enemy gained ${gold} gold.`;
+		playersGold.two += gold;
+
+		setTimeout(() => diceRollText.append(enemyRolled), 100);
+		setTimeout(() => diceRollText.append(enemyGained), 1200);
+
+		setTimeout(() => {
+			enemyRolled.remove();
+		}, 5000);
+		setTimeout(() => {
+			enemyGained.remove();
+		}, 5000);
+
+		setTimeout(() => updateGold(), 1200);
 	}, 2000);
 	setTimeout(() => {
 		if (playersGold.two >= 15) {
@@ -111,7 +123,7 @@ function enemyTurn() {
 		} else {
 			endPlayerTurn();
 		}
-	}, 4000);
+	}, 7000);
 }
 
 //Rolls two dice and returns an array with the results.
@@ -161,6 +173,99 @@ function renderSoldiers(army) {
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 }
 
+//Creates four buttons for a game interface.
+//These buttons allows the player to roll dice, attack, end turn, and access a shop)
+function renderButtons() {
+	const attackButton = document.createElement('button');
+	const rollDiceButton = document.createElement('button');
+	const endTurnButton = document.createElement('button');
+	const shopButton = document.createElement('button');
+
+	attackButton.textContent = 'Attack (15)';
+	rollDiceButton.textContent = 'Roll Dice';
+	endTurnButton.textContent = 'End Turn';
+	shopButton.textContent = 'Shop';
+
+	attackButton.addEventListener('click', () => {
+		if (isPlayerTurn && attackCount === 0) {
+			if (playersGold.one >= 15) {
+				playersGold.one -= 15;
+				battle(myArmy, enemyArmy);
+				attackCount++;
+				updateGold();
+				setTimeout(() => endPlayerTurn(), 2000);
+			} else {
+				console.log('Not enough gold');
+			}
+		}
+	});
+
+	rollDiceButton.addEventListener('click', () => {
+		if (diceThrowCount === 0 && isPlayerTurn) {
+			const [dice1, dice2] = rollDice();
+			const gold = dice1 * dice2;
+			playersGold.one += gold;
+
+			//  DOM element to hold the sentences
+			const youRolled = document.createElement('h5');
+			const youGained = document.createElement('h5');
+
+			youRolled.innerText = `You rolled ${dice1} and ${dice2} `;
+			youGained.innerText = `You gained ${gold} gold.`;
+
+			setTimeout(() => diceRollText.append(youRolled), 100);
+			setTimeout(() => diceRollText.append(youGained), 1200);
+
+			setTimeout(() => {
+				youRolled.remove();
+			}, 4100);
+			setTimeout(() => {
+				youGained.remove();
+			}, 6100);
+
+			diceThrowCount++;
+			setTimeout(() => updateGold(), 1200);
+		}
+	});
+
+	endTurnButton.addEventListener('click', () => {
+		if (isPlayerTurn && attackCount === 0) {
+			endPlayerTurn();
+		}
+	});
+
+	shopButton.addEventListener('click', () => {});
+
+	const playerGold = document.createElement('h4');
+	const enemyGold = document.createElement('h4');
+
+	playerGold.innerText = `Gold: ${playersGold.one}`;
+	enemyGold.innerText = `Gold: ${playersGold.two}`;
+
+	document.getElementById('pointsDiv').append(playerGold, enemyGold);
+
+	const buttonContainer = document.getElementById('buttonContainer');
+	buttonContainer.append(attackButton, rollDiceButton, shopButton, endTurnButton);
+
+	if (playerOne === 'Vikings') {
+		rollDiceButton.classList.add('red');
+		attackButton.classList.add('red');
+		endTurnButton.classList.add('red');
+		shopButton.classList.add('red');
+		shopButton.classList.add('not-implemented');
+		enemyGold.classList.add('red');
+		playerGold.classList.add('yellow');
+	} else {
+		rollDiceButton.classList.add('yellow');
+		attackButton.classList.add('yellow');
+		endTurnButton.classList.add('yellow');
+		shopButton.classList.add('yellow');
+		shopButton.classList.add('not-implemented');
+		enemyGold.classList.add('yellow');
+		playerGold.classList.add('red');
+	}
+}
+
 //Updates the health values of all the soldiers in both armies in the DOM.
 //It iterates through the soldiers in each army and updates the corresponding li element with the soldier's current health value.
 //It also removes any soldiers from the DOM whose health is zero or less.
@@ -206,87 +311,6 @@ function updateArmies() {
 			footer.style.display = 'flex';
 			gameFinished = true;
 		}
-	}
-}
-
-//Creates four buttons for a game interface.
-//These buttons allows the player to roll dice, attack, end turn, and access a shop)
-function renderButtons() {
-	const attackButton = document.createElement('button');
-	attackButton.textContent = 'Attack (15)';
-
-	attackButton.addEventListener('click', () => {
-		if (isPlayerTurn && attackCount === 0) {
-			if (playersGold.one >= 15) {
-				playersGold.one -= 15;
-				battle(myArmy, enemyArmy);
-				attackCount++;
-				updateGold();
-				setTimeout(() => endPlayerTurn(), 2000);
-			} else {
-				console.log('Not enough gold');
-			}
-		}
-	});
-
-	const rollDiceButton = document.createElement('button');
-	rollDiceButton.textContent = 'Roll Dice';
-
-	rollDiceButton.addEventListener('click', () => {
-		if (diceThrowCount === 0 && isPlayerTurn) {
-			const [dice1, dice2] = rollDice();
-			const gold = dice1 * dice2;
-			playersGold.one += gold;
-			console.log(`You rolled ${dice1} and ${dice2}`);
-			console.log(`You gained ${gold} gold.`);
-			diceThrowCount++;
-			updateGold();
-		}
-	});
-
-	const endTurnButton = document.createElement('button');
-	endTurnButton.textContent = 'End Turn';
-
-	endTurnButton.addEventListener('click', () => {
-		if (isPlayerTurn && attackCount === 0) {
-			endPlayerTurn();
-		}
-	});
-
-	const shopButton = document.createElement('button');
-	shopButton.textContent = 'Shop';
-
-	shopButton.addEventListener('click', () => {
-		// Implement the shop logic here
-	});
-
-	const playerGold = document.createElement('h4');
-	const enemyGold = document.createElement('h4');
-
-	playerGold.innerText = `Gold: ${playersGold.one}`;
-	enemyGold.innerText = `Gold: ${playersGold.two}`;
-
-	document.getElementById('pointsDiv').append(playerGold, enemyGold);
-
-	const buttonContainer = document.getElementById('buttonContainer');
-	buttonContainer.append(attackButton, rollDiceButton, shopButton, endTurnButton);
-
-	if (playerOne === 'Vikings') {
-		rollDiceButton.classList.add('red');
-		attackButton.classList.add('red');
-		endTurnButton.classList.add('red');
-		shopButton.classList.add('red');
-		shopButton.classList.add('not-implemented');
-		enemyGold.classList.add('red');
-		playerGold.classList.add('yellow');
-	} else {
-		rollDiceButton.classList.add('yellow');
-		attackButton.classList.add('yellow');
-		endTurnButton.classList.add('yellow');
-		shopButton.classList.add('yellow');
-		shopButton.classList.add('not-implemented');
-		enemyGold.classList.add('yellow');
-		playerGold.classList.add('red');
 	}
 }
 

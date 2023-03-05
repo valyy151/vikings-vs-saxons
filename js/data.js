@@ -130,3 +130,5 @@ const totalHealthSaxon = document.getElementById('totalHealthSaxon');
 
 const yourTurnText = document.getElementById('yourTurnText');
 const enemyTurnText = document.getElementById('enemyTurnText');
+
+const diceRollText = document.getElementById('diceRollText');
