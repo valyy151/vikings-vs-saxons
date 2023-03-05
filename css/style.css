@@ -4,6 +4,7 @@ body {
 	font-size: 20px;
 	text-align: center;
 	font-variant: small-caps;
+	cursor: default;
 }
 
 header {

@@ -1,41 +1,3 @@
-function renderDamageMessage(message) {
-	const damageElement = document.createElement('p');
-
-	if (isPlayerTurn && playerOne === 'Vikings') {
-		damageElement.classList.add('dexterity');
-	}
-
-	if (isPlayerTurn && playerOne === 'Saxons') {
-		damageElement.classList.add('strength');
-	}
-
-	if (!isPlayerTurn && playerTwo === 'Vikings') {
-		damageElement.classList.add('dexterity');
-	}
-	if (!isPlayerTurn && playerTwo === 'Saxons') {
-		damageElement.classList.add('strength');
-	}
-
-	damageElement.innerText = message;
-
-	damageContainer.appendChild(damageElement);
-
-	damageElement.style.transition = 'opacity 0.3s ease-in-out';
-
-	damageElement.getBoundingClientRect();
-
-	damageElement.style.opacity = 1;
-
-	setTimeout(() => {
-		damageElement.style.opacity = 0;
-
-		// add transitionend event listener to remove the element after the transition
-		damageElement.addEventListener('transitionend', () => {
-			damageElement.remove();
-		});
-	}, 1600);
-}
-
 class Soldier {
 	constructor(name, health, strength) {
 		this.name = name;
@@ -45,6 +7,10 @@ class Soldier {
 
 	attack(target) {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
+		const critical = this.critical();
+		if (critical) {
+			damage * 2.75 + 10;
+		}
 		target.receiveDamage(damage);
 
 		updateArmies();
@@ -76,6 +42,10 @@ class Soldier {
 
 	evade() {
 		return Math.random() > 0.8;
+	}
+
+	critical() {
+		return Math.random() > 0.95;
 	}
 }
 

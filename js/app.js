@@ -54,6 +54,7 @@ startBattleButton.addEventListener('click', () => {
 	renderSoldiers(saxons);
 	renderButtons();
 	updateArmies();
+	whoGoesFirst();
 
 	setTimeout(() => decideTurn(), 3000);
 });
@@ -253,16 +254,16 @@ function renderButtons() {
 		endTurnButton.classList.add('red');
 		shopButton.classList.add('red');
 		shopButton.classList.add('not-implemented');
-		enemyGold.classList.add('red');
-		playerGold.classList.add('yellow');
+		enemyGold.classList.add('strength');
+		playerGold.classList.add('dexterity');
 	} else {
 		rollDiceButton.classList.add('yellow');
 		attackButton.classList.add('yellow');
 		endTurnButton.classList.add('yellow');
 		shopButton.classList.add('yellow');
 		shopButton.classList.add('not-implemented');
-		enemyGold.classList.add('yellow');
-		playerGold.classList.add('red');
+		enemyGold.classList.add('dexterity');
+		playerGold.classList.add('strength');
 	}
 }
 
@@ -301,15 +302,19 @@ function updateArmies() {
 		return;
 	} else {
 		if (totalHealthViking.innerText == 0) {
-			displayVictoryText('Saxons win!');
-			section.style.display = 'none';
-			footer.style.display = 'flex';
-			gameFinished = true;
+			setTimeout(() => {
+				displayVictoryText('Saxons win!');
+				section.style.display = 'none';
+				footer.style.display = 'flex';
+				gameFinished = true;
+			}, 4000);
 		} else if (totalHealthSaxon.innerText == 0) {
-			displayVictoryText('Vikings win!');
-			section.style.display = 'none';
-			footer.style.display = 'flex';
-			gameFinished = true;
+			setTimeout(() => {
+				displayVictoryText('Vikings win!');
+				section.style.display = 'none';
+				footer.style.display = 'flex';
+				gameFinished = true;
+			}, 4000);
 		}
 	}
 }
@@ -384,4 +389,62 @@ function decideTurn() {
 		enemyTurnText.style.visibility = 'visible';
 		enemyTurn();
 	}
+}
+
+function whoGoesFirst() {
+	const vikingHealth = parseInt(totalHealthViking.innerText);
+	const saxonHealth = parseInt(totalHealthSaxon.innerText);
+	const message = document.createElement('h2');
+	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
+		message.innerText = 'You go first.';
+		diceRollText.appendChild(message);
+	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
+		message.innerText = 'You go first.';
+		diceRollText.appendChild(message);
+	} else {
+		isPlayerTurn = false;
+
+		message.innerText = 'Enemy goes first.';
+		diceRollText.appendChild(message);
+	}
+
+	setTimeout(() => message.remove(), 3000);
+}
+
+function renderDamageMessage(message) {
+	const damageElement = document.createElement('p');
+
+	if (isPlayerTurn && playerOne === 'Vikings') {
+		damageElement.classList.add('dexterity');
+	}
+
+	if (isPlayerTurn && playerOne === 'Saxons') {
+		damageElement.classList.add('strength');
+	}
+
+	if (!isPlayerTurn && playerTwo === 'Vikings') {
+		damageElement.classList.add('dexterity');
+	}
+	if (!isPlayerTurn && playerTwo === 'Saxons') {
+		damageElement.classList.add('strength');
+	}
+
+	damageElement.innerText = message;
+
+	damageContainer.appendChild(damageElement);
+
+	damageElement.style.transition = 'opacity 0.3s ease-in-out';
+
+	damageElement.getBoundingClientRect();
+
+	damageElement.style.opacity = 1;
+
+	setTimeout(() => {
+		damageElement.style.opacity = 0;
+
+		// add transitionend event listener to remove the element after the transition
+		damageElement.addEventListener('transitionend', () => {
+			damageElement.remove();
+		});
+	}, 1600);
 }
