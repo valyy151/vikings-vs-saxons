@@ -124,6 +124,9 @@ footer button:hover {
 	transition: 100ms;
 	color: rgb(185, 170, 30);
 }
+.dexterity {
+	color: rgb(219, 199, 19);
+}
 
 .not-implemented {
 	color: gray;
@@ -133,6 +136,21 @@ footer button:hover {
 .not-implemented:hover {
 	color: gray;
 	border-color: gray;
+}
+
+.turnText {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 400px;
+}
+
+.turnText h2 {
+	font-size: 2.1em;
+	visibility: hidden;
+
+	font-weight: 600;
 }
 
 #vikingH2 {
@@ -181,9 +199,4 @@ footer button:hover {
 	bottom: 26vh;
 	left: 89vw;
 	font-size: 30px;
-}
-
-h4 {
-	font-weight: 600;
-	width: 200px;
 }

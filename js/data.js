@@ -19,7 +19,7 @@ class Soldier {
 			damage = 0;
 			console.log(`Attack Evaded! ${this.name} received 0 damage!`);
 		} else if (defended) {
-			damage = Math.floor(damage * 0.8);
+			damage = Math.floor(damage * 0.5);
 			console.log(`Attack Defended!${this.name} received ${damage} damage!`);
 		} else {
 			console.log(`${this.name} received ${damage} damage!`);
@@ -33,11 +33,11 @@ class Soldier {
 	}
 
 	defend() {
-		return Math.random() > 0.8;
+		return Math.random() > 0.6;
 	}
 
 	evade() {
-		return Math.random() > 0.95;
+		return Math.random() > 0.8;
 	}
 }
 
@@ -110,3 +110,23 @@ const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(10, 15),
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+const startBattleButton = document.getElementById('startBattle');
+const newGameButton = document.getElementById('newGame');
+const selectTeam = document.getElementById('selectTeam');
+
+const header = document.querySelector('header');
+const section = document.querySelector('section');
+const footer = document.querySelector('footer');
+
+const vikingDiv = document.getElementById('vikingDiv');
+const saxonDiv = document.getElementById('saxonDiv');
+
+const vikingArmy = document.getElementById('vikingArmy');
+const saxonArmy = document.getElementById('saxonArmy');
+
+const totalHealthViking = document.getElementById('totalHealthViking');
+const totalHealthSaxon = document.getElementById('totalHealthSaxon');
+
+const yourTurnText = document.getElementById('yourTurnText');
+const enemyTurnText = document.getElementById('enemyTurnText');

@@ -1,87 +1,90 @@
-const startBattleButton = document.getElementById('startBattle');
-const newGameButton = document.getElementById('newGame');
-const selectTeam = document.getElementById('selectTeam');
+let vikingHealthSum = 0;
+let saxonHealthSum = 0;
 
-const header = document.querySelector('header');
-const section = document.querySelector('section');
-const footer = document.querySelector('footer');
+let diceThrowCount = 1;
+let attackCount = 1;
 
-const vikingDiv = document.getElementById('vikingDiv');
-const saxonDiv = document.getElementById('saxonDiv');
+let gameFinished = false;
 
-const vikingArmy = document.getElementById('vikingArmy');
-const saxonArmy = document.getElementById('saxonArmy');
+let isPlayerTurn;
 
-const totalHealthViking = document.getElementById('totalHealthViking');
-const totalHealthSaxon = document.getElementById('totalHealthSaxon');
-
-const players = {
-	1: {
+const players = [
+	{
 		playerOne: 'Vikings',
 		playerTwo: 'Saxons',
 		yourArmyDiv: vikingDiv,
 		myArmy: vikings,
 		enemyArmy: saxons,
 	},
-	2: { playerOne: 'Saxons', playerTwo: 'Vikings', yourArmyDiv: saxonDiv, myArmy: saxons, enemyArmy: vikings },
-};
-
-let playerOne;
-let playerTwo;
-let yourArmyDiv;
-let playerOneHealth;
-let playerTwoHealth;
-
-let myArmy;
-let enemyArmy;
-
-let vikingHealthSum = 0;
-let saxonHealthSum = 0;
-
-let gameFinished = false;
+	{
+		playerOne: 'Saxons',
+		playerTwo: 'Vikings',
+		yourArmyDiv: saxonDiv,
+		myArmy: saxons,
+		enemyArmy: vikings,
+	},
+];
 
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
-	if (team) {
-		playerOne = team.playerOne;
-		playerTwo = team.playerTwo;
-		yourArmyDiv = team.yourArmyDiv;
-		myArmy = team.myArmy;
-		enemyArmy = team.enemyArmy;
 
-		console.log(`Your Team is ${playerOne} and the Enemy Team is ${playerTwo}`);
+	playerOne = team.playerOne;
+	playerTwo = team.playerTwo;
+	yourArmyDiv = team.yourArmyDiv;
+	myArmy = team.myArmy;
+	enemyArmy = team.enemyArmy;
 
-		header.style.display = 'none';
-		section.style.display = 'flex';
+	console.log(`Your Team is ${playerOne} and the Enemy Team is ${playerTwo}`);
 
-		renderButtons();
-		renderSoldiers(vikings);
-		renderSoldiers(saxons);
-		updateArmies();
+	header.style.display = 'none';
+	section.style.display = 'flex';
+
+	if (selectTeam.value === '0') {
+		isPlayerTurn = true;
+		yourTurnText.className = 'strength';
+		enemyTurnText.className = 'dexterity';
+	} else {
+		isPlayerTurn = false;
+		yourTurnText.className = 'dexterity';
+		enemyTurnText.className = 'strength';
 	}
+
+	renderSoldiers(vikings);
+	renderSoldiers(saxons);
+	renderButtons();
+	updateArmies();
+
+	setTimeout(() => decideTurn(), 2000);
 });
 
-let isPlayerTurn = true;
+//Button that refreshes the page
+newGameButton.addEventListener('click', () => {
+	location.reload();
+});
 
-//Function that ends the players turn
+//Ends the current player's turn and switches to the other enemy's turn. It also calls enemyTurn() if it's the enemy's turn.
 function endPlayerTurn() {
 	if (totalHealthSaxon.innerText == 0 || totalHealthViking.innerText == 0) {
 		return null;
 	} else {
 		isPlayerTurn = !isPlayerTurn;
 		if (isPlayerTurn) {
-			console.log('Your Turn');
+			yourTurnText.style.visibility = 'visible';
+			enemyTurnText.style.visibility = 'hidden';
+
 			diceThrowCount = 0;
 			attackCount = 0;
 		} else {
-			console.log('Enemy Turn');
+			yourTurnText.style.visibility = 'hidden';
+			enemyTurnText.style.visibility = 'visible';
+
 			enemyTurn();
 		}
 	}
 }
 
-//Behavior that enemy does when its his turn
+//Simulates the behavior of the enemy when it's their turn.
 function enemyTurn() {
 	const [dice1, dice2] = rollDice();
 	const gold = dice1 * dice2;
@@ -111,14 +114,14 @@ function enemyTurn() {
 	}, 4000);
 }
 
-//Dice rolling that will impact the turns players make, for example damage,defense,evasion
+//Rolls two dice and returns an array with the results.
 function rollDice() {
 	dice1 = Math.round(Math.random() * 5) + 1;
 	dice2 = Math.round(Math.random() * 5) + 1;
 	return [dice1, dice2];
 }
 
-// Function to create a new soldier element
+//Takes a soldier object as input and returns a new ul element representing that soldier.
 function createSoldierElement(soldier) {
 	const newSoldier = document.createElement('ul');
 	newSoldier.setAttribute('id', soldier.name);
@@ -140,7 +143,8 @@ function createSoldierElement(soldier) {
 	return newSoldier;
 }
 
-// Function to render the soldiers to the DOM
+//Renders all the soldiers in an army to the DOM. It creates a new ul element for each soldier using createSoldierElement(),
+// and then appends the ul to the correct army div based on whether the army is the viking army or the saxon army.
 function renderSoldiers(army) {
 	army.forEach((soldier) => {
 		const newSoldier = createSoldierElement(soldier);
@@ -157,7 +161,9 @@ function renderSoldiers(army) {
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 }
 
-// Function to update the soldiers' health values in the DOM
+//Updates the health values of all the soldiers in both armies in the DOM.
+//It iterates through the soldiers in each army and updates the corresponding li element with the soldier's current health value.
+//It also removes any soldiers from the DOM whose health is zero or less.
 function updateArmies() {
 	let vikingHealthSum = 0;
 	let saxonHealthSum = 0;
@@ -203,16 +209,26 @@ function updateArmies() {
 	}
 }
 
-//Function to display the buttons and gold
-const playersGold = {
-	one: 0,
-	two: 0,
-};
-
-let diceThrowCount = 0;
-let attackCount = 0;
-
+//Creates four buttons for a game interface.
+//These buttons allows the player to roll dice, attack, end turn, and access a shop)
 function renderButtons() {
+	const attackButton = document.createElement('button');
+	attackButton.textContent = 'Attack (15)';
+
+	attackButton.addEventListener('click', () => {
+		if (isPlayerTurn && attackCount === 0) {
+			if (playersGold.one >= 15) {
+				playersGold.one -= 15;
+				battle(myArmy, enemyArmy);
+				attackCount++;
+				updateGold();
+				setTimeout(() => endPlayerTurn(), 2000);
+			} else {
+				console.log('Not enough gold');
+			}
+		}
+	});
+
 	const rollDiceButton = document.createElement('button');
 	rollDiceButton.textContent = 'Roll Dice';
 
@@ -228,28 +244,11 @@ function renderButtons() {
 		}
 	});
 
-	const attackButton = document.createElement('button');
-	attackButton.textContent = 'Attack';
-
-	attackButton.addEventListener('click', () => {
-		if (isPlayerTurn && attackCount === 0) {
-			if (playersGold.one >= 15) {
-				playersGold.one -= 15;
-				battle(myArmy, enemyArmy);
-				attackCount++;
-				updateGold();
-				setTimeout(() => endPlayerTurn(), 2000);
-			} else {
-				console.log('Not enough gold');
-			}
-		} else console.log('Not your turn!');
-	});
-
 	const endTurnButton = document.createElement('button');
 	endTurnButton.textContent = 'End Turn';
 
 	endTurnButton.addEventListener('click', () => {
-		if (isPlayerTurn) {
+		if (isPlayerTurn && attackCount === 0) {
 			endPlayerTurn();
 		}
 	});
@@ -269,6 +268,9 @@ function renderButtons() {
 
 	document.getElementById('pointsDiv').append(playerGold, enemyGold);
 
+	const buttonContainer = document.getElementById('buttonContainer');
+	buttonContainer.append(attackButton, rollDiceButton, shopButton, endTurnButton);
+
 	if (playerOne === 'Vikings') {
 		rollDiceButton.classList.add('red');
 		attackButton.classList.add('red');
@@ -286,18 +288,22 @@ function renderButtons() {
 		enemyGold.classList.add('yellow');
 		playerGold.classList.add('red');
 	}
-
-	const buttonContainer = document.getElementById('buttonContainer');
-	buttonContainer.append(attackButton, rollDiceButton, shopButton, endTurnButton);
 }
 
+const playersGold = {
+	one: 0,
+	two: 0,
+};
+
+//Updates gold amount in the DOM
 function updateGold() {
 	const gold = document.querySelectorAll('h4');
 	gold[0].innerText = `Gold: ${playersGold.two}`;
 	gold[1].innerText = `Gold: ${playersGold.one}`;
 }
 
-//Function where one army attack the other
+//Simulates a battle between two armies by randomly selecting targets for soldiers in one army
+//and removing them from the other army if their health drops to or below 0.
 function battle(soldiers1, soldiers2) {
 	for (let i = 0; i < soldiers1.length; i++) {
 		const attacker = soldiers1[i];
@@ -307,17 +313,12 @@ function battle(soldiers1, soldiers2) {
 		if (target.health <= 0) {
 			soldiers2.splice(targetIndex, 1);
 			if (soldiers2.length === 0) {
-				break; // stop the loop if all targets are dead
+				break; // stops the loop if all targets are dead
 			}
 		}
 	}
 
 	updateArmies();
-}
-
-function randomSoldier(soldiers) {
-	const index = Math.floor(Math.random() * soldiers.length);
-	return soldiers[index];
 }
 
 function displayVictoryText(value) {
@@ -327,6 +328,26 @@ function displayVictoryText(value) {
 	footer.appendChild(h1);
 }
 
-newGameButton.addEventListener('click', () => {
-	location.reload();
-});
+//Determines who will have the first turn based on whose army starts with less health
+function decideTurn() {
+	const vikingHealth = parseInt(totalHealthViking.innerText);
+	const saxonHealth = parseInt(totalHealthSaxon.innerText);
+
+	diceThrowCount = 0;
+	attackCount = 0;
+
+	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
+		isPlayerTurn = true;
+		yourTurnText.style.visibility = 'visible';
+		enemyTurnText.style.visibility = 'hidden';
+	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
+		isPlayerTurn = true;
+		yourTurnText.style.visibility = 'visible';
+		enemyTurnText.style.visibility = 'hidden';
+	} else {
+		isPlayerTurn = false;
+		yourTurnText.style.visibility = 'hidden';
+		enemyTurnText.style.visibility = 'visible';
+		enemyTurn();
+	}
+}
