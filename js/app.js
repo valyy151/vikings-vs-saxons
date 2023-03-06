@@ -60,9 +60,7 @@ startBattleButton.addEventListener('click', () => {
 });
 
 //Button that refreshes the page
-newGameButton.addEventListener('click', () => {
-	location.reload();
-});
+newGameButton.addEventListener('click', () => location.reload());
 
 //Ends the current player's turn and switches to the other enemy's turn. It also calls enemyTurn() if it's the enemy's turn.
 function endPlayerTurn() {
@@ -473,3 +471,25 @@ function printEnemyAttacks() {
 		message.remove();
 	}, 2000);
 }
+
+function summonReinforcements() {
+	if (playerOne === 'Vikings') {
+		vikingReinforcements.forEach((viking) => {
+			const newSoldier = createSoldierElement(viking);
+			vikings.push(viking);
+			vikingArmy.appendChild(newSoldier);
+		});
+	}
+	if (playerOne === 'Saxons') {
+		saxonReinforcements.forEach((saxon) => {
+			const newSoldier = createSoldierElement(saxon);
+			saxons.push(saxon);
+			saxonArmy.appendChild(newSoldier);
+		});
+	}
+	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
+	updateArmies();
+}
+
+const summonReinforcementsButton = document.getElementById('summonReinforcements');
+summonReinforcementsButton.addEventListener('click', () => summonReinforcements());

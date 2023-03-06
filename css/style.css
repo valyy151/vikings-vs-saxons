@@ -202,6 +202,7 @@ p {
 	justify-content: space-evenly;
 	align-items: center;
 	align-content: space-around;
+	transition: ease-in-out 2s;
 }
 
 .shop div {
@@ -221,16 +222,21 @@ p {
 
 .shop button {
 	background: rgb(192, 148, 5);
-	color: white;
-	border: 2px solid rgb(146, 113, 5);
+	color: rgb(252, 234, 132);
+	border: 2px solid rgb(114, 102, 37);
 	border-radius: 10px;
 	font-size: 1.2em;
 	cursor: pointer;
 	width: 300px;
 }
 
+.shop button:hover {
+	color: rgb(255, 255, 255);
+}
+
 .hidden {
 	display: none;
+	transition: ease-in-out 2s;
 }
 
 #vikingH2 {

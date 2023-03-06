@@ -112,8 +112,45 @@ const saxonNames = [
 	'Uhtred',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(125, 150), getRandomNumber(15, 35)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(125, 150), getRandomNumber(15, 35)));
+const vikingsOtherNames = [
+	'Gunnar',
+	'Helga',
+	'Ingvar',
+	'Kelda',
+	'Lofn',
+	'Maren',
+	'Hrothgar',
+	'Rane',
+	'Sigrid',
+	'Torgny',
+	'Ulrik',
+	'Viggo',
+];
+
+const saxonsOtherNames = [
+	'Aethelred',
+	'Beornhelm',
+	'Cynric',
+	'Drida',
+	'Eadwine',
+	'Frealaf',
+	'Godgifu',
+	'Oskar',
+	'Ina',
+	'Judoc',
+	'Kenelm',
+	'Leofmund',
+];
+
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(15, 35)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(10, 15), getRandomNumber(15, 35)));
+
+const vikingReinforcements = vikingsOtherNames.map(
+	(name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(15, 35))
+);
+const saxonReinforcements = saxonsOtherNames.map(
+	(name) => new Saxon(name, getRandomNumber(10, 15), getRandomNumber(15, 35))
+);
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
