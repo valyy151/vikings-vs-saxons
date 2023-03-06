@@ -62,6 +62,26 @@ startBattleButton.addEventListener('click', () => {
 //Button that refreshes the page
 newGameButton.addEventListener('click', () => location.reload());
 
+summonReinforcementsButton.addEventListener('click', () => {
+	summonReinforcements();
+	shopDiv.classList.toggle('hidden');
+});
+
+healButton.addEventListener('click', () => {
+	healArmy(myArmy);
+	shopDiv.classList.toggle('hidden');
+});
+
+arrowBarrageButton.addEventListener('click', () => {
+	arrowBarrage(enemyArmy);
+	shopDiv.classList.toggle('hidden');
+});
+
+volatileButton.addEventListener('click', () => {
+	volatileSelection(myArmy);
+	shopDiv.classList.toggle('hidden');
+});
+
 //Ends the current player's turn and switches to the other enemy's turn. It also calls enemyTurn() if it's the enemy's turn.
 function endPlayerTurn() {
 	if (totalHealthSaxon.innerText == 0 || totalHealthViking.innerText == 0) {
@@ -259,23 +279,26 @@ function updateArmies() {
 
 	vikings.forEach((viking) => {
 		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
-
+		const vikingStrengthElement = document.querySelector(`#${viking.name} li:nth-child(2)`);
 		if (vikingHealthElement.innerText == 0) {
 			vikingHealthElement.parentNode.remove();
 		}
 
 		vikingHealthElement.innerText = viking.health;
+		vikingStrengthElement.innerText = viking.strength;
 		vikingHealthSum += viking.health;
 	});
 
 	saxons.forEach((saxon) => {
 		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
+		const saxonStrengthElement = document.querySelector(`#${saxon.name} li:nth-child(2)`);
 
 		if (saxonHealthElement.innerText == 0) {
 			saxonHealthElement.parentNode.remove();
 		}
 
 		saxonHealthElement.innerText = saxon.health;
+		saxonStrengthElement.innerText = saxon.strength;
 		saxonHealthSum += saxon.health;
 	});
 
@@ -328,7 +351,7 @@ function battle(soldiers1, soldiers2) {
 
 		const attacker = soldiers1[Math.floor(Math.random() * soldiers1.length)];
 		const target = soldiers2[currentTargetIndex];
-		attacker.attack(target);
+		attacker.attack(target, 1600);
 
 		if (target.health <= 0) {
 			soldiers2.splice(currentTargetIndex, 1);
@@ -400,7 +423,7 @@ function whoGoesFirst() {
 	setTimeout(() => message.remove(), 3000);
 }
 
-function renderDamageMessage(message) {
+function renderDamageMessage(message, duration) {
 	const damageElement = document.createElement('p');
 
 	if (isPlayerTurn && playerOne === 'Vikings') {
@@ -430,7 +453,7 @@ function renderDamageMessage(message) {
 		damageContainerEnemy.appendChild(damageElement);
 	}
 
-	damageElement.style.transition = 'opacity 0.3s ease-in-out';
+	damageElement.style.transition = 'opacity 0.9s ease-in-out';
 
 	damageElement.getBoundingClientRect();
 
@@ -443,7 +466,7 @@ function renderDamageMessage(message) {
 		damageElement.addEventListener('transitionend', () => {
 			damageElement.remove();
 		});
-	}, 1600);
+	}, duration);
 }
 
 function enemyAttack() {
@@ -473,23 +496,97 @@ function printEnemyAttacks() {
 }
 
 function summonReinforcements() {
-	if (playerOne === 'Vikings') {
-		vikingReinforcements.forEach((viking) => {
-			const newSoldier = createSoldierElement(viking);
-			vikings.push(viking);
-			vikingArmy.appendChild(newSoldier);
-		});
-	}
-	if (playerOne === 'Saxons') {
-		saxonReinforcements.forEach((saxon) => {
-			const newSoldier = createSoldierElement(saxon);
-			saxons.push(saxon);
-			saxonArmy.appendChild(newSoldier);
-		});
-	}
+	if (isPlayerTurn && playersGold.one >= 100) {
+		playersGold.one -= 100;
+		if (playerOne === 'Vikings') {
+			vikingReinforcements.forEach((viking) => {
+				const newSoldier = createSoldierElement(viking);
+				vikings.push(viking);
+				vikingArmy.appendChild(newSoldier);
+			});
+		}
+		if (playerOne === 'Saxons') {
+			saxonReinforcements.forEach((saxon) => {
+				const newSoldier = createSoldierElement(saxon);
+				saxons.push(saxon);
+				saxonArmy.appendChild(newSoldier);
+			});
+		}
+	} else return null;
+
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
+	updateArmies();
+	updateGold();
+}
+
+function healArmy(army) {
+	if (playersGold.one >= 15) {
+		playersGold.one -= 15;
+		army.forEach((soldier) => (soldier.health = soldier.health + 25));
+		updateArmies();
+		updateGold();
+	}
+}
+
+function arrowBarrage(army) {
+	let barragesLeft = 3;
+
+	const intervalId = setInterval(() => {
+		updateArmies();
+		let index = 0;
+
+		const soldierIntervalId = setInterval(() => {
+			const soldier = army[index];
+
+			if (soldier) {
+				soldier.receiveDamage(2, 500);
+				updateArmies();
+
+				if (soldier.health <= 0) {
+					army.splice(index, 1);
+					updateArmies();
+				} else {
+					index++;
+				}
+			} else {
+				clearInterval(soldierIntervalId);
+			}
+		}, 25);
+
+		barragesLeft--;
+		if (barragesLeft === 0 || army.length === 0) {
+			clearInterval(intervalId);
+			updateArmies();
+		}
+	}, 2000);
+
+	updateArmies();
+	updateGold();
+}
+
+function volatileSelection(army) {
+	const number = Math.floor(Math.random() * 3) + 1;
+	if (number === 1) {
+		damageBoost(army);
+	} else if (number === 2) {
+		evasionBoost(army);
+	} else if (number === 3) {
+		defenseBoost(army);
+	}
+	updateGold();
+}
+
+function damageBoost(army) {
+	army.forEach((soldier) => (soldier.strength = soldier.strength + 25));
 	updateArmies();
 }
 
-const summonReinforcementsButton = document.getElementById('summonReinforcements');
-summonReinforcementsButton.addEventListener('click', () => summonReinforcements());
+function evasionBoost(army) {
+	army.forEach((soldier) => (soldier.evasionChance = Number((soldier.evasionChance - 0.15).toFixed(2))));
+	updateArmies();
+}
+
+function blockBoost(army) {
+	army.forEach((soldier) => (soldier.blockDamageReduction = Number((soldier.blockDamageReduction - 0.5).toFixed(2))));
+	updateArmies();
+}

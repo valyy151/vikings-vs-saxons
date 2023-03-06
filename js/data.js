@@ -3,49 +3,54 @@ class Soldier {
 		this.name = name;
 		this.health = health;
 		this.strength = strength;
+		this.evasionChance = 0.95;
+		this.criticalChance = 0.95;
+		this.criticalDamage = 2.5;
+		this.blockDamageReduction = 0.8;
+		this.blockChance = 0.75;
 	}
 
-	attack(target) {
+	attack(target, duration) {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
 		const critical = this.critical();
 		if (critical) {
-			damage = (damage + 5) * 2.5;
+			damage = (damage + 5) * this.criticalDamage;
 		}
-		target.receiveDamage(damage);
+		target.receiveDamage(damage, duration);
 
 		updateArmies();
 	}
 
-	receiveDamage(damage) {
+	receiveDamage(damage, duration) {
 		const evaded = this.evade();
-		const defended = this.defend();
+		const blocked = this.block();
 		if (evaded) {
 			damage = 0;
-			renderDamageMessage(`${this.name} evades the attack !`);
-		} else if (defended) {
-			damage = Math.floor(damage * 0.75);
-			renderDamageMessage(`${this.name} deflects some of the attack and receives ${damage} damage!`);
+			renderDamageMessage(`${this.name} evades the attack ! ( ${damage} )`, duration);
+		} else if (blocked) {
+			damage = Math.floor(damage * this.blockDamageReduction);
+			renderDamageMessage(`${this.name} blocks the attack and receives reduced damage! ( ${damage} )`, duration);
 		} else {
-			renderDamageMessage(`${this.name} receives ${damage} damage!`);
+			renderDamageMessage(`${this.name} takes damage! ( ${damage} ) `, duration);
 			this.health -= damage;
 			if (this.health <= 0) {
-				renderDamageMessage(`${this.name} has died.`);
+				renderDamageMessage(`${this.name} has died.`, duration);
 				this.health = 0;
 				updateArmies();
 			}
 		}
 	}
 
-	defend() {
-		return Math.random() > 0.6;
+	block() {
+		return Math.random() > this.blockChance;
 	}
 
 	evade() {
-		return Math.random() > 0.8;
+		return Math.random() > this.evasionChance;
 	}
 
 	critical() {
-		return Math.random() > 0.95;
+		return Math.random() > this.criticalChance;
 	}
 }
 
@@ -182,3 +187,8 @@ const damageContainerPlayer = document.getElementById('damageContainerPlayer');
 const damageContainerEnemy = document.getElementById('damageContainerEnemy');
 
 const shopDiv = document.getElementById('shop');
+
+const summonReinforcementsButton = document.getElementById('summonReinforcementsButton');
+const healButton = document.getElementById('healingButton');
+const arrowBarrageButton = document.getElementById('arrowBarrageButton');
+const volatileButton = document.getElementById('volatileButton');

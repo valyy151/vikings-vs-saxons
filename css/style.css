@@ -127,6 +127,8 @@ p {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	z-index: 1;
+	background: white;
 }
 
 .soldiers {
@@ -303,6 +305,8 @@ p {
 	width: 400px;
 	height: 400px;
 	right: 20vw;
+	contain: content;
+	contain: strict;
 }
 
 #damageContainerEnemy {
@@ -310,4 +314,5 @@ p {
 	width: 400px;
 	height: 400px;
 	left: 20vw;
+	contain: content;
 }
