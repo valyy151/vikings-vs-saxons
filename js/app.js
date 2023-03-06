@@ -218,7 +218,9 @@ function renderButtons() {
 		}
 	});
 
-	shopButton.addEventListener('click', () => {});
+	shopButton.addEventListener('click', () => {
+		shopDiv.classList.toggle('hidden');
+	});
 
 	const playerGold = document.createElement('h4');
 	const enemyGold = document.createElement('h4');
@@ -236,7 +238,7 @@ function renderButtons() {
 		attackButton.classList.add('red');
 		endTurnButton.classList.add('red');
 		shopButton.classList.add('red');
-		shopButton.classList.add('not-implemented');
+		shopButton.classList.add('red');
 		enemyGold.classList.add('strength');
 		playerGold.classList.add('dexterity');
 	} else {
@@ -244,7 +246,7 @@ function renderButtons() {
 		attackButton.classList.add('yellow');
 		endTurnButton.classList.add('yellow');
 		shopButton.classList.add('yellow');
-		shopButton.classList.add('not-implemented');
+		shopButton.classList.add('yellow');
 		enemyGold.classList.add('dexterity');
 		playerGold.classList.add('strength');
 	}
@@ -382,12 +384,12 @@ function whoGoesFirst() {
 		setTimeout(() => {
 			message.innerText = 'You go first.';
 			diceRollText.appendChild(message);
-		}, 500);
+		}, 1000);
 	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
 		setTimeout(() => {
 			message.innerText = 'You go first.';
 			diceRollText.appendChild(message);
-		}, 500);
+		}, 1000);
 	} else {
 		isPlayerTurn = false;
 

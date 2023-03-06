@@ -189,6 +189,49 @@ p {
 	font-variant: small-caps;
 	font-weight: 600;
 }
+.shop {
+	flex-wrap: wrap;
+	display: flex;
+	height: 400px;
+	width: 1375px;
+	border: 1px solid black;
+	position: absolute;
+	left: 14vw;
+	background: rgb(255, 245, 157);
+	z-index: 1;
+	justify-content: space-evenly;
+	align-items: center;
+	align-content: space-around;
+}
+
+.shop div {
+	width: 500px;
+
+	height: 150px;
+	display: flex;
+	flex-direction: column;
+}
+
+.shop p {
+	font-size: 18px;
+	width: 500px;
+	margin: auto;
+	text-align: justify;
+}
+
+.shop button {
+	background: rgb(192, 148, 5);
+	color: white;
+	border: 2px solid rgb(146, 113, 5);
+	border-radius: 10px;
+	font-size: 1.2em;
+	cursor: pointer;
+	width: 300px;
+}
+
+.hidden {
+	display: none;
+}
 
 #vikingH2 {
 	color: rgb(241, 33, 33);

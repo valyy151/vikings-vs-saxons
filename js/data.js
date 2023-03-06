@@ -112,8 +112,8 @@ const saxonNames = [
 	'Uhtred',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(75, 100), getRandomNumber(25, 50)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(75, 100), getRandomNumber(25, 50)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(125, 150), getRandomNumber(15, 35)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(125, 150), getRandomNumber(15, 35)));
 
 function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -143,3 +143,5 @@ const diceRollText = document.getElementById('diceRollText');
 
 const damageContainerPlayer = document.getElementById('damageContainerPlayer');
 const damageContainerEnemy = document.getElementById('damageContainerEnemy');
+
+const shopDiv = document.getElementById('shop');
