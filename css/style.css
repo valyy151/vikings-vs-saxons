@@ -101,17 +101,18 @@ footer button:hover {
 
 h5 {
 	position: relative;
-	right: 42.25vw;
-	bottom: 4vh;
-	font-size: 1em;
+	bottom: 6vh;
 	margin: 10px 0;
+	font-size: 1.2em;
+	font-weight: 500;
 }
 
 h6 {
 	position: relative;
-	font-size: 1em;
-	margin: 10px 0;
 	bottom: 6vh;
+	margin: 10px 0;
+	font-size: 1.2em;
+	font-weight: 500;
 }
 
 p {
@@ -248,10 +249,16 @@ p {
 	justify-content: space-evenly;
 }
 
-#damageContainer {
+#damageContainerPlayer {
 	position: absolute;
-
 	width: 400px;
 	height: 400px;
 	right: 20vw;
+}
+
+#damageContainerEnemy {
+	position: absolute;
+	width: 400px;
+	height: 400px;
+	left: 20vw;
 }

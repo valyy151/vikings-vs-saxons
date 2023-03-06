@@ -9,7 +9,7 @@ class Soldier {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
 		const critical = this.critical();
 		if (critical) {
-			damage * 2.75 + 10;
+			damage = (damage + 5) * 2.5;
 		}
 		target.receiveDamage(damage);
 
@@ -141,4 +141,5 @@ const enemyTurnText = document.getElementById('enemyTurnText');
 
 const diceRollText = document.getElementById('diceRollText');
 
-damageContainer = document.getElementById('damageContainer');
+const damageContainerPlayer = document.getElementById('damageContainerPlayer');
+const damageContainerEnemy = document.getElementById('damageContainerEnemy');

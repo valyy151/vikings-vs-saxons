@@ -101,30 +101,13 @@ function enemyTurn() {
 		setTimeout(() => diceRollText.append(enemyRolled), 100);
 		setTimeout(() => diceRollText.append(enemyGained), 1200);
 
-		setTimeout(() => {
-			enemyRolled.remove();
-		}, 5000);
-		setTimeout(() => {
-			enemyGained.remove();
-		}, 5000);
+		setTimeout(() => enemyRolled.remove(), 5000);
+		setTimeout(() => enemyGained.remove(), 5000);
 
 		setTimeout(() => updateGold(), 1200);
 	}, 2000);
-	setTimeout(() => {
-		if (playersGold.two >= 15) {
-			playersGold.two -= 15;
 
-			battle(enemyArmy, myArmy);
-
-			updateGold();
-
-			setTimeout(() => {
-				endPlayerTurn();
-			}, (myArmy.length + 2) * 600);
-		} else {
-			endPlayerTurn();
-		}
-	}, 7000);
+	setTimeout(() => enemyAttack(), 7000);
 }
 
 //Rolls two dice and returns an array with the results.
@@ -396,16 +379,22 @@ function whoGoesFirst() {
 	const saxonHealth = parseInt(totalHealthSaxon.innerText);
 	const message = document.createElement('h2');
 	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
-		message.innerText = 'You go first.';
-		diceRollText.appendChild(message);
+		setTimeout(() => {
+			message.innerText = 'You go first.';
+			diceRollText.appendChild(message);
+		}, 500);
 	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
-		message.innerText = 'You go first.';
-		diceRollText.appendChild(message);
+		setTimeout(() => {
+			message.innerText = 'You go first.';
+			diceRollText.appendChild(message);
+		}, 500);
 	} else {
 		isPlayerTurn = false;
 
-		message.innerText = 'Enemy goes first.';
-		diceRollText.appendChild(message);
+		setTimeout(() => {
+			message.innerText = 'Enemy goes first.';
+			diceRollText.appendChild(message);
+		}, 500);
 	}
 
 	setTimeout(() => message.remove(), 3000);
@@ -416,22 +405,30 @@ function renderDamageMessage(message) {
 
 	if (isPlayerTurn && playerOne === 'Vikings') {
 		damageElement.classList.add('dexterity');
+		damageElement.innerText = message;
+
+		damageContainerPlayer.appendChild(damageElement);
 	}
 
 	if (isPlayerTurn && playerOne === 'Saxons') {
 		damageElement.classList.add('strength');
+		damageElement.innerText = message;
+
+		damageContainerPlayer.appendChild(damageElement);
 	}
 
 	if (!isPlayerTurn && playerTwo === 'Vikings') {
 		damageElement.classList.add('dexterity');
+		damageElement.innerText = message;
+
+		damageContainerEnemy.appendChild(damageElement);
 	}
 	if (!isPlayerTurn && playerTwo === 'Saxons') {
 		damageElement.classList.add('strength');
+		damageElement.innerText = message;
+
+		damageContainerEnemy.appendChild(damageElement);
 	}
-
-	damageElement.innerText = message;
-
-	damageContainer.appendChild(damageElement);
 
 	damageElement.style.transition = 'opacity 0.3s ease-in-out';
 
@@ -447,4 +444,30 @@ function renderDamageMessage(message) {
 			damageElement.remove();
 		});
 	}, 1600);
+}
+
+function enemyAttack() {
+	if (playersGold.two >= 15) {
+		printEnemyAttacks();
+		setTimeout(() => {
+			playersGold.two -= 15;
+
+			battle(enemyArmy, myArmy);
+
+			updateGold();
+
+			setTimeout(() => endPlayerTurn(), (myArmy.length + 2) * 600);
+		}, 2000);
+	} else endPlayerTurn();
+}
+
+function printEnemyAttacks() {
+	const message = document.createElement('h1');
+	message.innerText = 'Enemy decides to Attack your forces!';
+
+	diceRollText.append(message);
+
+	setTimeout(() => {
+		message.remove();
+	}, 2000);
 }
