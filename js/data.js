@@ -63,22 +63,21 @@ class Viking extends Soldier {
 	}
 
 	berserk() {
-		const berserkHealthCost = Math.floor(this.health * 0.5);
-		const berserkNewStrength = this.strength * 2;
-		const displayStrength = berserkNewStrength - this.strength;
+		this.strength = this.strength * 2;
+		this.evasionChance += 0.2;
+		this.blockChance = 0;
 
-		this.health -= berserkHealthCost;
+		const displayStrength = this.strength * 2;
+		-this.strength;
+
+		this.health -= Math.floor(this.health * 0.5);
 		renderDamageMessage(
 			`${this.name} goes into a berserk rage, gaining 
 			${displayStrength} strength and 20% evasion,
 			 but dropping the shield,
-			 and sacrificing ${berserkHealthCost} health `,
+			 and sacrificing ${Math.floor(this.health * 0.5)} health `,
 			3000
 		);
-
-		this.strength = berserkNewStrength;
-		this.evasionChance += 0.2;
-		this.blockChance = 0;
 		updateArmies();
 
 		setTimeout(() => {

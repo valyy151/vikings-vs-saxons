@@ -4,6 +4,8 @@ body {
 	font-size: 20px;
 	text-align: center;
 	font-variant: small-caps;
+
+	background: rgb(200, 255, 145);
 	cursor: default;
 }
 
@@ -51,6 +53,7 @@ ul {
 	flex-direction: column;
 	align-items: center;
 	font-weight: 600;
+	margin: auto;
 }
 
 ul li:nth-child(3) {
@@ -65,15 +68,15 @@ h1 {
 
 h2,
 h3 {
-	font-weight: 400;
+	font-weight: 600;
 	margin: 3px;
 	font-size: 32px;
 }
 
 h3 {
-	border: 2px solid rgb(34, 219, 9);
+	border: 4px solid rgb(100, 197, 87);
 	border-radius: 10px;
-	width: 75px;
+	width: 95px;
 }
 
 footer {
@@ -125,10 +128,11 @@ p {
 	width: 95vw;
 	height: 22vh;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
+	flex-direction: column;
 	z-index: 1;
-	background: white;
+	background: rgb(255, 255, 255);
+	contain: content;
 }
 
 .soldiers {
@@ -136,6 +140,7 @@ p {
 	justify-content: space-evenly;
 	flex-wrap: wrap;
 	margin: auto;
+	width: 90vw;
 }
 
 .strength {
@@ -209,7 +214,6 @@ p {
 
 .shop div {
 	width: 500px;
-
 	height: 150px;
 	display: flex;
 	flex-direction: column;
@@ -249,14 +253,6 @@ p {
 	color: rgb(219, 199, 19);
 }
 
-#vikingArmy {
-	width: 95vw;
-}
-
-#saxonArmy {
-	width: 95vw;
-}
-
 #buttonContainer {
 	display: flex;
 	width: 250px;
@@ -272,10 +268,10 @@ p {
 	height: 70px;
 	cursor: pointer;
 	background: transparent;
-	border: 2px solid;
+	border: 3px solid;
 	border-radius: 10px;
-
-	font-size: larger;
+	background: white;
+	font-size: 26px;
 }
 
 #pointsDiv {
@@ -285,8 +281,9 @@ p {
 	height: 465px;
 	position: absolute;
 	bottom: 26vh;
-	left: 89vw;
-	font-size: 30px;
+	left: 88vw;
+	font-size: 36px;
+	text-shadow: 0px 0px 5px rgb(255, 255, 255);
 }
 
 #diceRollText {

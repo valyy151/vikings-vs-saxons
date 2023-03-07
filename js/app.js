@@ -67,7 +67,7 @@ summonReinforcementsButton.addEventListener('click', () => {
 		playersGold.one -= 100;
 		summonReinforcements();
 		shopDiv.classList.toggle('hidden');
-	} else return null;
+	} else return false;
 });
 
 healButton.addEventListener('click', () => {
@@ -75,7 +75,7 @@ healButton.addEventListener('click', () => {
 		playersGold.one -= 15;
 		healArmy(myArmy);
 		shopDiv.classList.toggle('hidden');
-	} else return null;
+	} else return false;
 });
 
 arrowBarrageButton.addEventListener('click', () => {
@@ -83,7 +83,7 @@ arrowBarrageButton.addEventListener('click', () => {
 		playersGold.one -= 10;
 		arrowBarrage(enemyArmy);
 		shopDiv.classList.toggle('hidden');
-	} else return null;
+	} else return false;
 });
 
 volatileButton.addEventListener('click', () => {
@@ -97,7 +97,7 @@ volatileButton.addEventListener('click', () => {
 //Ends the current player's turn and switches to the other enemy's turn. It also calls enemyTurn() if it's the enemy's turn.
 function endPlayerTurn() {
 	if (totalHealthSaxon.innerText == 0 || totalHealthViking.innerText == 0) {
-		return null;
+		return false;
 	} else {
 		isPlayerTurn = !isPlayerTurn;
 		if (isPlayerTurn) {
@@ -291,12 +291,13 @@ function updateArmies() {
 	vikings.forEach((viking) => {
 		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
 		const vikingStrengthElement = document.querySelector(`#${viking.name} li:nth-child(2)`);
-		if (vikingHealthElement.innerText == 0) {
+
+		if (vikingHealthElement.textContent == 0) {
 			vikingHealthElement.parentNode.remove();
 		}
 
-		vikingHealthElement.innerText = viking.health;
-		vikingStrengthElement.innerText = viking.strength;
+		vikingHealthElement.textContent = viking.health;
+		vikingStrengthElement.textContent = viking.strength;
 		vikingHealthSum += viking.health;
 	});
 
@@ -304,28 +305,28 @@ function updateArmies() {
 		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
 		const saxonStrengthElement = document.querySelector(`#${saxon.name} li:nth-child(2)`);
 
-		if (saxonHealthElement.innerText == 0) {
+		if (saxonHealthElement.textContent == 0) {
 			saxonHealthElement.parentNode.remove();
 		}
 
-		saxonHealthElement.innerText = saxon.health;
-		saxonStrengthElement.innerText = saxon.strength;
+		saxonHealthElement.textContent = saxon.health;
+		saxonStrengthElement.textContent = saxon.strength;
 		saxonHealthSum += saxon.health;
 	});
 
-	totalHealthViking.innerText = vikingHealthSum;
-	totalHealthSaxon.innerText = saxonHealthSum;
+	totalHealthViking.textContent = vikingHealthSum;
+	totalHealthSaxon.textContent = saxonHealthSum;
 	if (gameFinished) {
 		return;
 	} else {
-		if (totalHealthViking.innerText == 0) {
+		if (totalHealthViking.textContent == 0) {
 			setTimeout(() => {
 				displayVictoryText('Saxons win!');
 				section.style.display = 'none';
 				footer.style.display = 'flex';
 				gameFinished = true;
 			}, 4000);
-		} else if (totalHealthSaxon.innerText == 0) {
+		} else if (totalHealthSaxon.textContent == 0) {
 			setTimeout(() => {
 				displayVictoryText('Vikings win!');
 				section.style.display = 'none';
@@ -350,11 +351,11 @@ function updateGold() {
 
 //Simulates a battle between two armies by randomly selecting targets for soldiers in one army
 //and removing them from the other army if their health drops to or below 0.
-function battle(soldiers1, soldiers2) {
+function battle(army1, army2) {
 	let currentTargetIndex = 0;
 
 	const intervalId = setInterval(() => {
-		if (currentTargetIndex >= soldiers2.length) {
+		if (currentTargetIndex >= army2.length) {
 			clearInterval(intervalId);
 			updateArmies();
 			return;
@@ -362,26 +363,29 @@ function battle(soldiers1, soldiers2) {
 
 		const poisonChance = Math.random() < 0.05;
 
-		const attacker = soldiers1[Math.floor(Math.random() * soldiers1.length)];
-		const target = soldiers2[currentTargetIndex];
+		const attacker = army1[Math.floor(Math.random() * army1.length)];
+		const target = army2[currentTargetIndex];
 
 		const targetOriginalHealth = target.health;
 
 		attacker.attack(target, 1600);
-		if (target.health < targetOriginalHealth * 0.2 && target.constructor.name == 'Viking') {
-			target.berserk();
+		if (target.health > 0) {
+			if (target.health < targetOriginalHealth * 0.2 && target.constructor.name == 'Viking') {
+				target.berserk();
+			}
 		}
+
 		if (attacker.constructor.name == 'Saxon' && poisonChance) {
 			attacker.poison(target, 200);
 		}
 
 		if (target.health <= 0) {
-			soldiers2.splice(currentTargetIndex, 1);
+			army2.splice(currentTargetIndex, 1);
 		} else {
 			currentTargetIndex++;
 		}
 
-		if (soldiers2.length === 0) {
+		if (army2.length === 0) {
 			clearInterval(intervalId);
 			updateArmies();
 		}
