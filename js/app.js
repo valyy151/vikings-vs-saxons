@@ -44,10 +44,12 @@ startBattleButton.addEventListener('click', () => {
 		isPlayerTurn = true;
 		yourTurnText.className = 'strength';
 		enemyTurnText.className = 'dexterity';
+		vikingMusic.play();
 	} else {
 		isPlayerTurn = false;
 		yourTurnText.className = 'dexterity';
 		enemyTurnText.className = 'strength';
+		saxonMusic.play();
 	}
 
 	renderSoldiers(vikings);
@@ -56,7 +58,7 @@ startBattleButton.addEventListener('click', () => {
 	updateArmies();
 	whoGoesFirst();
 
-	setTimeout(() => decideTurn(), 3000);
+	setTimeout(() => decideTurn(), 6000);
 });
 
 //Button that refreshes the page
@@ -143,6 +145,7 @@ function enemyTurn() {
 function rollDice() {
 	dice1 = Math.round(Math.random() * 5) + 1;
 	dice2 = Math.round(Math.random() * 5) + 1;
+
 	return [dice1, dice2];
 }
 
@@ -164,6 +167,9 @@ function createSoldierElement(soldier) {
 	health.innerText = soldier.health;
 	health.classList.add('green');
 	newSoldier.appendChild(health);
+
+	const sprite = document.createElement('li');
+	newSoldier.appendChild(sprite);
 
 	return newSoldier;
 }
@@ -292,7 +298,7 @@ function updateArmies() {
 		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
 		const vikingStrengthElement = document.querySelector(`#${viking.name} li:nth-child(2)`);
 
-		if (vikingHealthElement.textContent == 0) {
+		if (parseInt(vikingHealthElement.textContent) <= 0) {
 			vikingHealthElement.parentNode.remove();
 		}
 
@@ -305,7 +311,7 @@ function updateArmies() {
 		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
 		const saxonStrengthElement = document.querySelector(`#${saxon.name} li:nth-child(2)`);
 
-		if (saxonHealthElement.textContent == 0) {
+		if (parseInt(saxonHealthElement.textContent) <= 0) {
 			saxonHealthElement.parentNode.remove();
 		}
 
@@ -352,44 +358,27 @@ function updateGold() {
 //Simulates a battle between two armies by randomly selecting targets for soldiers in one army
 //and removing them from the other army if their health drops to or below 0.
 function battle(army1, army2) {
-	let currentTargetIndex = 0;
+	let i = 0;
 
 	const intervalId = setInterval(() => {
-		if (currentTargetIndex >= army2.length) {
+		if (i >= army2.length) {
 			clearInterval(intervalId);
 			updateArmies();
 			return;
 		}
 
-		const poisonChance = Math.random() < 0.05;
-
 		const attacker = army1[Math.floor(Math.random() * army1.length)];
-		const target = army2[currentTargetIndex];
-
-		const targetOriginalHealth = target.health;
-
+		const target = army2[i];
 		attacker.attack(target, 1600);
-		if (target.health > 0) {
-			if (target.health < targetOriginalHealth * 0.2 && target.constructor.name == 'Viking') {
-				target.berserk();
-			}
-		}
-
-		if (attacker.constructor.name == 'Saxon' && poisonChance) {
-			attacker.poison(target, 200);
-		}
 
 		if (target.health <= 0) {
-			army2.splice(currentTargetIndex, 1);
-		} else {
-			currentTargetIndex++;
+			army2.splice(i, 1);
+			i--;
 		}
 
-		if (army2.length === 0) {
-			clearInterval(intervalId);
-			updateArmies();
-		}
-	}, 400);
+		i++;
+		updateArmies();
+	}, 500);
 }
 
 function displayVictoryText(value) {
@@ -431,22 +420,22 @@ function whoGoesFirst() {
 		setTimeout(() => {
 			message.innerText = 'You go first.';
 			diceRollText.appendChild(message);
-		}, 1000);
+		}, 3000);
 	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
 		setTimeout(() => {
 			message.innerText = 'You go first.';
 			diceRollText.appendChild(message);
-		}, 1000);
+		}, 3000);
 	} else {
 		isPlayerTurn = false;
 
 		setTimeout(() => {
 			message.innerText = 'Enemy goes first.';
 			diceRollText.appendChild(message);
-		}, 500);
+		}, 3000);
 	}
 
-	setTimeout(() => message.remove(), 3000);
+	setTimeout(() => message.remove(), 6000);
 }
 
 function renderDamageMessage(message, duration) {

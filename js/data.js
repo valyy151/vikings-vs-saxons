@@ -19,26 +19,31 @@ class Soldier {
 
 	receiveDamage(damage, duration) {
 		const critical = this.critical();
+		const evaded = this.evade();
+		const blocked = this.block();
+
 		if (critical) {
 			damage = damage * this.criticalDamage;
 		}
-		const evaded = this.evade();
-		const blocked = this.block();
+
 		if (evaded) {
 			damage = 0;
-			renderDamageMessage(`${this.name} evades the attack ! ( ${damage} )`, duration);
+			renderDamageMessage(`${this.name} evaded! ( ${damage} )`, duration);
 		} else if (blocked) {
 			damage = Math.floor(damage * this.blockDamageReduction);
-			renderDamageMessage(`${this.name} blocks the attack and receives reduced damage! ( ${damage} )`, duration);
-		} else {
-			renderDamageMessage(`${this.name} takes damage! ( ${damage} ) `, duration);
 			this.health -= damage;
+			renderDamageMessage(`${this.name} blocked! ( ${damage} )`, duration);
+		} else {
+			this.health -= damage;
+
 			if (this.health <= 0) {
-				renderDamageMessage(`${this.name} has died.`, duration);
+				renderDamageMessage(`${this.name} took ${damage} damage and died.`, duration);
 				this.health = 0;
-				updateArmies();
+			} else {
+				renderDamageMessage(`${this.name} took damage! ( ${damage} ) `, duration);
 			}
 		}
+		updateArmies();
 	}
 
 	block() {
@@ -67,17 +72,8 @@ class Viking extends Soldier {
 		this.evasionChance += 0.2;
 		this.blockChance = 0;
 
-		const displayStrength = this.strength * 2;
-		-this.strength;
-
 		this.health -= Math.floor(this.health * 0.5);
-		renderDamageMessage(
-			`${this.name} goes into a berserk rage, gaining 
-			${displayStrength} strength and 20% evasion,
-			 but dropping the shield,
-			 and sacrificing ${Math.floor(this.health * 0.5)} health `,
-			3000
-		);
+		renderDamageMessage(`${this.name} GOES INTO A BERSERK RAGE!`, 3000);
 		updateArmies();
 
 		setTimeout(() => {
@@ -97,16 +93,11 @@ class Saxon extends Soldier {
 
 	poison(target) {
 		const damage = 5;
+
 		const poisonInterval = setInterval(() => {
 			target.health -= damage;
-			renderDamageMessage(` ${target.name} takes -${damage} poison damage!`, 2000);
-			if (target.health <= 0) {
-				renderDamageMessage(`${target.name} has died.`, 3000);
-				target.health = 0;
-				updateArmies();
-				clearInterval(poisonInterval);
-			}
 			updateArmies();
+			renderDamageMessage(` ${target.name} takes -${damage} poison damage!`, 2000);
 		}, 500);
 
 		setTimeout(() => {
@@ -237,3 +228,11 @@ const summonReinforcementsButton = document.getElementById('summonReinforcements
 const healButton = document.getElementById('healingButton');
 const arrowBarrageButton = document.getElementById('arrowBarrageButton');
 const volatileButton = document.getElementById('volatileButton');
+
+const vikingMusic = new Audio('./music/Viking Music - With Axe And Sword.mp3');
+const saxonMusic = new Audio('./music/Warrior.mp3');
+
+vikingMusic.volume = 0.5;
+vikingMusic.loop = true;
+saxonMusic.volume = 0.5;
+saxonMusic.loop = true;
