@@ -6,7 +6,7 @@ class Soldier {
 		this.evasionChance = 0.05;
 		this.criticalChance = 0.05;
 		this.criticalDamage = 2.5;
-		this.blockDamageReduction = 0.2;
+		this.blockDamageReduction = 0.8;
 		this.blockChance = 0.25;
 	}
 
@@ -57,9 +57,38 @@ class Soldier {
 class Viking extends Soldier {
 	constructor(name, health, strength) {
 		super(name, health, strength);
+		this.originalStrength = this.strength;
+		this.originalEvasionChance = this.evasionChance;
+		this.originalBlockChance = this.blockChance;
 	}
 
-	berserk() {}
+	berserk() {
+		const berserkHealthCost = Math.floor(this.health * 0.5);
+		const berserkNewStrength = this.strength * 2;
+		const displayStrength = berserkNewStrength - this.strength;
+
+		this.health -= berserkHealthCost;
+		renderDamageMessage(
+			`${this.name} goes into a berserk rage, gaining 
+			${displayStrength} strength and 20% evasion,
+			 but dropping the shield,
+			 and sacrificing ${berserkHealthCost} health `,
+			3000
+		);
+
+		this.strength = berserkNewStrength;
+		this.evasionChance += 0.2;
+		this.blockChance = 0;
+		updateArmies();
+
+		setTimeout(() => {
+			renderDamageMessage(`${this.name} snaps out of the berserk rage !`, 3000);
+			this.strength = this.originalStrength;
+			this.evasionChance = this.originalEvasionChance;
+			this.blockChance = this.originalBlockChance;
+			updateArmies();
+		}, 90000);
+	}
 }
 
 class Saxon extends Soldier {
@@ -67,7 +96,24 @@ class Saxon extends Soldier {
 		super(name, health, strength);
 	}
 
-	poison() {}
+	poison(target) {
+		const damage = 5;
+		const poisonInterval = setInterval(() => {
+			target.health -= damage;
+			renderDamageMessage(` ${target.name} takes -${damage} poison damage!`, 2000);
+			if (target.health <= 0) {
+				renderDamageMessage(`${target.name} has died.`, 3000);
+				target.health = 0;
+				updateArmies();
+				clearInterval(poisonInterval);
+			}
+			updateArmies();
+		}, 500);
+
+		setTimeout(() => {
+			clearInterval(poisonInterval);
+		}, 5000);
+	}
 }
 
 //Creation of the armies
@@ -147,8 +193,8 @@ const saxonsOtherNames = [
 	'Leofmund',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(15, 35)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(10, 15), getRandomNumber(15, 35)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(25, 30), getRandomNumber(15, 35)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(25, 30), getRandomNumber(15, 35)));
 
 const vikingReinforcements = vikingsOtherNames.map(
 	(name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(15, 35))

@@ -109,7 +109,6 @@ function endPlayerTurn() {
 		} else {
 			yourTurnText.style.visibility = 'hidden';
 			enemyTurnText.style.visibility = 'visible';
-			battle();
 			enemyTurn();
 		}
 	}
@@ -361,9 +360,20 @@ function battle(soldiers1, soldiers2) {
 			return;
 		}
 
+		const poisonChance = Math.random() < 0.05;
+
 		const attacker = soldiers1[Math.floor(Math.random() * soldiers1.length)];
 		const target = soldiers2[currentTargetIndex];
+
+		const targetOriginalHealth = target.health;
+
 		attacker.attack(target, 1600);
+		if (target.health < targetOriginalHealth * 0.2 && target.constructor.name == 'Viking') {
+			target.berserk();
+		}
+		if (attacker.constructor.name == 'Saxon' && poisonChance) {
+			attacker.poison(target, 200);
+		}
 
 		if (target.health <= 0) {
 			soldiers2.splice(currentTargetIndex, 1);
@@ -593,6 +603,6 @@ function evasionBoost(army) {
 }
 
 function blockBoost(army) {
-	army.forEach((soldier) => (soldier.blockDamageReduction = Number((soldier.blockDamageReduction + 0.5).toFixed(2))));
+	army.forEach((soldier) => (soldier.blockDamageReduction = Number((soldier.blockDamageReduction - 0.5).toFixed(2))));
 	updateArmies();
 }
