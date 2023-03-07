@@ -3,25 +3,25 @@ class Soldier {
 		this.name = name;
 		this.health = health;
 		this.strength = strength;
-		this.evasionChance = 0.95;
-		this.criticalChance = 0.95;
+		this.evasionChance = 0.05;
+		this.criticalChance = 0.05;
 		this.criticalDamage = 2.5;
-		this.blockDamageReduction = 0.8;
-		this.blockChance = 0.75;
+		this.blockDamageReduction = 0.2;
+		this.blockChance = 0.25;
 	}
 
 	attack(target, duration) {
 		const damage = Math.floor(Math.random() * this.strength) + 1;
-		const critical = this.critical();
-		if (critical) {
-			damage = (damage + 5) * this.criticalDamage;
-		}
 		target.receiveDamage(damage, duration);
 
 		updateArmies();
 	}
 
 	receiveDamage(damage, duration) {
+		const critical = this.critical();
+		if (critical) {
+			damage = damage * this.criticalDamage;
+		}
 		const evaded = this.evade();
 		const blocked = this.block();
 		if (evaded) {
@@ -42,15 +42,15 @@ class Soldier {
 	}
 
 	block() {
-		return Math.random() > this.blockChance;
+		return Math.random() < this.blockChance;
 	}
 
 	evade() {
-		return Math.random() > this.evasionChance;
+		return Math.random() < this.evasionChance;
 	}
 
 	critical() {
-		return Math.random() > this.criticalChance;
+		return Math.random() < this.criticalChance;
 	}
 }
 

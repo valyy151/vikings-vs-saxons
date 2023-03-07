@@ -63,23 +63,35 @@ startBattleButton.addEventListener('click', () => {
 newGameButton.addEventListener('click', () => location.reload());
 
 summonReinforcementsButton.addEventListener('click', () => {
-	summonReinforcements();
-	shopDiv.classList.toggle('hidden');
+	if (isPlayerTurn && playersGold.one >= 100) {
+		playersGold.one -= 100;
+		summonReinforcements();
+		shopDiv.classList.toggle('hidden');
+	} else return null;
 });
 
 healButton.addEventListener('click', () => {
-	healArmy(myArmy);
-	shopDiv.classList.toggle('hidden');
+	if (playersGold.one >= 15) {
+		playersGold.one -= 15;
+		healArmy(myArmy);
+		shopDiv.classList.toggle('hidden');
+	} else return null;
 });
 
 arrowBarrageButton.addEventListener('click', () => {
-	arrowBarrage(enemyArmy);
-	shopDiv.classList.toggle('hidden');
+	if (playersGold.one >= 10) {
+		playersGold.one -= 10;
+		arrowBarrage(enemyArmy);
+		shopDiv.classList.toggle('hidden');
+	} else return null;
 });
 
 volatileButton.addEventListener('click', () => {
-	volatileSelection(myArmy);
-	shopDiv.classList.toggle('hidden');
+	if (playersGold.one >= 50) {
+		playersGold.one -= 50;
+		volatileSelection(myArmy);
+		shopDiv.classList.toggle('hidden');
+	}
 });
 
 //Ends the current player's turn and switches to the other enemy's turn. It also calls enemyTurn() if it's the enemy's turn.
@@ -496,23 +508,20 @@ function printEnemyAttacks() {
 }
 
 function summonReinforcements() {
-	if (isPlayerTurn && playersGold.one >= 100) {
-		playersGold.one -= 100;
-		if (playerOne === 'Vikings') {
-			vikingReinforcements.forEach((viking) => {
-				const newSoldier = createSoldierElement(viking);
-				vikings.push(viking);
-				vikingArmy.appendChild(newSoldier);
-			});
-		}
-		if (playerOne === 'Saxons') {
-			saxonReinforcements.forEach((saxon) => {
-				const newSoldier = createSoldierElement(saxon);
-				saxons.push(saxon);
-				saxonArmy.appendChild(newSoldier);
-			});
-		}
-	} else return null;
+	if (playerOne === 'Vikings') {
+		vikingReinforcements.forEach((viking) => {
+			const newSoldier = createSoldierElement(viking);
+			vikings.push(viking);
+			vikingArmy.appendChild(newSoldier);
+		});
+	}
+	if (playerOne === 'Saxons') {
+		saxonReinforcements.forEach((saxon) => {
+			const newSoldier = createSoldierElement(saxon);
+			saxons.push(saxon);
+			saxonArmy.appendChild(newSoldier);
+		});
+	}
 
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 	updateArmies();
@@ -520,12 +529,9 @@ function summonReinforcements() {
 }
 
 function healArmy(army) {
-	if (playersGold.one >= 15) {
-		playersGold.one -= 15;
-		army.forEach((soldier) => (soldier.health = soldier.health + 25));
-		updateArmies();
-		updateGold();
-	}
+	army.forEach((soldier) => (soldier.health = soldier.health + 25));
+	updateArmies();
+	updateGold();
 }
 
 function arrowBarrage(army) {
@@ -539,7 +545,7 @@ function arrowBarrage(army) {
 			const soldier = army[index];
 
 			if (soldier) {
-				soldier.receiveDamage(2, 500);
+				soldier.receiveDamage(5, 500);
 				updateArmies();
 
 				if (soldier.health <= 0) {
@@ -582,11 +588,11 @@ function damageBoost(army) {
 }
 
 function evasionBoost(army) {
-	army.forEach((soldier) => (soldier.evasionChance = Number((soldier.evasionChance - 0.15).toFixed(2))));
+	army.forEach((soldier) => (soldier.evasionChance = Number((soldier.evasionChance + 0.15).toFixed(2))));
 	updateArmies();
 }
 
 function blockBoost(army) {
-	army.forEach((soldier) => (soldier.blockDamageReduction = Number((soldier.blockDamageReduction - 0.5).toFixed(2))));
+	army.forEach((soldier) => (soldier.blockDamageReduction = Number((soldier.blockDamageReduction + 0.5).toFixed(2))));
 	updateArmies();
 }
