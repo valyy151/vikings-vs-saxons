@@ -73,7 +73,7 @@ summonReinforcementsButton.addEventListener('click', () => {
 });
 
 healButton.addEventListener('click', () => {
-	if (playersGold.one >= 30) {
+	if (isPlayerTurn && playersGold.one >= 30) {
 		playersGold.one -= 30;
 		updateGold();
 		printHealMessage(playerOne);
@@ -83,7 +83,7 @@ healButton.addEventListener('click', () => {
 });
 
 arrowBarrageButton.addEventListener('click', () => {
-	if (playersGold.one >= 10) {
+	if (isPlayerTurn && playersGold.one >= 10) {
 		playersGold.one -= 10;
 		updateGold();
 		printArrowBarrageMessage(playerOne);
@@ -93,7 +93,7 @@ arrowBarrageButton.addEventListener('click', () => {
 });
 
 volatileButton.addEventListener('click', () => {
-	if (playersGold.one >= 50) {
+	if (isPlayerTurn && playersGold.one >= 50) {
 		playersGold.one -= 50;
 		updateGold();
 		printVolatileMessage(playerOne);
@@ -235,20 +235,18 @@ function renderButtons() {
 	shopButton.textContent = 'Shop';
 
 	attackButton.addEventListener('click', () => {
-		printAttackMessage(playerOne);
-		setTimeout(() => {
-			if (isPlayerTurn && attackCount === 0) {
-				if (playersGold.one >= 15) {
-					playersGold.one -= 15;
-					battle(myArmy, enemyArmy);
-					attackCount++;
-					updateGold();
-					setTimeout(() => endPlayerTurn(), (enemyArmy.length + 2) * 600);
-				} else {
-					console.log('Not enough gold');
-				}
-			}
-		}, 2000);
+		if (isPlayerTurn && attackCount === 0 && playersGold.one >= 15) {
+			printAttackMessage(playerOne);
+			setTimeout(() => {
+				playersGold.one -= 15;
+				battle(myArmy, enemyArmy);
+				attackCount++;
+				updateGold();
+				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 2) * 600);
+			}, 2000);
+		} else {
+			console.log('Not enough gold');
+		}
 	});
 
 	rollDiceButton.addEventListener('click', () => {

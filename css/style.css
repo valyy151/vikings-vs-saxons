@@ -1,10 +1,8 @@
 body {
 	margin: 0;
 	font-family: sans-serif;
-	font-size: 1.2em;
 	text-align: center;
 	font-variant: small-caps;
-
 	background: rgb(219, 255, 182);
 	cursor: default;
 }
@@ -17,7 +15,7 @@ header {
 }
 
 select {
-	font-size: xx-large;
+	font-size: 1.6em;
 	text-align: center;
 	margin: 17%;
 	cursor: pointer;
@@ -29,9 +27,9 @@ header button {
 	font-size: 1.2em;
 	background: transparent;
 	cursor: pointer;
-	border: 3px solid rgb(255, 65, 65);
+	border: 3px solid rgb(0, 140, 255);
 	border-radius: 10px;
-	color: rgb(177, 42, 42);
+	color: rgb(0, 140, 255);
 	font-weight: 600;
 }
 
@@ -53,9 +51,9 @@ ul {
 	padding: 0px;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	font-weight: 600;
 	margin: auto;
+	align-items: center;
 }
 
 ul li:nth-child(3) {
@@ -66,6 +64,7 @@ ul li:nth-child(3) {
 
 h1 {
 	font-weight: 500;
+	margin: 0;
 }
 
 h2,
@@ -142,7 +141,8 @@ p {
 	justify-content: space-evenly;
 	flex-wrap: wrap;
 	margin: auto;
-	width: 90vw;
+	width: 95vw;
+	flex-wrap: wrap;
 }
 
 .strength {
@@ -193,7 +193,7 @@ p {
 }
 
 .turnText h2 {
-	font-size: 1.8em;
+	font-size: 2.5em;
 	visibility: hidden;
 	font-variant: small-caps;
 	font-weight: 600;
@@ -288,10 +288,11 @@ p {
 }
 
 #diceRollText {
-	width: 15vw;
-	height: 5vh;
+	width: 17vw;
+	height: 22vh;
 	position: absolute;
-	bottom: 52vh;
+	bottom: 40vh;
+	font-size: larger;
 }
 
 #h1Div {
@@ -300,6 +301,7 @@ p {
 }
 
 #damageContainerPlayer {
+	font-size: larger;
 	position: absolute;
 	width: 20vw;
 	height: 40vh;
@@ -309,6 +311,7 @@ p {
 }
 
 #damageContainerEnemy {
+	font-size: larger;
 	position: absolute;
 	width: 20vw;
 	height: 40vh;
