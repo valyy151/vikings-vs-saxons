@@ -62,6 +62,8 @@ startBattleButton.addEventListener('click', () => {
 	renderButtons();
 	updateArmies();
 	whoGoesFirst();
+	idleAnimationSaxon();
+	idleAnimationViking();
 
 	setTimeout(() => decideTurn(), 6000);
 });
@@ -93,6 +95,27 @@ arrowBarrageButton.addEventListener('click', () => {
 		updateGold();
 		printArrowBarrageMessage(playerOne);
 		arrowBarrage(enemyArmy);
+		arrowVolley.currentTime = 2.8;
+		arrowVolley.play();
+		setTimeout(() => {
+			arrowVolley.pause;
+			arrowVolley.currentTime = 8.3;
+		}, 2000);
+		setTimeout(() => {
+			arrowVolley.play();
+		}, 2500);
+		setTimeout(() => {
+			arrowVolley.pause;
+			arrowVolley.currentTime = 8.3;
+		}, 4000);
+		setTimeout(() => {
+			arrowVolley.play();
+		}, 4500);
+		setTimeout(() => {
+			arrowVolley.pause;
+			arrowVolley.currentTime = 8.3;
+		}, 6000);
+
 		shopDiv.classList.toggle('hidden');
 	} else return false;
 });
@@ -168,6 +191,27 @@ function enemyTurn() {
 			playersGold.two -= 10;
 			printArrowBarrageMessage(playerTwo);
 			arrowBarrage(myArmy);
+			arrowBarrage(enemyArmy);
+			arrowVolley.currentTime = 2.8;
+			arrowVolley.play();
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 2000);
+			setTimeout(() => {
+				arrowVolley.play();
+			}, 2500);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 4000);
+			setTimeout(() => {
+				arrowVolley.play();
+			}, 4500);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 6000);
 			setTimeout(() => {
 				endPlayerTurn();
 			}, 9000);
@@ -256,7 +300,6 @@ function renderButtons() {
 				battle(myArmy, enemyArmy);
 				attackCount++;
 				updateGold();
-				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 2) * 600);
 			}, 2000);
 		} else {
 			console.log('Not enough gold');
@@ -403,11 +446,15 @@ function updateGold() {
 //and removing them from the other army if their health drops to or below 0.
 function battle(army1, army2) {
 	let i = 0;
+	battleSounds.play();
 
 	const intervalId = setInterval(() => {
 		if (i >= army2.length) {
 			clearInterval(intervalId);
 			updateArmies();
+			battleSounds.pause();
+			battleSounds.currentTime = 0;
+
 			return;
 		}
 
@@ -777,28 +824,3 @@ function printBlockBoostMessage(attacker) {
 		message.remove();
 	}, 2000);
 }
-
-setInterval(() => {
-	saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
-	setTimeout(() => {
-		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_2.png')"));
-	}, 300);
-	setTimeout(() => {
-		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_3.png')"));
-	}, 600);
-}, 900);
-setInterval(() => {
-	vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
-	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_2.png')"));
-	}, 150);
-	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
-	}, 300);
-	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_4.png')"));
-	}, 450);
-	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
-	}, 600);
-}, 750);

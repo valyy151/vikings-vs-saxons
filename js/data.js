@@ -183,8 +183,8 @@ const saxonsOtherNames = [
 	'Leofmund',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(100, 125), getRandomNumber(15, 25)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(100, 125), getRandomNumber(15, 25)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(50, 55), getRandomNumber(15, 25)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(50, 55), getRandomNumber(15, 25)));
 
 const vikingReinforcements = vikingsOtherNames.map(
 	(name) => new Viking(name, getRandomNumber(100, 125), getRandomNumber(15, 25))
@@ -232,7 +232,55 @@ const volatileButton = document.getElementById('volatileButton');
 const vikingMusic = new Audio('./music/Viking Music - With Axe And Sword.mp3');
 const saxonMusic = new Audio('./music/Warrior.mp3');
 
-vikingMusic.volume = 0.5;
+const battleSounds = new Audio('./sound_effects/battle_sounds.mp3');
+const arrowVolley = new Audio('./sound_effects/arrows.mp3');
+
+arrowVolley.currentTime = 2.8;
+
+battleSounds.volume = 0.3;
+
+vikingMusic.volume = 0.3;
 vikingMusic.loop = true;
-saxonMusic.volume = 0.5;
+saxonMusic.volume = 0.3;
 saxonMusic.loop = true;
+
+function idleAnimationSaxon() {
+	const idleIntervalSaxon = setInterval(() => {
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_2.png')"));
+		}, 300);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_3.png')"));
+		}, 600);
+	}, 900);
+}
+
+function idleAnimationViking() {
+	const idleIntervalViking = setInterval(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
+		}, 300);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
+		}, 600);
+	}, 900);
+}
+
+// function rollAnimationSaxon() {
+// 	saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/jump_4.png')"));
+// 	setTimeout(() => {
+// 		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/jump_5.png')"));
+// 	}, 300);
+// }
+
+// function rollAnimationViking() {
+// 	vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
+// 	setTimeout(() => {
+// 		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
+// 	}, 310);
+// 	setTimeout(() => {
+// 		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
+// 	}, 610);
+// }

@@ -356,3 +356,7 @@ p {
 	justify-content: space-between;
 	flex-direction: column;
 }
+
+#saxonHealthAndName {
+	display: inline-block;
+}
