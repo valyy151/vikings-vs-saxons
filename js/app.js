@@ -779,12 +779,12 @@ function printBlockBoostMessage(attacker) {
 }
 
 setInterval(() => {
-	saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/saxon/ready_1.png')"));
+	saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
 	setTimeout(() => {
-		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/saxon/ready_2.png')"));
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_2.png')"));
 	}, 300);
 	setTimeout(() => {
-		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/saxon/ready_3.png')"));
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_3.png')"));
 	}, 600);
 }, 900);
 setInterval(() => {
