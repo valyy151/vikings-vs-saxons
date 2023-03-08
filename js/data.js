@@ -236,6 +236,3 @@ vikingMusic.volume = 0.5;
 vikingMusic.loop = true;
 saxonMusic.volume = 0.5;
 saxonMusic.loop = true;
-
-const vikingIdle1 = '../images/viking/ready_1.png';
-const vikingIdle2 = '../images/viking/ready_2.png';

@@ -788,17 +788,17 @@ setInterval(() => {
 	}, 600);
 }, 900);
 setInterval(() => {
-	vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_1.png')"));
+	vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
 	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_2.png')"));
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_2.png')"));
 	}, 150);
 	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_3.png')"));
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
 	}, 300);
 	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_4.png')"));
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_4.png')"));
 	}, 450);
 	setTimeout(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_5.png')"));
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
 	}, 600);
 }, 750);
