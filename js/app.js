@@ -17,6 +17,7 @@ const players = [
 		playerTwo: 'Saxons',
 		yourArmyDiv: vikingDiv,
 		myArmy: vikings,
+
 		enemyArmy: saxons,
 	},
 	{
@@ -24,6 +25,7 @@ const players = [
 		playerTwo: 'Vikings',
 		yourArmyDiv: saxonDiv,
 		myArmy: saxons,
+
 		enemyArmy: vikings,
 	},
 ];
@@ -226,7 +228,9 @@ function renderSoldiers(army) {
 	vikingSprites = document.querySelectorAll('.viking-sprite');
 
 	// Set styles for the army display
+
 	yourArmyDiv.style.order = 1;
+
 	yourArmyDiv.style.flexDirection = 'column-reverse';
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 }
