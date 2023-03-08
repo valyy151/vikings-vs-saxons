@@ -183,14 +183,14 @@ const saxonsOtherNames = [
 	'Leofmund',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(25, 30), getRandomNumber(15, 35)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(25, 30), getRandomNumber(15, 35)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(100, 125), getRandomNumber(15, 25)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(100, 125), getRandomNumber(15, 25)));
 
 const vikingReinforcements = vikingsOtherNames.map(
-	(name) => new Viking(name, getRandomNumber(10, 15), getRandomNumber(15, 35))
+	(name) => new Viking(name, getRandomNumber(100, 125), getRandomNumber(15, 25))
 );
 const saxonReinforcements = saxonsOtherNames.map(
-	(name) => new Saxon(name, getRandomNumber(10, 15), getRandomNumber(15, 35))
+	(name) => new Saxon(name, getRandomNumber(100, 125), getRandomNumber(15, 25))
 );
 
 function getRandomNumber(min, max) {
