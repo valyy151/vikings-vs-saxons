@@ -29,9 +29,9 @@ header button {
 	font-size: 1.2em;
 	background: transparent;
 	cursor: pointer;
-	border: 3px solid rgb(182, 54, 54);
+	border: 3px solid rgb(204, 10, 10);
 	border-radius: 10px;
-	color: rgb(119, 23, 23);
+	color: rgb(204, 10, 10);
 	font-weight: 600;
 }
 
