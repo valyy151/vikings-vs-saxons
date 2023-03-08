@@ -3,7 +3,7 @@ body {
 	font-family: sans-serif;
 	text-align: center;
 	font-variant: small-caps;
-	background: rgb(219, 255, 182);
+	background: rgb(216, 255, 177);
 	cursor: default;
 }
 
@@ -51,7 +51,7 @@ ul {
 	padding: 0px;
 	display: flex;
 	flex-direction: column;
-	font-weight: 600;
+	font-weight: 700;
 	align-items: center;
 	justify-content: space-between;
 	width: 3vw;
@@ -141,7 +141,6 @@ p {
 	align-items: center;
 	flex-direction: column;
 	z-index: 1;
-	background: rgb(255, 255, 255);
 }
 
 .soldiers {
@@ -171,15 +170,15 @@ p {
 }
 
 .yellow {
-	color: rgb(214, 193, 0);
+	color: rgb(192, 173, 0);
 }
 
 .yellow:hover {
 	transition: 100ms;
-	color: rgb(185, 170, 30);
+	color: rgb(161, 148, 26);
 }
 .dexterity {
-	color: rgb(219, 199, 19);
+	color: rgb(136, 124, 14);
 }
 
 .not-implemented {
@@ -275,13 +274,23 @@ p {
 }
 
 #vikingH2 {
-	color: rgb(241, 33, 33);
+	color: rgb(255, 34, 34);
 	position: absolute;
 }
 
 #saxonH2 {
 	color: rgb(219, 199, 19);
 	position: absolute;
+}
+
+#vikingDiv {
+	background: rgb(143, 54, 54);
+	color: rgb(255, 255, 255);
+}
+
+#saxonDiv {
+	background: rgb(240, 227, 114);
+	color: black;
 }
 
 #buttonContainer {
@@ -301,20 +310,22 @@ p {
 	background: transparent;
 	border: 3px solid;
 	border-radius: 10px;
-	background: white;
+	background: rgb(255, 255, 255);
 	font-size: 1.3em;
+	font-weight: 600;
 }
 
 #pointsDiv {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 50vh;
+	height: 48.5vh;
 	position: absolute;
 	bottom: 26vh;
 	left: 88vw;
 	font-size: 2em;
 	text-shadow: 0px 0px 5px rgb(255, 255, 255);
+	width: 10vw;
 }
 
 #diceRollText {

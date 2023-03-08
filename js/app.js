@@ -3,13 +3,14 @@ let saxonHealthSum = 0;
 
 let diceThrowCount = 1;
 let attackCount = 1;
-
+let victoryCount = 0;
 let gameFinished = false;
 
 let isPlayerTurn;
 
 let saxonSprites;
 let vikingSprites;
+let shopClosed = true;
 
 const players = [
 	{
@@ -75,6 +76,8 @@ summonReinforcementsButton.addEventListener('click', () => {
 	if (isPlayerTurn && playersGold.one >= 100) {
 		playersGold.one -= 100;
 		summonReinforcements();
+		shopCloseSound.currentTime = 0.3;
+		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
 	} else return false;
 });
@@ -84,7 +87,14 @@ healButton.addEventListener('click', () => {
 		playersGold.one -= 30;
 		updateGold();
 		printHealMessage(playerOne);
+		healSound.play();
+		setTimeout(() => {
+			healSound.pause();
+			healSound.currentTime = 0;
+		}, 2000);
 		healArmy(myArmy);
+		shopCloseSound.currentTime = 0.3;
+		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
 	} else return false;
 });
@@ -116,6 +126,8 @@ arrowBarrageButton.addEventListener('click', () => {
 			arrowVolley.currentTime = 8.3;
 		}, 6000);
 
+		shopCloseSound.currentTime = 0.3;
+		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
 	} else return false;
 });
@@ -126,6 +138,8 @@ volatileButton.addEventListener('click', () => {
 		updateGold();
 		printVolatileMessage(playerOne);
 		volatileSelection(myArmy);
+		shopCloseSound.currentTime = 0.3;
+		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
 	}
 });
@@ -137,12 +151,15 @@ function endPlayerTurn() {
 	} else {
 		isPlayerTurn = !isPlayerTurn;
 		if (isPlayerTurn) {
+			yourTurnSound.play();
 			yourTurnText.style.visibility = 'visible';
 			enemyTurnText.style.visibility = 'hidden';
 
 			diceThrowCount = 0;
 			attackCount = 0;
 		} else {
+			enemyTurnSound.currentTime = 0.7;
+			enemyTurnSound.play();
 			yourTurnText.style.visibility = 'hidden';
 			enemyTurnText.style.visibility = 'visible';
 			enemyTurn();
@@ -163,8 +180,14 @@ function enemyTurn() {
 		enemyGained.innerText = `Enemy gained ${gold} gold.`;
 		playersGold.two += gold;
 
-		setTimeout(() => diceRollText.append(enemyRolled), 100);
-		setTimeout(() => diceRollText.append(enemyGained), 1200);
+		setTimeout(() => {
+			diceSound.play();
+			diceRollText.append(enemyRolled);
+		}, 100);
+		setTimeout(() => {
+			coinSound.play();
+			diceRollText.append(enemyGained);
+		}, 1200);
 
 		setTimeout(() => enemyRolled.remove(), 5000);
 		setTimeout(() => enemyGained.remove(), 5000);
@@ -181,10 +204,16 @@ function enemyTurn() {
 		} else if (playersGold.two >= 30) {
 			playersGold.two -= 30;
 			printHealMessage(playerTwo);
+			healSound.play();
+			setTimeout(() => {
+				healSound.pause();
+				healSound.currentTime = 0;
+			}, 2000);
 			healArmy(enemyArmy);
 			setTimeout(() => endPlayerTurn(), 4000);
 		} else if (playersGold.two >= 15) {
 			printAttackMessage(playerTwo);
+			hornSound.play();
 			playersGold.two -= 15;
 			enemyAttack();
 		} else if (playersGold.two >= 10) {
@@ -319,8 +348,14 @@ function renderButtons() {
 			youRolled.innerText = `You rolled ${dice1} and ${dice2} `;
 			youGained.innerText = `You gained ${gold} gold.`;
 
-			setTimeout(() => diceRollText.append(youRolled), 100);
-			setTimeout(() => diceRollText.append(youGained), 1200);
+			setTimeout(() => {
+				diceSound.play();
+				diceRollText.append(youRolled);
+			}, 100);
+			setTimeout(() => {
+				coinSound.play();
+				diceRollText.append(youGained);
+			}, 1200);
 
 			setTimeout(() => {
 				youRolled.remove();
@@ -335,13 +370,23 @@ function renderButtons() {
 	});
 
 	endTurnButton.addEventListener('click', () => {
-		if (isPlayerTurn && attackCount === 0) {
+		if (isPlayerTurn) {
 			endPlayerTurn();
 		}
 	});
 
 	shopButton.addEventListener('click', () => {
-		shopDiv.classList.toggle('hidden');
+		if (shopClosed) {
+			shopOpenSound.currentTime = 0.4;
+			shopOpenSound.play();
+			shopDiv.classList.toggle('hidden');
+			shopClosed = !shopClosed;
+		} else if (!shopClosed) {
+			shopCloseSound.currentTime = 0.3;
+			shopCloseSound.play();
+			shopDiv.classList.toggle('hidden');
+			shopClosed = !shopClosed;
+		}
 	});
 
 	const playerGold = document.createElement('h4');
@@ -385,25 +430,28 @@ function updateArmies() {
 		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
 		const vikingStrengthElement = document.querySelector(`#${viking.name} li:nth-child(2)`);
 
-		if (parseInt(vikingHealthElement.textContent) <= 0) {
-			vikingHealthElement.parentNode.remove();
+		if (vikingHealthElement !== null) {
+			vikingHealthElement.textContent = viking.health;
+			vikingStrengthElement.textContent = viking.strength;
+			if (parseInt(vikingHealthElement.textContent) <= 0) {
+				vikingHealthElement.parentNode.remove();
+			}
 		}
 
-		vikingHealthElement.textContent = viking.health;
-		vikingStrengthElement.textContent = viking.strength;
 		vikingHealthSum += viking.health;
 	});
 
 	saxons.forEach((saxon) => {
 		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
 		const saxonStrengthElement = document.querySelector(`#${saxon.name} li:nth-child(2)`);
-
-		if (parseInt(saxonHealthElement.textContent) <= 0) {
-			saxonHealthElement.parentNode.remove();
+		if (saxonHealthElement !== null) {
+			saxonHealthElement.textContent = saxon.health;
+			saxonStrengthElement.textContent = saxon.strength;
+			if (parseInt(saxonHealthElement.textContent) <= 0) {
+				saxonHealthElement.parentNode.remove();
+			}
 		}
 
-		saxonHealthElement.textContent = saxon.health;
-		saxonStrengthElement.textContent = saxon.strength;
 		saxonHealthSum += saxon.health;
 	});
 
@@ -489,14 +537,18 @@ function decideTurn() {
 
 	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
 		isPlayerTurn = true;
+		yourTurnSound.play();
 		yourTurnText.style.visibility = 'visible';
 		enemyTurnText.style.visibility = 'hidden';
 	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
 		isPlayerTurn = true;
+		yourTurnSound.play();
 		yourTurnText.style.visibility = 'visible';
 		enemyTurnText.style.visibility = 'hidden';
 	} else {
 		isPlayerTurn = false;
+		enemyTurnSound.currentTime = 0.8;
+		enemyTurnSound.play();
 		yourTurnText.style.visibility = 'hidden';
 		enemyTurnText.style.visibility = 'visible';
 		enemyTurn();
@@ -600,7 +652,7 @@ function arrowBarrage(army) {
 			const soldier = army[index];
 
 			if (soldier) {
-				soldier.receiveDamage(5, 500);
+				soldier.receiveDamage(2, 500);
 				updateArmies();
 
 				if (soldier.health <= 0) {
