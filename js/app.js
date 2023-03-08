@@ -75,6 +75,8 @@ summonReinforcementsButton.addEventListener('click', () => {
 healButton.addEventListener('click', () => {
 	if (playersGold.one >= 30) {
 		playersGold.one -= 30;
+		updateGold();
+		printHealMessage(playerOne);
 		healArmy(myArmy);
 		shopDiv.classList.toggle('hidden');
 	} else return false;
@@ -83,6 +85,8 @@ healButton.addEventListener('click', () => {
 arrowBarrageButton.addEventListener('click', () => {
 	if (playersGold.one >= 10) {
 		playersGold.one -= 10;
+		updateGold();
+		printArrowBarrageMessage(playerOne);
 		arrowBarrage(enemyArmy);
 		shopDiv.classList.toggle('hidden');
 	} else return false;
@@ -91,6 +95,8 @@ arrowBarrageButton.addEventListener('click', () => {
 volatileButton.addEventListener('click', () => {
 	if (playersGold.one >= 50) {
 		playersGold.one -= 50;
+		updateGold();
+		printVolatileMessage(playerOne);
 		volatileSelection(myArmy);
 		shopDiv.classList.toggle('hidden');
 	}
@@ -141,19 +147,21 @@ function enemyTurn() {
 	setTimeout(() => {
 		if (playersGold.two >= 50) {
 			playersGold.two -= 50;
+			printVolatileMessage(playerTwo);
 			volatileSelection(enemyArmy);
 			setTimeout(() => endPlayerTurn(), 8000);
 		} else if (playersGold.two >= 30) {
 			playersGold.two -= 30;
-			printEnemyHeal();
+			printHealMessage(playerTwo);
 			healArmy(enemyArmy);
 			setTimeout(() => endPlayerTurn(), 4000);
 		} else if (playersGold.two >= 15) {
+			printAttackMessage(playerTwo);
 			playersGold.two -= 15;
 			enemyAttack();
 		} else if (playersGold.two >= 10) {
 			playersGold.two -= 10;
-			printEnemyArrowBarrage();
+			printArrowBarrageMessage(playerTwo);
 			arrowBarrage(myArmy);
 			setTimeout(() => {
 				endPlayerTurn();
@@ -227,17 +235,20 @@ function renderButtons() {
 	shopButton.textContent = 'Shop';
 
 	attackButton.addEventListener('click', () => {
-		if (isPlayerTurn && attackCount === 0) {
-			if (playersGold.one >= 15) {
-				playersGold.one -= 15;
-				battle(myArmy, enemyArmy);
-				attackCount++;
-				updateGold();
-				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 2) * 600);
-			} else {
-				console.log('Not enough gold');
+		printAttackMessage(playerOne);
+		setTimeout(() => {
+			if (isPlayerTurn && attackCount === 0) {
+				if (playersGold.one >= 15) {
+					playersGold.one -= 15;
+					battle(myArmy, enemyArmy);
+					attackCount++;
+					updateGold();
+					setTimeout(() => endPlayerTurn(), (enemyArmy.length + 2) * 600);
+				} else {
+					console.log('Not enough gold');
+				}
 			}
-		}
+		}, 2000);
 	});
 
 	rollDiceButton.addEventListener('click', () => {
@@ -506,7 +517,6 @@ function renderDamageMessage(message, duration) {
 }
 
 function enemyAttack() {
-	printEnemyAttacks();
 	setTimeout(() => {
 		battle(enemyArmy, myArmy);
 
@@ -516,36 +526,8 @@ function enemyAttack() {
 	}, 2000);
 }
 
-function summonReinforcements() {
-	if (playerOne === 'Vikings') {
-		vikingReinforcements.forEach((viking) => {
-			const newSoldier = createSoldierElement(viking);
-			vikings.push(viking);
-			vikingArmy.appendChild(newSoldier);
-		});
-	}
-	if (playerOne === 'Saxons') {
-		saxonReinforcements.forEach((saxon) => {
-			const newSoldier = createSoldierElement(saxon);
-			saxons.push(saxon);
-			saxonArmy.appendChild(newSoldier);
-		});
-	}
-
-	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
-	updateArmies();
-	updateGold();
-}
-
-function healArmy(army) {
-	setTimeout(() => {
-		army.forEach((soldier) => (soldier.health = soldier.health + 25));
-		updateArmies();
-		updateGold();
-	}, 3000);
-}
-
 function arrowBarrage(army) {
+	updateGold();
 	if (!isPlayerTurn) {
 		army = myArmy;
 	}
@@ -581,7 +563,14 @@ function arrowBarrage(army) {
 	}, 2000);
 
 	updateArmies();
-	updateGold();
+}
+
+function healArmy(army) {
+	setTimeout(() => {
+		army.forEach((soldier) => (soldier.health = soldier.health + 25));
+		updateArmies();
+		updateGold();
+	}, 3000);
 }
 
 function volatileSelection(army) {
@@ -592,12 +581,12 @@ function volatileSelection(army) {
 			const number = Math.floor(Math.random() * 3) + 1;
 			if (number === 1) {
 				damageBoost(army);
-				printEnemyAttackBoost();
+				printAttackBoostMessage(playerTwo);
 			} else if (number === 2) {
-				printEnemyEvasionBoost();
+				printEvasionBoostMessage(playerTwo);
 				evasionBoost(army);
 			} else if (number === 3) {
-				printEnemyBlockBoost();
+				printBlockBoostMessage(playerTwo);
 				blockBoost(army);
 			}
 			updateGold();
@@ -606,14 +595,55 @@ function volatileSelection(army) {
 		setTimeout(() => {
 			const number = Math.floor(Math.random() * 3) + 1;
 			if (number === 1) {
+				printAttackBoostMessage(playerOne);
 				damageBoost(army);
 			} else if (number === 2) {
+				printEvasionBoostMessage(playerOne);
 				evasionBoost(army);
 			} else if (number === 3) {
+				printBlockBoostMessage(playerOne);
 				blockBoost(army);
 			}
 			updateGold();
 		}, 4000);
+	}
+}
+
+function summonReinforcements(army) {
+	if (army === playerOne) {
+		if (playerOne === 'Vikings') {
+			vikingReinforcements.forEach((viking) => {
+				const newSoldier = createSoldierElement(viking);
+				vikings.push(viking);
+				vikingArmy.appendChild(newSoldier);
+			});
+		}
+		if (playerOne === 'Saxons') {
+			saxonReinforcements.forEach((saxon) => {
+				const newSoldier = createSoldierElement(saxon);
+				saxons.push(saxon);
+				saxonArmy.appendChild(newSoldier);
+			});
+		}
+		yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
+	} else if (army === playerTwo) {
+		if (playerTwo === 'Vikings') {
+			vikingReinforcements.forEach((viking) => {
+				const newSoldier = createSoldierElement(viking);
+				vikings.push(viking);
+				vikingArmy.appendChild(newSoldier);
+			});
+		}
+		if (playerTwo === 'Saxons') {
+			saxonReinforcements.forEach((saxon) => {
+				const newSoldier = createSoldierElement(saxon);
+				saxons.push(saxon);
+				saxonArmy.appendChild(newSoldier);
+			});
+		}
+
+		updateArmies();
+		updateGold();
 	}
 }
 
@@ -632,9 +662,13 @@ function blockBoost(army) {
 	updateArmies();
 }
 
-function printEnemyAttacks() {
+function printAttackMessage(attacker) {
 	const message = document.createElement('h1');
-	message.innerText = 'Enemy decides to Attack your forces!';
+	if (attacker === playerOne) {
+		message.innerText = 'You decide to Attack enemy forces!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy decides to Attack your forces!';
+	}
 
 	diceRollText.append(message);
 
@@ -643,9 +677,13 @@ function printEnemyAttacks() {
 	}, 2000);
 }
 
-function printEnemyArrowBarrage() {
+function printArrowBarrageMessage(attacker) {
 	const message = document.createElement('h1');
-	message.innerText = 'Enemy decides to Rain you with arrows!';
+	if (attacker === playerOne) {
+		message.innerText = 'You decide to Rain the enemy with arrows!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy decides to Rain you with arrows!';
+	}
 
 	diceRollText.append(message);
 
@@ -654,9 +692,43 @@ function printEnemyArrowBarrage() {
 	}, 2000);
 }
 
-function printEnemyHeal() {
+function printHealMessage(attacker) {
 	const message = document.createElement('h1');
-	message.innerText = 'Enemy decides to Heal his forces!';
+	if (attacker === playerOne) {
+		message.innerText = 'You decide to Heal your forces!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy decides to Heal his forces!';
+	}
+
+	diceRollText.append(message);
+
+	setTimeout(() => {
+		message.remove();
+	}, 3000);
+}
+
+function printVolatileMessage(attacker) {
+	const message = document.createElement('h1');
+	if (attacker === playerOne) {
+		message.innerText = 'You invoke Volatile Selection!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy invokes Volatile Selection!';
+	}
+
+	diceRollText.append(message);
+
+	setTimeout(() => {
+		message.remove();
+	}, 4000);
+}
+
+function printEvasionBoostMessage(attacker) {
+	const message = document.createElement('h1');
+	if (attacker === playerOne) {
+		message.innerText = 'You get 15% Evasion Boost on all soldiers!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy gets 15% Evasion Boost on all soldiers!';
+	}
 
 	diceRollText.append(message);
 
@@ -665,9 +737,13 @@ function printEnemyHeal() {
 	}, 2000);
 }
 
-function printEnemyVolatile() {
+function printAttackBoostMessage(attacker) {
 	const message = document.createElement('h1');
-	message.innerText = 'Enemy invokes Volatile Selection!';
+	if (attacker === playerOne) {
+		message.innerText = 'You get +25 Damage Boost on all soldiers!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy gets +25 Damage Boost on all soldiers!';
+	}
 
 	diceRollText.append(message);
 
@@ -676,32 +752,13 @@ function printEnemyVolatile() {
 	}, 2000);
 }
 
-function printEnemyEvasionBoost() {
+function printBlockBoostMessage(attacker) {
 	const message = document.createElement('h1');
-	message.innerText = 'Enemy gets 15% Evasion Boost on all soldiers!';
-
-	diceRollText.append(message);
-
-	setTimeout(() => {
-		message.remove();
-	}, 2000);
-}
-
-function printEnemyAttackBoost() {
-	const message = document.createElement('h1');
-	message.innerText = 'Enemy gets +25 Damage Boost on all soldiers!';
-
-	diceRollText.append(message);
-
-	setTimeout(() => {
-		message.remove();
-	}, 2000);
-}
-
-function printEnemyBlockBoost() {
-	const message = document.createElement('h1');
-	message.innerText = 'Enemy gets +50 % Damage Block on all soldiers!';
-
+	if (attacker === playerOne) {
+		message.innerText = 'You get +50 % Damage Block on all soldiers!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy gets +50 % Damage Block on all soldiers!';
+	}
 	diceRollText.append(message);
 
 	setTimeout(() => {
