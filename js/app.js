@@ -8,6 +8,9 @@ let gameFinished = false;
 
 let isPlayerTurn;
 
+let saxonSprites;
+let vikingSprites;
+
 const players = [
 	{
 		playerOne: 'Vikings',
@@ -44,7 +47,7 @@ startBattleButton.addEventListener('click', () => {
 		isPlayerTurn = true;
 		yourTurnText.className = 'strength';
 		enemyTurnText.className = 'dexterity';
-		vikingMusic.play();
+		setTimeout(() => vikingMusic.play(), 1500);
 	} else {
 		isPlayerTurn = false;
 		yourTurnText.className = 'dexterity';
@@ -209,11 +212,18 @@ function renderSoldiers(army) {
 	army.forEach((soldier) => {
 		const newSoldier = createSoldierElement(soldier);
 		if (army === saxons) {
+			newSoldier.children[3].classList.add('saxon-sprite');
+
 			saxonArmy.appendChild(newSoldier);
 		} else if (army === vikings) {
+			newSoldier.children[3].classList.add('viking-sprite');
+
 			vikingArmy.appendChild(newSoldier);
 		}
 	});
+
+	saxonSprites = document.querySelectorAll('.saxon-sprite');
+	vikingSprites = document.querySelectorAll('.viking-sprite');
 
 	// Set styles for the army display
 	yourArmyDiv.style.order = 1;
@@ -763,3 +773,28 @@ function printBlockBoostMessage(attacker) {
 		message.remove();
 	}, 2000);
 }
+
+setInterval(() => {
+	saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/saxon/ready_1.png')"));
+	setTimeout(() => {
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/saxon/ready_2.png')"));
+	}, 300);
+	setTimeout(() => {
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/saxon/ready_3.png')"));
+	}, 600);
+}, 900);
+setInterval(() => {
+	vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_1.png')"));
+	setTimeout(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_2.png')"));
+	}, 150);
+	setTimeout(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_3.png')"));
+	}, 300);
+	setTimeout(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_4.png')"));
+	}, 450);
+	setTimeout(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('../images/viking/ready_5.png')"));
+	}, 600);
+}, 750);

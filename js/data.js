@@ -11,7 +11,7 @@ class Soldier {
 	}
 
 	attack(target, duration) {
-		const damage = Math.floor(Math.random() * this.strength) + 1;
+		const damage = Math.floor(Math.random() * this.strength) + 5;
 		target.receiveDamage(damage, duration);
 
 		updateArmies();
@@ -236,3 +236,6 @@ vikingMusic.volume = 0.5;
 vikingMusic.loop = true;
 saxonMusic.volume = 0.5;
 saxonMusic.loop = true;
+
+const vikingIdle1 = '../images/viking/ready_1.png';
+const vikingIdle2 = '../images/viking/ready_2.png';
