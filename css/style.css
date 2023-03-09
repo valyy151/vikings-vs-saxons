@@ -3,9 +3,33 @@ body {
 	font-family: sans-serif;
 	text-align: center;
 	font-variant: small-caps;
-	background: rgb(174, 216, 132);
 
+	z-index: 1;
 	cursor: default;
+	color: white;
+}
+
+#wrapper {
+	background: url('../images/map.jpg');
+	width: 100vw;
+	height: 100vh;
+	z-index: -2;
+	position: absolute;
+	background-size: cover;
+	background-repeat: no-repeat;
+	opacity: 0.35;
+	bottom: 0;
+}
+#black {
+	background: black;
+	width: 100vw;
+	height: 100vh;
+	z-index: -2;
+	position: absolute;
+	background-size: cover;
+	background-repeat: no-repeat;
+	opacity: 0.4;
+	bottom: 0;
 }
 
 article {
@@ -34,10 +58,18 @@ header h1 {
 }
 
 select {
-	font-size: 1.6em;
+	font-size: 2em;
 	text-align: center;
 	margin: 5vh auto;
 	cursor: pointer;
+	background: none;
+	border: none;
+	font-weight: 700;
+}
+
+select:hover {
+	color: rgb(170, 36, 36);
+	transition: 0.1s ease;
 }
 
 header button {
@@ -220,7 +252,7 @@ p {
 	color: rgb(161, 148, 26);
 }
 .dexterity {
-	color: rgb(136, 124, 14);
+	color: rgb(255, 233, 33);
 }
 
 .not-implemented {
@@ -274,6 +306,7 @@ p {
 	width: 26vw;
 	margin: auto;
 	text-align: justify;
+	color: black;
 }
 
 .shop button {
@@ -366,7 +399,6 @@ p {
 	bottom: 26vh;
 	left: 88vw;
 	font-size: 2em;
-	text-shadow: 0px 0px 5px rgb(255, 255, 255);
 	width: 10vw;
 }
 
@@ -392,6 +424,7 @@ p {
 	bottom: 51.5vh;
 	contain: content;
 	z-index: 0;
+	font-weight: 700;
 }
 
 #damageContainerEnemy {
@@ -403,6 +436,7 @@ p {
 	bottom: 51.5vh;
 	contain: content;
 	z-index: 0;
+	font-weight: 700;
 }
 
 #armies {
@@ -429,6 +463,7 @@ p {
 	align-items: center;
 	justify-content: space-evenly;
 	height: 100%;
+	color: black;
 }
 
 #mainInstructions div {
@@ -447,7 +482,7 @@ p {
 	flex-direction: column;
 	font-size: 1.5em;
 	text-align: justify;
-
+	color: black;
 	justify-content: space-around;
 	height: 100%;
 }
