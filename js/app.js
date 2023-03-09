@@ -31,6 +31,42 @@ const players = [
 	},
 ];
 
+instructionsButton.addEventListener('click', () => {
+	header.style.display = 'none';
+	article.style.display = 'flex';
+	shopOpenSound.currentTime = 0.4;
+	shopOpenSound.volume = 0.5;
+	shopOpenSound.play();
+});
+
+instructionsInfo.addEventListener('click', () => {
+	mainInstructions.style.display = 'flex';
+	instructionsInfo.style.display = 'none';
+	soldiersInfoButton.style.display = 'inline';
+	soldiersInstructions.style.display = 'none';
+	shopCloseSound.currentTime = 0.3;
+	shopCloseSound.volume = 0.5;
+	shopCloseSound.play();
+});
+
+soldiersInfoButton.addEventListener('click', () => {
+	soldiersInstructions.style.display = 'flex';
+	mainInstructions.style.display = 'none	';
+	instructionsInfo.style.display = 'inline';
+	soldiersInfoButton.style.display = 'none';
+	shopCloseSound.currentTime = 0.3;
+	shopCloseSound.volume = 0.5;
+	shopCloseSound.play();
+});
+
+backButton.addEventListener('click', () => {
+	shopOpenSound.currentTime = 0.4;
+	shopOpenSound.volume = 0.5;
+	shopOpenSound.play();
+	article.style.display = 'none';
+	header.style.display = 'flex';
+});
+
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
 	const team = players[selectTeam.value];
@@ -329,6 +365,7 @@ function renderButtons() {
 				battle(myArmy, enemyArmy);
 				attackCount++;
 				updateGold();
+				setTimeout(() => endPlayerTurn(), (myArmy.length + 3) * 700);
 			}, 2000);
 		} else {
 			console.log('Not enough gold');
@@ -649,19 +686,8 @@ function renderDamageMessage(message, duration) {
 		damageContainerEnemy.appendChild(damageElement);
 	}
 
-	damageElement.style.transition = 'opacity 0.9s ease-in-out';
-
-	damageElement.getBoundingClientRect();
-
-	damageElement.style.opacity = 1;
-
 	setTimeout(() => {
-		damageElement.style.opacity = 0;
-
-		// add transitionend event listener to remove the element after the transition
-		damageElement.addEventListener('transitionend', () => {
-			damageElement.remove();
-		});
+		damageElement.remove();
 	}, duration);
 }
 
@@ -671,7 +697,7 @@ function enemyAttack() {
 
 		updateGold();
 
-		setTimeout(() => endPlayerTurn(), (myArmy.length + 4) * 600);
+		setTimeout(() => endPlayerTurn(), (myArmy.length + 3) * 700);
 	}, 2000);
 }
 
@@ -690,7 +716,7 @@ function arrowBarrage(army) {
 			const soldier = army[index];
 
 			if (soldier) {
-				soldier.receiveDamage(2, 500);
+				soldier.receiveDamage(2, 100);
 				updateArmies();
 
 				if (soldier.health <= 0) {
@@ -702,7 +728,7 @@ function arrowBarrage(army) {
 			} else {
 				clearInterval(soldierIntervalId);
 			}
-		}, 25);
+		}, 50);
 
 		barragesLeft--;
 		if (barragesLeft === 0 || army.length === 0) {

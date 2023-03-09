@@ -12,9 +12,11 @@ class Soldier {
 
 	attack(target, duration) {
 		const damage = this.strength;
-		target.receiveDamage(damage, duration);
+		if (target) {
+			target.receiveDamage(damage, duration);
 
-		updateArmies();
+			updateArmies();
+		}
 	}
 
 	receiveDamage(damage, duration) {
@@ -196,6 +198,7 @@ function getRandomNumber(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const instructionsButton = document.getElementById('instructionsButton');
 const startBattleButton = document.getElementById('startBattle');
 const newGameButton = document.getElementById('newGame');
 const selectTeam = document.getElementById('selectTeam');
@@ -203,6 +206,7 @@ const selectTeam = document.getElementById('selectTeam');
 const header = document.querySelector('header');
 const section = document.querySelector('section');
 const footer = document.querySelector('footer');
+const article = document.querySelector('article');
 
 const vikingDiv = document.getElementById('vikingDiv');
 const saxonDiv = document.getElementById('saxonDiv');
@@ -222,11 +226,16 @@ const damageContainerPlayer = document.getElementById('damageContainerPlayer');
 const damageContainerEnemy = document.getElementById('damageContainerEnemy');
 
 const shopDiv = document.getElementById('shop');
+const mainInstructions = document.getElementById('mainInstructions');
+const soldiersInstructions = document.getElementById('soldiersInstructions');
+const instructionsInfo = document.getElementById('instructionsInfo');
 
 const summonReinforcementsButton = document.getElementById('summonReinforcementsButton');
 const healButton = document.getElementById('healingButton');
 const arrowBarrageButton = document.getElementById('arrowBarrageButton');
 const volatileButton = document.getElementById('volatileButton');
+const soldiersInfoButton = document.getElementById('soldiersInfo');
+const backButton = document.getElementById('back');
 
 const vikingMusic = new Audio('./music/Viking Music - With Axe And Sword.mp3');
 const saxonMusic = new Audio('./music/Warrior.mp3');
