@@ -266,6 +266,7 @@ p {
 	position: relative;
 	z-index: 0;
 	scale: 1.3;
+	transition: 0.5s ease;
 }
 
 .viking-sprite {
@@ -276,6 +277,7 @@ p {
 	position: relative;
 	z-index: 0;
 	scale: 1.3;
+	transition: 0.5s ease;
 }
 
 #vikingH2 {
@@ -354,7 +356,7 @@ p {
 	right: 20vw;
 	bottom: 51.5vh;
 	contain: content;
-	z-index: 1;
+	z-index: 0;
 }
 
 #damageContainerEnemy {
@@ -365,7 +367,7 @@ p {
 	left: 20vw;
 	bottom: 51.5vh;
 	contain: content;
-	z-index: 1;
+	z-index: 0;
 }
 
 #armies {

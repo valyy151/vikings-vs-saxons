@@ -254,8 +254,11 @@ const yourTurnSound = new Audio('./sound_effects/your_turn.mp3');
 const enemyTurnSound = new Audio('./sound_effects/enemy_turn.mp3');
 
 const healSound = new Audio('./sound_effects/heal.mp3');
-const hornSound = new Audio('./sound_effects/horn.mp3');
 
+const hornSound = new Audio('./sound_effects/horn.mp3');
+const hornSound1 = new Audio('./sound_effects/horn1.mp3');
+
+const volatileSound = new Audio('./sound_effects/volatile.mp3');
 arrowVolley.currentTime = 2.8;
 
 battleSounds.volume = 0.3;
@@ -264,74 +267,3 @@ vikingMusic.volume = 0.3;
 vikingMusic.loop = true;
 saxonMusic.volume = 0.3;
 saxonMusic.loop = true;
-
-let idleIntervalSaxon;
-let idleIntervalViking;
-
-function idleAnimationSaxon() {
-	clearInterval(idleIntervalSaxon);
-	idleIntervalSaxon = setInterval(() => {
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
-		}, 200);
-
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_2.png')"));
-		}, 500);
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_3.png')"));
-		}, 800);
-	}, 1100);
-}
-
-function attackAnimationSaxon() {
-	clearInterval(idleIntervalSaxon);
-	idleIntervalSaxon = setInterval(() => {
-		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_1.png')"));
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_3.png')"));
-		}, 200);
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_4.png')"));
-		}, 600);
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_5.png')"));
-		}, 1000);
-		setTimeout(() => {
-			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_6.png')"));
-		}, 1400);
-	}, 1800);
-}
-
-function idleAnimationViking() {
-	clearInterval(idleIntervalViking);
-	idleIntervalViking = setInterval(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
-		setTimeout(() => {
-			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
-		}, 300);
-		setTimeout(() => {
-			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
-		}, 600);
-	}, 900);
-}
-
-function attackAnimationViking() {
-	clearInterval(idleIntervalViking);
-	idleIntervalViking = setInterval(() => {
-		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_1.png')"));
-
-		setTimeout(() => {
-			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_3.png')"));
-		}, 400);
-		setTimeout(() => {
-			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_4.png')"));
-		}, 800);
-		setTimeout(() => {
-			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_5.png')"));
-		}, 1200);
-		setTimeout(() => {
-			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_6.png')"));
-		}, 1600);
-	}, 2000);
-}

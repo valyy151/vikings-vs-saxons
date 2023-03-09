@@ -12,6 +12,9 @@ let saxonSprites;
 let vikingSprites;
 let shopClosed = true;
 
+let idleIntervalSaxon;
+let idleIntervalViking;
+
 const players = [
 	{
 		playerOne: 'Vikings',
@@ -109,9 +112,9 @@ startBattleButton.addEventListener('click', () => {
 newGameButton.addEventListener('click', () => location.reload());
 
 summonReinforcementsButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 100) {
-		playersGold.one -= 100;
-		summonReinforcements();
+	if (isPlayerTurn && playersGold.one >= 60) {
+		playersGold.one -= 60;
+		summonReinforcements(playerOne);
 		shopCloseSound.currentTime = 0.3;
 		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
@@ -173,6 +176,13 @@ volatileButton.addEventListener('click', () => {
 		playersGold.one -= 50;
 		updateGold();
 		printVolatileMessage(playerOne);
+
+		volatileSound.volume = 0.8;
+		volatileSound.play();
+		setTimeout(() => {
+			volatileSound.pause();
+			volatileSound.currentTime = 0;
+		}, 6000);
 		volatileSelection(myArmy);
 		shopCloseSound.currentTime = 0.3;
 		shopCloseSound.play();
@@ -359,6 +369,8 @@ function renderButtons() {
 
 	attackButton.addEventListener('click', () => {
 		if (isPlayerTurn && attackCount === 0 && playersGold.one >= 15) {
+			hornSound1.volume = 0.5;
+			hornSound1.play();
 			printAttackMessage(playerOne);
 			setTimeout(() => {
 				playersGold.one -= 15;
@@ -466,12 +478,18 @@ function updateArmies() {
 	vikings.forEach((viking) => {
 		const vikingHealthElement = document.querySelector(`#${viking.name} li:nth-child(3)`);
 		const vikingStrengthElement = document.querySelector(`#${viking.name} li:nth-child(2)`);
-
+		const vikingSprite = document.querySelector(`#${viking.name} li:nth-child(4)`);
 		if (vikingHealthElement !== null) {
 			vikingHealthElement.textContent = viking.health;
 			vikingStrengthElement.textContent = viking.strength;
 			if (parseInt(vikingHealthElement.textContent) <= 0) {
-				vikingHealthElement.parentNode.remove();
+				vikingHealthElement.textContent = 0;
+				clearInterval(idleIntervalViking);
+				vikingSprite.style.backgroundImage = "url('./images/viking/dead_3.png')";
+				setTimeout(() => {
+					vikingSprite.style.backgroundImage = "url('./images/viking/dead_4.png')";
+				}, 500);
+				setTimeout(() => vikingHealthElement.parentNode.remove(), 3000);
 			}
 		}
 
@@ -481,11 +499,17 @@ function updateArmies() {
 	saxons.forEach((saxon) => {
 		const saxonHealthElement = document.querySelector(`#${saxon.name} li:nth-child(3)`);
 		const saxonStrengthElement = document.querySelector(`#${saxon.name} li:nth-child(2)`);
+		const saxonSprite = document.querySelector(`#${saxon.name} li:nth-child(4)`);
 		if (saxonHealthElement !== null) {
 			saxonHealthElement.textContent = saxon.health;
 			saxonStrengthElement.textContent = saxon.strength;
 			if (parseInt(saxonHealthElement.textContent) <= 0) {
-				saxonHealthElement.parentNode.remove();
+				clearInterval(idleIntervalSaxon);
+				saxonSprite.style.backgroundImage = "url('./images/saxon/fall_back_3.png')";
+				setTimeout(() => {
+					saxonSprite.style.backgroundImage = "url('./images/saxon/fall_back_5.png')";
+				}, 500);
+				setTimeout(() => saxonHealthElement.parentNode.remove(), 3000);
 			}
 		}
 
@@ -716,7 +740,7 @@ function arrowBarrage(army) {
 			const soldier = army[index];
 
 			if (soldier) {
-				soldier.receiveDamage(2, 100);
+				soldier.receiveDamage(5, 150);
 				updateArmies();
 
 				if (soldier.health <= 0) {
@@ -938,5 +962,77 @@ function printBlockBoostMessage(attacker) {
 
 	setTimeout(() => {
 		message.remove();
+	}, 2000);
+}
+
+function idleAnimationSaxon() {
+	clearInterval(idleIntervalSaxon);
+	idleIntervalSaxon = setInterval(() => {
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
+		}, 200);
+
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_2.png')"));
+		}, 500);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_3.png')"));
+		}, 800);
+	}, 1100);
+}
+
+function attackAnimationSaxon() {
+	clearInterval(idleIntervalSaxon);
+	idleIntervalSaxon = setInterval(() => {
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_1.png')"));
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_2.png')"));
+		}, 400);
+
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_3.png')"));
+		}, 600);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_4.png')"));
+		}, 1000);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_5.png')"));
+		}, 1200);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_6.png')"));
+		}, 1800);
+	}, 2200);
+}
+
+function idleAnimationViking() {
+	clearInterval(idleIntervalViking);
+	idleIntervalViking = setInterval(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
+		}, 300);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
+		}, 600);
+	}, 900);
+}
+
+function attackAnimationViking() {
+	clearInterval(idleIntervalViking);
+	idleIntervalViking = setInterval(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_1.png')"));
+
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_3.png')"));
+		}, 400);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_4.png')"));
+		}, 800);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_5.png')"));
+		}, 1200);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_6.png')"));
+		}, 1600);
 	}, 2000);
 }
