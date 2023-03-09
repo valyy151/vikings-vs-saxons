@@ -4,6 +4,7 @@ body {
 	text-align: center;
 	font-variant: small-caps;
 	background: rgb(174, 216, 132);
+
 	cursor: default;
 }
 
@@ -16,28 +17,46 @@ article {
 header {
 	display: flex;
 	flex-direction: column;
-	width: 26vw;
+	width: 100vw;
 	margin: 2% auto;
+	background-image: url('../images/cover.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	justify-content: flex-start;
+	height: 90vh;
+	align-items: center;
+}
+
+header h1 {
+	text-shadow: 0px 0px 2px white;
+	font-size: 4em;
+	width: 10vw;
 }
 
 select {
 	font-size: 1.6em;
 	text-align: center;
-	margin: 17%;
+	margin: 5vh auto;
 	cursor: pointer;
 }
 
 header button {
-	margin: auto;
-	padding: 1.5% 7.5%;
+	padding: 1%;
 	font-size: 1.2em;
 	background: transparent;
 	cursor: pointer;
-	border: 3px solid rgb(0, 140, 255);
+
 	border-radius: 10px;
-	color: rgb(11, 120, 209);
+	color: rgb(161, 148, 26);
 	font-weight: 600;
 	background: white;
+	margin: auto;
+	height: 5vh;
+	width: 15vw;
+	border: 3px solid rgb(161, 148, 26);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 header button:hover {
@@ -70,6 +89,22 @@ li {
 	margin: 0px 0;
 }
 
+span {
+	position: absolute;
+	top: 2vh;
+	right: 3vw;
+	font-weight: 700;
+}
+
+a {
+	position: absolute;
+	top: 3vh;
+	left: 3.5vw;
+	scale: 2;
+	text-decoration: none;
+	display: none;
+}
+
 ul li:nth-child(3) {
 	border: 2px solid rgb(48, 201, 28);
 	border-radius: 10px;
@@ -77,7 +112,7 @@ ul li:nth-child(3) {
 }
 
 h1 {
-	font-weight: 500;
+	font-weight: 700;
 	margin: 0;
 }
 
@@ -266,7 +301,7 @@ p {
 	position: relative;
 	z-index: 0;
 	scale: 1.3;
-	transition: 0.5s ease;
+	transition: 1s ease;
 }
 
 .viking-sprite {
@@ -277,7 +312,7 @@ p {
 	position: relative;
 	z-index: 0;
 	scale: 1.3;
-	transition: 0.5s ease;
+	transition: 1s ease;
 }
 
 #vikingH2 {

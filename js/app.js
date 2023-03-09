@@ -15,6 +15,8 @@ let shopClosed = true;
 let idleIntervalSaxon;
 let idleIntervalViking;
 
+let isMuted = false;
+
 const players = [
 	{
 		playerOne: 'Vikings',
@@ -33,6 +35,16 @@ const players = [
 		enemyArmy: vikings,
 	},
 ];
+
+muteButton.addEventListener('click', () => {
+	if (isMuted) {
+		mute();
+		muteButton.innerHTML = '&#128264;';
+	} else if (!isMuted) {
+		unmute();
+		muteButton.innerHTML = '&#128266;';
+	}
+});
 
 instructionsButton.addEventListener('click', () => {
 	header.style.display = 'none';
@@ -72,6 +84,7 @@ backButton.addEventListener('click', () => {
 
 //Button that assigns which team you will be based on the choice you made
 startBattleButton.addEventListener('click', () => {
+	unmute();
 	const team = players[selectTeam.value];
 
 	playerOne = team.playerOne;
@@ -84,6 +97,7 @@ startBattleButton.addEventListener('click', () => {
 
 	header.style.display = 'none';
 	section.style.display = 'flex';
+	muteButton.style.display = 'block';
 
 	if (selectTeam.value === '0') {
 		isPlayerTurn = true;
@@ -377,7 +391,7 @@ function renderButtons() {
 				battle(myArmy, enemyArmy);
 				attackCount++;
 				updateGold();
-				setTimeout(() => endPlayerTurn(), (myArmy.length + 3) * 700);
+				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 4) * 700);
 			}, 2000);
 		} else {
 			console.log('Not enough gold');
@@ -484,12 +498,8 @@ function updateArmies() {
 			vikingStrengthElement.textContent = viking.strength;
 			if (parseInt(vikingHealthElement.textContent) <= 0) {
 				vikingHealthElement.textContent = 0;
-				clearInterval(idleIntervalViking);
-				vikingSprite.style.backgroundImage = "url('./images/viking/dead_3.png')";
-				setTimeout(() => {
-					vikingSprite.style.backgroundImage = "url('./images/viking/dead_4.png')";
-				}, 500);
-				setTimeout(() => vikingHealthElement.parentNode.remove(), 3000);
+
+				setTimeout(() => vikingHealthElement.parentNode.remove(), 1500);
 			}
 		}
 
@@ -504,12 +514,9 @@ function updateArmies() {
 			saxonHealthElement.textContent = saxon.health;
 			saxonStrengthElement.textContent = saxon.strength;
 			if (parseInt(saxonHealthElement.textContent) <= 0) {
-				clearInterval(idleIntervalSaxon);
-				saxonSprite.style.backgroundImage = "url('./images/saxon/fall_back_3.png')";
-				setTimeout(() => {
-					saxonSprite.style.backgroundImage = "url('./images/saxon/fall_back_5.png')";
-				}, 500);
-				setTimeout(() => saxonHealthElement.parentNode.remove(), 3000);
+				saxonHealthElement.textContent = 0;
+
+				setTimeout(() => saxonHealthElement.parentNode.remove(), 1500);
 			}
 		}
 
@@ -558,7 +565,7 @@ function battle(army1, army2) {
 	setTimeout(() => {
 		attackAnimationSaxon();
 		attackAnimationViking();
-	}, 1000);
+	}, 500);
 
 	setTimeout(() => {
 		battleSounds.play();
@@ -573,6 +580,7 @@ function battle(army1, army2) {
 		}
 
 		const intervalId = setInterval(() => {
+			const randomNumber = Math.random();
 			if (i >= army2.length) {
 				clearInterval(intervalId);
 
@@ -606,6 +614,9 @@ function battle(army1, army2) {
 
 			const attacker = army1[Math.floor(Math.random() * army1.length)];
 			const target = army2[i];
+			if (attacker.constructor.name === 'Saxon' && randomNumber < 0.06) {
+				attacker.poison(target, 300);
+			}
 			attacker.attack(target, 1600);
 
 			if (target.health <= 0) {
@@ -813,6 +824,8 @@ function summonReinforcements(army) {
 		if (playerOne === 'Vikings') {
 			vikingReinforcements.forEach((viking) => {
 				const newSoldier = createSoldierElement(viking);
+				newSoldier.children[3].classList.add('viking-sprite');
+				idleAnimationViking();
 				vikings.push(viking);
 				vikingArmy.appendChild(newSoldier);
 			});
@@ -820,7 +833,9 @@ function summonReinforcements(army) {
 		if (playerOne === 'Saxons') {
 			saxonReinforcements.forEach((saxon) => {
 				const newSoldier = createSoldierElement(saxon);
+				newSoldier.children[3].classList.add('saxon-sprite');
 				saxons.push(saxon);
+				idleAnimationSaxon();
 				saxonArmy.appendChild(newSoldier);
 			});
 		}
@@ -829,13 +844,17 @@ function summonReinforcements(army) {
 		if (playerTwo === 'Vikings') {
 			vikingReinforcements.forEach((viking) => {
 				const newSoldier = createSoldierElement(viking);
+				newSoldier.children[3].classList.add('viking-sprite');
 				vikings.push(viking);
+				idleAnimationViking();
 				vikingArmy.appendChild(newSoldier);
 			});
 		}
 		if (playerTwo === 'Saxons') {
 			saxonReinforcements.forEach((saxon) => {
 				const newSoldier = createSoldierElement(saxon);
+				newSoldier.children[3].classList.add('saxon-sprite');
+				idleAnimationSaxon();
 				saxons.push(saxon);
 				saxonArmy.appendChild(newSoldier);
 			});
@@ -1035,4 +1054,40 @@ function attackAnimationViking() {
 			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_6.png')"));
 		}, 1600);
 	}, 2000);
+}
+
+function mute() {
+	isMuted = !isMuted;
+	vikingMusic.volume = 0;
+	saxonMusic.volume = 0;
+	battleSounds.volume = 0;
+	arrowVolley.volume = 0;
+	diceSound.volume = 0;
+	coinSound.volume = 0;
+	shopOpenSound.volume = 0;
+	shopCloseSound.volume = 0;
+	yourTurnSound.volume = 0;
+	enemyTurnSound.volume = 0;
+	healSound.volume = 0;
+	hornSound.volume = 0;
+	hornSound1.volume = 0;
+	volatileSound.volume = 0;
+}
+
+function unmute() {
+	isMuted = !isMuted;
+	vikingMusic.volume = 0.2;
+	saxonMusic.volume = 0.2;
+	battleSounds.volume = 0.4;
+	arrowVolley.volume = 1;
+	diceSound.volume = 1;
+	coinSound.volume = 1;
+	shopOpenSound.volume = 1;
+	shopCloseSound.volume = 1;
+	yourTurnSound.volume = 1;
+	enemyTurnSound.volume = 1;
+	healSound.volume = 1;
+	hornSound.volume = 1;
+	hornSound1.volume = 1;
+	volatileSound.volume = 1;
 }
