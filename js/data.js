@@ -11,7 +11,7 @@ class Soldier {
 	}
 
 	attack(target, duration) {
-		const damage = Math.floor(Math.random() * this.strength) + 5;
+		const damage = this.strength;
 		target.receiveDamage(damage, duration);
 
 		updateArmies();
@@ -25,7 +25,6 @@ class Soldier {
 		if (critical) {
 			damage = damage * this.criticalDamage;
 		}
-
 		if (evaded) {
 			damage = 0;
 			renderDamageMessage(`${this.name} evaded! ( ${damage} )`, duration);
@@ -183,14 +182,14 @@ const saxonsOtherNames = [
 	'Leofmund',
 ];
 
-const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(50, 55), getRandomNumber(15, 25)));
-const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(50, 55), getRandomNumber(15, 25)));
+const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(150, 175), getRandomNumber(15, 25)));
+const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(150, 175), getRandomNumber(15, 25)));
 
 const vikingReinforcements = vikingsOtherNames.map(
-	(name) => new Viking(name, getRandomNumber(100, 125), getRandomNumber(15, 25))
+	(name) => new Viking(name, getRandomNumber(150, 175), getRandomNumber(15, 25))
 );
 const saxonReinforcements = saxonsOtherNames.map(
-	(name) => new Saxon(name, getRandomNumber(100, 125), getRandomNumber(15, 25))
+	(name) => new Saxon(name, getRandomNumber(150, 175), getRandomNumber(15, 25))
 );
 
 function getRandomNumber(min, max) {
@@ -257,20 +256,47 @@ vikingMusic.loop = true;
 saxonMusic.volume = 0.3;
 saxonMusic.loop = true;
 
+let idleIntervalSaxon;
+let idleIntervalViking;
+
 function idleAnimationSaxon() {
-	const idleIntervalSaxon = setInterval(() => {
-		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
+	clearInterval(idleIntervalSaxon);
+	idleIntervalSaxon = setInterval(() => {
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_1.png')"));
+		}, 200);
+
 		setTimeout(() => {
 			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_2.png')"));
-		}, 300);
+		}, 500);
 		setTimeout(() => {
 			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/ready_3.png')"));
+		}, 800);
+	}, 1100);
+}
+
+function attackAnimationSaxon() {
+	clearInterval(idleIntervalSaxon);
+	idleIntervalSaxon = setInterval(() => {
+		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_1.png')"));
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_3.png')"));
+		}, 200);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_4.png')"));
 		}, 600);
-	}, 900);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_5.png')"));
+		}, 1000);
+		setTimeout(() => {
+			saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/attack1_6.png')"));
+		}, 1400);
+	}, 1800);
 }
 
 function idleAnimationViking() {
-	const idleIntervalViking = setInterval(() => {
+	clearInterval(idleIntervalViking);
+	idleIntervalViking = setInterval(() => {
 		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
 		setTimeout(() => {
 			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
@@ -281,19 +307,22 @@ function idleAnimationViking() {
 	}, 900);
 }
 
-// function rollAnimationSaxon() {
-// 	saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/jump_4.png')"));
-// 	setTimeout(() => {
-// 		saxonSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/saxon/jump_5.png')"));
-// 	}, 300);
-// }
+function attackAnimationViking() {
+	clearInterval(idleIntervalViking);
+	idleIntervalViking = setInterval(() => {
+		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_1.png')"));
 
-// function rollAnimationViking() {
-// 	vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_1.png')"));
-// 	setTimeout(() => {
-// 		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_3.png')"));
-// 	}, 310);
-// 	setTimeout(() => {
-// 		vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/ready_5.png')"));
-// 	}, 610);
-// }
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_3.png')"));
+		}, 400);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_4.png')"));
+		}, 800);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_5.png')"));
+		}, 1200);
+		setTimeout(() => {
+			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_6.png')"));
+		}, 1600);
+	}, 2000);
+}

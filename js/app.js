@@ -494,30 +494,68 @@ function updateGold() {
 //and removing them from the other army if their health drops to or below 0.
 function battle(army1, army2) {
 	let i = 0;
-	battleSounds.play();
+	setTimeout(() => {
+		attackAnimationSaxon();
+		attackAnimationViking();
+	}, 1000);
 
-	const intervalId = setInterval(() => {
-		if (i >= army2.length) {
-			clearInterval(intervalId);
+	setTimeout(() => {
+		battleSounds.play();
+		if (playerOne === 'Saxons') {
+			saxonSprites.forEach((sprite) => (sprite.style.bottom = 23 + 'vh'));
+			vikingSprites.forEach((sprite) => (sprite.style.top = 23 + 'vh'));
+		}
+
+		if (playerOne === 'Vikings') {
+			saxonSprites.forEach((sprite) => (sprite.style.top = 23 + 'vh'));
+			vikingSprites.forEach((sprite) => (sprite.style.bottom = 23 + 'vh'));
+		}
+
+		const intervalId = setInterval(() => {
+			if (i >= army2.length) {
+				clearInterval(intervalId);
+
+				setTimeout(() => {
+					idleAnimationSaxon();
+					idleAnimationViking();
+				}, 1000);
+
+				setTimeout(() => {
+					if (playerOne === 'Saxons') {
+						setTimeout(() => {
+							saxonSprites.forEach((sprite) => (sprite.style.bottom = 0 + 'vh'));
+							vikingSprites.forEach((sprite) => (sprite.style.top = 0 + 'vh')), 1500;
+						});
+					}
+
+					if (playerOne === 'Vikings') {
+						setTimeout(() => {
+							saxonSprites.forEach((sprite) => (sprite.style.top = 0 + 'vh'));
+							vikingSprites.forEach((sprite) => (sprite.style.bottom = 0 + 'vh')), 1500;
+						});
+					}
+
+					updateArmies();
+					battleSounds.pause();
+					battleSounds.currentTime = 0;
+
+					return;
+				}, 2000);
+			}
+
+			const attacker = army1[Math.floor(Math.random() * army1.length)];
+			const target = army2[i];
+			attacker.attack(target, 1600);
+
+			if (target.health <= 0) {
+				army2.splice(i, 1);
+				i--;
+			}
+
+			i++;
 			updateArmies();
-			battleSounds.pause();
-			battleSounds.currentTime = 0;
-
-			return;
-		}
-
-		const attacker = army1[Math.floor(Math.random() * army1.length)];
-		const target = army2[i];
-		attacker.attack(target, 1600);
-
-		if (target.health <= 0) {
-			army2.splice(i, 1);
-			i--;
-		}
-
-		i++;
-		updateArmies();
-	}, 500);
+		}, 500);
+	}, 2000);
 }
 
 function displayVictoryText(value) {
@@ -633,7 +671,7 @@ function enemyAttack() {
 
 		updateGold();
 
-		setTimeout(() => endPlayerTurn(), (myArmy.length + 2) * 600);
+		setTimeout(() => endPlayerTurn(), (myArmy.length + 4) * 600);
 	}, 2000);
 }
 

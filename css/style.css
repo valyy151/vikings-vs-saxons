@@ -3,7 +3,7 @@ body {
 	font-family: sans-serif;
 	text-align: center;
 	font-variant: small-caps;
-	background: rgb(216, 255, 177);
+	background: rgb(174, 216, 132);
 	cursor: default;
 }
 
@@ -257,8 +257,7 @@ p {
 	background-repeat: no-repeat;
 	background-position: center;
 	position: relative;
-	/* translate: 0 -25vh; */
-	z-index: 1;
+	z-index: 0;
 	scale: 1.3;
 }
 
@@ -268,8 +267,7 @@ p {
 	background-repeat: no-repeat;
 	background-position: center;
 	position: relative;
-	/* translate: 0 25vh; */
-	z-index: 1;
+	z-index: 0;
 	scale: 1.3;
 }
 
@@ -345,19 +343,22 @@ p {
 	font-size: larger;
 	position: absolute;
 	width: 20vw;
-	height: 40vh;
+	height: 30vh;
 	right: 20vw;
+	bottom: 40vh;
 	contain: content;
-	contain: strict;
+	z-index: 1;
 }
 
 #damageContainerEnemy {
 	font-size: larger;
 	position: absolute;
 	width: 20vw;
-	height: 40vh;
+	height: 30vh;
 	left: 20vw;
+	bottom: 40vh;
 	contain: content;
+	z-index: 1;
 }
 
 #armies {
