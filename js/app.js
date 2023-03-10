@@ -129,7 +129,16 @@ newGameButton.addEventListener('click', () => location.reload());
 summonReinforcementsButton.addEventListener('click', () => {
 	if (isPlayerTurn && playersGold.one >= 60) {
 		playersGold.one -= 60;
-		summonReinforcements(playerOne);
+		updateGold();
+		printReinforcementsMessage(playerOne);
+		marchSound.play();
+		setTimeout(() => {
+			marchSound.pause();
+			marchSound.currentTime = 0;
+		}, 3000);
+		setTimeout(() => {
+			summonReinforcements(playerOne);
+		}, 2000);
 		shopCloseSound.currentTime = 0.3;
 		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
@@ -231,7 +240,10 @@ function endPlayerTurn() {
 //Simulates the behavior of the enemy when it's their turn.
 function enemyTurn() {
 	const [dice1, dice2] = rollDice();
-	const gold = dice1 * dice2;
+	let gold = dice1 * dice2;
+	if (dice1 === dice2) {
+		gold = gold * 2;
+	}
 
 	setTimeout(() => {
 		const enemyRolled = document.createElement('h6');
@@ -239,6 +251,7 @@ function enemyTurn() {
 
 		enemyRolled.innerText = `Enemy rolled ${dice1} and ${dice2} `;
 		enemyGained.innerText = `Enemy gained ${gold} gold.`;
+
 		playersGold.two += gold;
 
 		setTimeout(() => {
@@ -257,10 +270,26 @@ function enemyTurn() {
 	}, 2000);
 
 	setTimeout(() => {
-		if (playersGold.two >= 50) {
+		if (playersGold.two >= 60) {
+			playersGold.two -= 60;
+			printReinforcementsMessage(playerTwo);
+			marchSound.play();
+			setTimeout(() => {
+				marchSound.pause();
+				marchSound.currentTime = 0;
+			}, 3000);
+			setTimeout(() => summonReinforcements(playerTwo), 2000);
+			setTimeout(() => endPlayerTurn(), 3000);
+		} else if (playersGold.two >= 50) {
 			playersGold.two -= 50;
 			printVolatileMessage(playerTwo);
 			volatileSelection(enemyArmy);
+			volatileSound.volume = 0.8;
+			volatileSound.play();
+			setTimeout(() => {
+				volatileSound.pause();
+				volatileSound.currentTime = 0;
+			}, 6000);
 			setTimeout(() => endPlayerTurn(), 8000);
 		} else if (playersGold.two >= 30) {
 			playersGold.two -= 30;
@@ -402,7 +431,10 @@ function renderButtons() {
 	rollDiceButton.addEventListener('click', () => {
 		if (diceThrowCount === 0 && isPlayerTurn) {
 			const [dice1, dice2] = rollDice();
-			const gold = dice1 * dice2;
+			let gold = dice1 * dice2;
+			if (dice1 === dice2) {
+				gold = gold * 2;
+			}
 			playersGold.one += gold;
 
 			//  DOM element to hold the sentences
@@ -426,7 +458,7 @@ function renderButtons() {
 			}, 4100);
 			setTimeout(() => {
 				youGained.remove();
-			}, 5100);
+			}, 4100);
 
 			diceThrowCount++;
 			setTimeout(() => updateGold(), 1200);
@@ -825,8 +857,18 @@ function summonReinforcements(army) {
 		if (playerOne === 'Vikings') {
 			vikingReinforcements.forEach((viking) => {
 				const newSoldier = createSoldierElement(viking);
+
 				newSoldier.children[3].classList.add('viking-sprite');
-				idleAnimationViking();
+				setTimeout(() => {
+					saxonSprites = document.querySelectorAll('.saxon-sprite');
+					vikingSprites = document.querySelectorAll('.viking-sprite');
+				}, 200);
+
+				setTimeout(() => {
+					idleAnimationSaxon();
+					idleAnimationViking();
+				}, 300);
+
 				vikings.push(viking);
 				vikingArmy.appendChild(newSoldier);
 			});
@@ -834,9 +876,19 @@ function summonReinforcements(army) {
 		if (playerOne === 'Saxons') {
 			saxonReinforcements.forEach((saxon) => {
 				const newSoldier = createSoldierElement(saxon);
+
 				newSoldier.children[3].classList.add('saxon-sprite');
+				setTimeout(() => {
+					saxonSprites = document.querySelectorAll('.saxon-sprite');
+					vikingSprites = document.querySelectorAll('.viking-sprite');
+					idleAnimationSaxon();
+				}, 500);
+				setTimeout(() => {
+					idleAnimationSaxon();
+					idleAnimationViking();
+				}, 750);
+
 				saxons.push(saxon);
-				idleAnimationSaxon();
 				saxonArmy.appendChild(newSoldier);
 			});
 		}
@@ -846,8 +898,15 @@ function summonReinforcements(army) {
 			vikingReinforcements.forEach((viking) => {
 				const newSoldier = createSoldierElement(viking);
 				newSoldier.children[3].classList.add('viking-sprite');
+				setTimeout(() => {
+					saxonSprites = document.querySelectorAll('.saxon-sprite');
+					vikingSprites = document.querySelectorAll('.viking-sprite');
+				}, 500);
+				setTimeout(() => {
+					idleAnimationSaxon();
+					idleAnimationViking();
+				}, 750);
 				vikings.push(viking);
-				idleAnimationViking();
 				vikingArmy.appendChild(newSoldier);
 			});
 		}
@@ -855,7 +914,15 @@ function summonReinforcements(army) {
 			saxonReinforcements.forEach((saxon) => {
 				const newSoldier = createSoldierElement(saxon);
 				newSoldier.children[3].classList.add('saxon-sprite');
-				idleAnimationSaxon();
+				setTimeout(() => {
+					saxonSprites = document.querySelectorAll('.saxon-sprite');
+					vikingSprites = document.querySelectorAll('.viking-sprite');
+				}, 500);
+				setTimeout(() => {
+					idleAnimationSaxon();
+					idleAnimationViking();
+				}, 750);
+
 				saxons.push(saxon);
 				saxonArmy.appendChild(newSoldier);
 			});
@@ -932,6 +999,20 @@ function printVolatileMessage(attacker) {
 		message.innerText = 'You invoke Volatile Selection!';
 	} else if (attacker === playerTwo) {
 		message.innerText = 'Enemy invokes Volatile Selection!';
+	}
+
+	diceRollText.append(message);
+
+	setTimeout(() => {
+		message.remove();
+	}, 4000);
+}
+function printReinforcementsMessage(attacker) {
+	const message = document.createElement('h1');
+	if (attacker === playerOne) {
+		message.innerText = 'You summon Reinforcements!';
+	} else if (attacker === playerTwo) {
+		message.innerText = 'Enemy summons Reinforcements!';
 	}
 
 	diceRollText.append(message);

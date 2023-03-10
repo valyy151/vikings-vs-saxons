@@ -259,6 +259,7 @@ const hornSound = new Audio('./sound_effects/horn.mp3');
 const hornSound1 = new Audio('./sound_effects/horn1.mp3');
 
 const volatileSound = new Audio('./sound_effects/volatile.mp3');
+const marchSound = new Audio('./sound_effects/march.mp3');
 
 vikingMusic.loop = true;
 
