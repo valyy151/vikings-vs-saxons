@@ -90,6 +90,7 @@
 
 				</div>
 				<div id="soldiersInstructions">
+					<img id="warrior" src="./images/warrior.png" alt="warrior">
 					<div><strong>Every solder has:</strong></div>
 					<div>Random damage between <strong>15-25</strong></div>
 					<div>Critical chance of <strong>5%</strong></div>
@@ -100,8 +101,8 @@
 					<div>Vikings have a berserk method that doubles their damage and evasion chance, but disables
 						their
 						block chance, and reduces
-						their health by half. This occurs when a Viking drops below <strong>20%</strong> health, and
-						lasts <strong>90</strong> seconds.
+						their health by half. This occurs when a Viking drops below <strong>50</strong> health, and
+						will double his damage for every turn he stays alive.
 					</div>
 					<div>Saxons have a <strong>5%</strong> chance on every attack to poison a target which deals 5
 						damage over 5 seconds.
@@ -128,7 +129,7 @@
 			<div class="armies" id="saxonDiv">
 				<div id="saxonHealthAndName">
 
-					<h2 class="dexterity">SAXONS</h2>
+					<h2 class="dexterity2">SAXONS</h2>
 					<h3 class="green" id="totalHealthSaxon"></h3>
 				</div>
 
@@ -138,11 +139,17 @@
 
 			<div id="diceRollText"></div>
 			<div id="shop" class="shop hidden">
-				<div><button id="summonReinforcementsButton">Summon Militia (60)</button>
-					<p>Allows the player to activate a powerful beacon that calls forth reinforcements from nearby
-						allied
-						forces, significantly
-						bolstering their army. <br> +10 fresh allied soldiers. </p>
+				<div><button id="arrowBarrageButton">Hurricane of Arrows (10)</button>
+					<p>Unleash a deadly storm of arrows with precise aim that delivers three barrages, leaving
+						enemies
+						battered and bloodied. <br>-5 health for each enemy soldier per barrage.
+					</p>
+				</div>
+
+				<div><button id="volatileButton">Volatile Selection (50)</button>
+					<p>Randomly grants one of three buffs to the player's army:
+						<br>+ 25 damage <br> + 15% evasion chance<br>+ 50% damage reduction when blocking
+					</p>
 				</div>
 				<div><button id="healingButton">Blessing of Renewal (30)</button>
 					<p>Bestows a divine healing energy that mends the wounds of every soldier in the
@@ -152,16 +159,11 @@
 						for
 						each allied soldier.</p>
 				</div>
-				<div><button id="arrowBarrageButton">Hurricane of Arrows (10)</button>
-					<p>Unleash a deadly storm of arrows with precise aim that delivers three barrages, leaving
-						enemies
-						battered and bloodied. <br>-5 health for each enemy soldier per barrage.
-					</p>
-				</div>
-				<div><button id="volatileButton">Volatile Selection (50)</button>
-					<p>Randomly grants one of three buffs to the player's army:
-						<br>+ 25 damage <br> + 15% evasion chance<br>+ 50% damage reduction when blocking
-					</p>
+				<div><button id="summonReinforcementsButton">Summon Militia (60)</button>
+					<p>Allows the player to activate a powerful beacon that calls forth reinforcements from nearby
+						allied
+						forces, significantly
+						bolstering their army. <br> +10 fresh allied soldiers. </p>
 				</div>
 
 			</div>

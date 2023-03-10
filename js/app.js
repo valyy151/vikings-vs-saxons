@@ -98,16 +98,17 @@ startBattleButton.addEventListener('click', () => {
 	header.style.display = 'none';
 	section.style.display = 'flex';
 	muteButton.style.display = 'block';
+	span.style.display = 'inline';
 
 	if (selectTeam.value === '0') {
 		isPlayerTurn = true;
-		yourTurnText.className = 'strength';
-		enemyTurnText.className = 'dexterity';
+		yourTurnText.className = 'strength2';
+		enemyTurnText.className = 'dexterity2';
 		setTimeout(() => vikingMusic.play(), 1500);
 	} else {
 		isPlayerTurn = false;
-		yourTurnText.className = 'dexterity';
-		enemyTurnText.className = 'strength';
+		yourTurnText.className = 'dexterity2';
+		enemyTurnText.className = 'strength2';
 		saxonMusic.play();
 	}
 
@@ -469,16 +470,16 @@ function renderButtons() {
 		endTurnButton.classList.add('red');
 		shopButton.classList.add('red');
 		shopButton.classList.add('red');
-		enemyGold.classList.add('strength');
-		playerGold.classList.add('dexterity');
+		enemyGold.classList.add('strength2');
+		playerGold.classList.add('dexterity2');
 	} else {
 		rollDiceButton.classList.add('yellow');
 		attackButton.classList.add('yellow');
 		endTurnButton.classList.add('yellow');
 		shopButton.classList.add('yellow');
 		shopButton.classList.add('yellow');
-		enemyGold.classList.add('dexterity');
-		playerGold.classList.add('strength');
+		enemyGold.classList.add('dexterity2');
+		playerGold.classList.add('strength2');
 	}
 }
 
@@ -695,27 +696,27 @@ function renderDamageMessage(message, duration) {
 	const damageElement = document.createElement('p');
 
 	if (isPlayerTurn && playerOne === 'Vikings') {
-		damageElement.classList.add('dexterity');
+		damageElement.classList.add('dexterity2');
 		damageElement.innerText = message;
 
 		damageContainerPlayer.appendChild(damageElement);
 	}
 
 	if (isPlayerTurn && playerOne === 'Saxons') {
-		damageElement.classList.add('strength');
+		damageElement.classList.add('strength2');
 		damageElement.innerText = message;
 
 		damageContainerPlayer.appendChild(damageElement);
 	}
 
 	if (!isPlayerTurn && playerTwo === 'Vikings') {
-		damageElement.classList.add('dexterity');
+		damageElement.classList.add('dexterity2');
 		damageElement.innerText = message;
 
 		damageContainerEnemy.appendChild(damageElement);
 	}
 	if (!isPlayerTurn && playerTwo === 'Saxons') {
-		damageElement.classList.add('strength');
+		damageElement.classList.add('strength2');
 		damageElement.innerText = message;
 
 		damageContainerEnemy.appendChild(damageElement);
@@ -892,7 +893,7 @@ function printAttackMessage(attacker) {
 
 	setTimeout(() => {
 		message.remove();
-	}, 2000);
+	}, 3000);
 }
 
 function printArrowBarrageMessage(attacker) {
@@ -1078,14 +1079,14 @@ function unmute() {
 	isMuted = !isMuted;
 	vikingMusic.volume = 0.2;
 	saxonMusic.volume = 0.2;
-	battleSounds.volume = 0.4;
-	arrowVolley.volume = 1;
+	battleSounds.volume = 0.3;
+	arrowVolley.volume = 0.8;
 	diceSound.volume = 1;
 	coinSound.volume = 1;
 	shopOpenSound.volume = 1;
 	shopCloseSound.volume = 1;
 	yourTurnSound.volume = 1;
-	enemyTurnSound.volume = 1;
+	enemyTurnSound.volume = 0.8;
 	healSound.volume = 1;
 	hornSound.volume = 1;
 	hornSound1.volume = 1;

@@ -65,11 +65,17 @@ select {
 	background: none;
 	border: none;
 	font-weight: 700;
+	color: rgb(0, 0, 0);
+	outline: none;
 }
 
 select:hover {
 	color: rgb(170, 36, 36);
 	transition: 0.1s ease;
+}
+
+select:focus {
+	color: rgb(170, 36, 36);
 }
 
 header button {
@@ -126,6 +132,7 @@ span {
 	top: 2vh;
 	right: 3vw;
 	font-weight: 700;
+	display: none;
 }
 
 a {
@@ -141,6 +148,12 @@ ul li:nth-child(3) {
 	border: 2px solid rgb(48, 201, 28);
 	border-radius: 10px;
 	padding: 0 0.75vw;
+}
+
+ul li:nth-child(2) {
+	border: 2px solid;
+	border-radius: 10px;
+	padding: 0 1vw;
 }
 
 h1 {
@@ -227,7 +240,11 @@ p {
 }
 
 .strength {
-	color: rgb(248, 99, 99);
+	color: #ff1e1e;
+}
+
+.strength2 {
+	color: #7c0606;
 }
 
 .green {
@@ -252,7 +269,11 @@ p {
 	color: rgb(161, 148, 26);
 }
 .dexterity {
-	color: rgb(255, 233, 33);
+	color: rgb(117, 107, 15);
+}
+
+.dexterity2 {
+	color: rgb(255, 234, 46);
 }
 
 .not-implemented {
@@ -287,7 +308,7 @@ p {
 	border: 1px solid black;
 	position: absolute;
 	left: 14vw;
-	background: rgb(255, 245, 157);
+	background: rgb(255, 245, 157, 0.5);
 	z-index: 1;
 	justify-content: space-evenly;
 	align-items: center;
@@ -359,13 +380,19 @@ p {
 }
 
 #vikingDiv {
-	background: rgb(143, 54, 54);
+	background: url('../images/viking_board.jpg');
+	background-position: 50%;
+	background-repeat: no-repeat;
+	background-size: cover;
 	color: rgb(255, 255, 255);
 }
 
 #saxonDiv {
-	background: rgb(240, 227, 114);
-	color: black;
+	background: url('../images/saxon_board.jpg');
+
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: rgb(255, 255, 255);
 }
 
 #buttonContainer {
@@ -394,12 +421,12 @@ p {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	height: 48.5vh;
+	height: 50vh;
 	position: absolute;
 	bottom: 26vh;
-	left: 88vw;
-	font-size: 2em;
-	width: 10vw;
+	right: 4vw;
+	font-size: 3em;
+	width: 12vw;
 }
 
 #diceRollText {
@@ -512,4 +539,11 @@ p {
 
 #instructionsButton:hover {
 	color: rgb(214, 149, 69);
+}
+
+#warrior {
+	position: absolute;
+	width: 30vw;
+	left: 40vw;
+	top: 5vh;
 }

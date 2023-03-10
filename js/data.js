@@ -90,7 +90,7 @@ class Viking extends Soldier {
 				this.health = 0;
 			} else {
 				renderDamageMessage(`${this.name} took damage! ( ${damage} ) `, duration);
-				if (this.health < 30) {
+				if (this.health < 50) {
 					this.berserk();
 				}
 			}
@@ -205,6 +205,7 @@ const header = document.querySelector('header');
 const section = document.querySelector('section');
 const footer = document.querySelector('footer');
 const article = document.querySelector('article');
+const span = document.querySelector('span');
 
 const vikingDiv = document.getElementById('vikingDiv');
 const saxonDiv = document.getElementById('saxonDiv');
