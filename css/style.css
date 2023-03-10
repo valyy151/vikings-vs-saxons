@@ -439,7 +439,9 @@ p {
 
 #h1Div {
 	display: flex;
-	justify-content: space-evenly;
+	width: 30vw;
+	justify-content: center;
+	margin: auto;
 }
 
 #damageContainerPlayer {
