@@ -1,364 +1,3 @@
-let vikingHealthSum = 0;
-let saxonHealthSum = 0;
-
-let diceThrowCount = 1;
-let attackCount = 1;
-let victoryCount = 0;
-let gameFinished = false;
-
-let isPlayerTurn;
-
-let saxonSprites;
-let vikingSprites;
-let shopClosed = true;
-
-let idleIntervalSaxon;
-let idleIntervalViking;
-
-let isMuted = false;
-
-const players = [
-	{
-		playerOne: 'Vikings',
-		playerTwo: 'Saxons',
-		yourArmyDiv: vikingDiv,
-		myArmy: vikings,
-
-		enemyArmy: saxons,
-	},
-	{
-		playerOne: 'Saxons',
-		playerTwo: 'Vikings',
-		yourArmyDiv: saxonDiv,
-		myArmy: saxons,
-
-		enemyArmy: vikings,
-	},
-];
-
-const playersGold = {
-	one: 0,
-	two: 0,
-};
-
-//Button that assigns which team you will be based on the choice you made
-startBattleButton.addEventListener('click', () => {
-	unmute();
-	const team = players[selectTeam.value];
-
-	playerOne = team.playerOne;
-	playerTwo = team.playerTwo;
-	yourArmyDiv = team.yourArmyDiv;
-	myArmy = team.myArmy;
-	enemyArmy = team.enemyArmy;
-
-	console.log(`Your Team is ${playerOne} and the Enemy Team is ${playerTwo}`);
-
-	header.style.display = 'none';
-	section.style.display = 'flex';
-	muteButton.style.display = 'block';
-	span.style.display = 'inline';
-
-	if (selectTeam.value === '0') {
-		isPlayerTurn = true;
-		yourTurnText.className = 'strength2';
-		enemyTurnText.className = 'dexterity2';
-		setTimeout(() => vikingMusic.play(), 1500);
-	} else {
-		isPlayerTurn = false;
-		yourTurnText.className = 'dexterity2';
-		enemyTurnText.className = 'strength2';
-		saxonMusic.play();
-	}
-
-	renderSoldiers(vikings);
-	renderSoldiers(saxons);
-	renderButtons();
-	updateArmies();
-	whoGoesFirst();
-	idleAnimationSaxon();
-	idleAnimationViking();
-
-	setTimeout(() => decideTurn(), 6000);
-});
-
-muteButton.addEventListener('click', () => {
-	if (isMuted) {
-		mute();
-		muteButton.innerHTML = '&#128264;';
-	} else if (!isMuted) {
-		unmute();
-		muteButton.innerHTML = '&#128266;';
-	}
-});
-
-instructionsButton.addEventListener('click', () => {
-	header.style.display = 'none';
-	article.style.display = 'flex';
-	shopOpenSound.currentTime = 0.4;
-	shopOpenSound.volume = 0.5;
-	shopOpenSound.play();
-});
-
-instructionsInfo.addEventListener('click', () => {
-	mainInstructions.style.display = 'flex';
-	instructionsInfo.style.display = 'none';
-	soldiersInfoButton.style.display = 'inline';
-	soldiersInstructions.style.display = 'none';
-	shopCloseSound.currentTime = 0.3;
-	shopCloseSound.volume = 0.5;
-	shopCloseSound.play();
-});
-
-soldiersInfoButton.addEventListener('click', () => {
-	soldiersInstructions.style.display = 'flex';
-	mainInstructions.style.display = 'none	';
-	instructionsInfo.style.display = 'inline';
-	soldiersInfoButton.style.display = 'none';
-	shopCloseSound.currentTime = 0.3;
-	shopCloseSound.volume = 0.5;
-	shopCloseSound.play();
-});
-
-backButton.addEventListener('click', () => {
-	shopOpenSound.currentTime = 0.4;
-	shopOpenSound.volume = 0.5;
-	shopOpenSound.play();
-	article.style.display = 'none';
-	header.style.display = 'flex';
-});
-
-newGameButton.addEventListener('click', () => location.reload());
-
-//Buttons located in the Shop
-summonReinforcementsButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 60) {
-		playersGold.one -= 60;
-		updateGold();
-		printMessage(playerOne, 'decide to Summon Reinforcements!');
-		marchSound.play();
-		setTimeout(() => {
-			marchSound.pause();
-			marchSound.currentTime = 0;
-		}, 3000);
-		setTimeout(() => {
-			summonReinforcements(playerOne);
-		}, 2000);
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	} else return false;
-});
-
-healButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 30) {
-		playersGold.one -= 30;
-		updateGold();
-		printMessage(playerOne, 'decide to Heal your soldiers!');
-		healSound.play();
-		setTimeout(() => {
-			healSound.pause();
-			healSound.currentTime = 0;
-		}, 2000);
-		healArmy(myArmy);
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	} else return false;
-});
-
-arrowBarrageButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 10) {
-		playersGold.one -= 10;
-		updateGold();
-		printMessage(playerOne, 'decide to Rain Arrows upon the enemy!');
-		arrowBarrage(enemyArmy);
-		arrowVolley.currentTime = 2.8;
-		arrowVolley.play();
-		setTimeout(() => {
-			arrowVolley.pause;
-			arrowVolley.currentTime = 8.3;
-		}, 2000);
-		setTimeout(() => {
-			arrowVolley.play();
-		}, 2500);
-		setTimeout(() => {
-			arrowVolley.pause;
-			arrowVolley.currentTime = 8.3;
-		}, 4000);
-		setTimeout(() => {
-			arrowVolley.play();
-		}, 4500);
-		setTimeout(() => {
-			arrowVolley.pause;
-			arrowVolley.currentTime = 8.3;
-		}, 6000);
-
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	} else return false;
-});
-
-volatileButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 50) {
-		playersGold.one -= 50;
-		updateGold();
-		printMessage(playerOne, 'invoke Volatile Selection!', 4000);
-		volatileSound.play();
-		setTimeout(() => {
-			volatileSound.pause();
-			volatileSound.currentTime = 0;
-		}, 7500);
-		volatileSelection(myArmy);
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	}
-});
-
-//Ends the current player's turn and switches to the other enemy's turn. It also calls enemyTurn() if it's the enemy's turn.
-function endPlayerTurn() {
-	if (totalHealthSaxon.innerText == 0 || totalHealthViking.innerText == 0) {
-		return false;
-	} else {
-		isPlayerTurn = !isPlayerTurn;
-		if (isPlayerTurn) {
-			yourTurnSound.play();
-			yourTurnText.style.visibility = 'visible';
-			enemyTurnText.style.visibility = 'hidden';
-
-			diceThrowCount = 0;
-			attackCount = 0;
-		} else {
-			enemyTurnSound.currentTime = 0.7;
-			enemyTurnSound.play();
-			yourTurnText.style.visibility = 'hidden';
-			enemyTurnText.style.visibility = 'visible';
-			enemyTurn();
-		}
-	}
-}
-
-//Simulates the behavior of the enemy when it's their turn.
-function enemyTurn() {
-	const [dice1, dice2] = rollDice();
-	let gold = dice1 * dice2;
-	if (dice1 === dice2) {
-		gold = gold * 2;
-	}
-
-	setTimeout(() => {
-		const enemyRolled = document.createElement('h6');
-		const enemyGained = document.createElement('h6');
-
-		enemyRolled.innerText = `Enemy rolled ${dice1} and ${dice2} `;
-		enemyGained.innerText = `Enemy gained ${gold} gold.`;
-
-		playersGold.two += gold;
-
-		setTimeout(() => {
-			diceSound.play();
-			diceRollText.append(enemyRolled);
-		}, 100);
-		setTimeout(() => {
-			coinSound.play();
-			diceRollText.append(enemyGained);
-		}, 1200);
-
-		setTimeout(() => enemyRolled.remove(), 5000);
-		setTimeout(() => enemyGained.remove(), 5000);
-
-		setTimeout(() => updateGold(), 1200);
-	}, 2000);
-
-	setTimeout(() => {
-		if (playersGold.two >= 60) {
-			playersGold.two -= 60;
-			printMessage(playerTwo, 'decides to Summon Reinforcements!');
-			marchSound.play();
-			setTimeout(() => {
-				marchSound.pause();
-				marchSound.currentTime = 0;
-			}, 3000);
-			setTimeout(() => summonReinforcements(playerTwo), 2000);
-			setTimeout(() => endPlayerTurn(), 3000);
-		} else if (playersGold.two >= 50) {
-			playersGold.two -= 50;
-			printMessage(playerTwo, 'invokes Volatile Selection!', 4000);
-			volatileSelection(enemyArmy);
-			volatileSound.play();
-			setTimeout(() => {
-				volatileSound.pause();
-				volatileSound.currentTime = 0;
-			}, 7500);
-			setTimeout(() => endPlayerTurn(), 8000);
-		} else if (playersGold.two >= 30) {
-			playersGold.two -= 30;
-			printMessage(playerTwo, 'decides to Heal his soldiers!');
-			healSound.play();
-			setTimeout(() => {
-				healSound.pause();
-				healSound.currentTime = 0;
-			}, 2000);
-			healArmy(enemyArmy);
-			setTimeout(() => endPlayerTurn(), 4000);
-		} else if (playersGold.two >= 15) {
-			printMessage(playerTwo, 'decides to Attack your forces! ');
-			hornSound.play();
-			playersGold.two -= 15;
-			enemyAttack();
-		} else if (playersGold.two >= 10) {
-			playersGold.two -= 10;
-			printMessage(playerTwo, 'decides to Rain Arrows upon you!');
-			arrowBarrage(myArmy);
-			arrowBarrage(enemyArmy);
-			arrowVolley.currentTime = 2.8;
-			arrowVolley.play();
-			setTimeout(() => {
-				arrowVolley.pause;
-				arrowVolley.currentTime = 8.3;
-			}, 2000);
-			setTimeout(() => {
-				arrowVolley.play();
-			}, 2500);
-			setTimeout(() => {
-				arrowVolley.pause;
-				arrowVolley.currentTime = 8.3;
-			}, 4000);
-			setTimeout(() => {
-				arrowVolley.play();
-			}, 4500);
-			setTimeout(() => {
-				arrowVolley.pause;
-				arrowVolley.currentTime = 8.3;
-			}, 6000);
-			setTimeout(() => {
-				endPlayerTurn();
-			}, 9000);
-		} else endPlayerTurn();
-	}, 7000);
-}
-
-//Enemy calls the battle functions and ends his turn.
-function enemyAttack() {
-	setTimeout(() => {
-		battle(enemyArmy, myArmy);
-
-		updateGold();
-
-		setTimeout(() => endPlayerTurn(), (myArmy.length + 3) * 700);
-	}, 2000);
-}
-
-//Rolls two dice and returns an array with the results.
-function rollDice() {
-	dice1 = Math.round(Math.random() * 5) + 1;
-	dice2 = Math.round(Math.random() * 5) + 1;
-
-	return [dice1, dice2];
-}
-
 //Takes a soldier object as input and returns a new ul element representing that soldier.
 function createSoldierElement(soldier) {
 	const newSoldier = document.createElement('ul');
@@ -411,8 +50,7 @@ function renderSoldiers(army) {
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 }
 
-//Creates four buttons for a game interface.
-//These buttons allows the player to roll dice, attack, end turn, and access a shop)
+//Creates four buttons for a game interface, and gold counter on the side.
 function renderButtons() {
 	const attackButton = document.createElement('button');
 	const rollDiceButton = document.createElement('button');
@@ -426,14 +64,14 @@ function renderButtons() {
 
 	attackButton.addEventListener('click', () => {
 		if (isPlayerTurn && attackCount === 0 && playersGold.one >= 15) {
+			playersGold.one -= 15;
+			updateGold();
 			hornSound1.volume = 0.5;
 			hornSound1.play();
-			printMessage(playerOne, 'decide to Attack enemy forces!');
+			printMessage(playerOne, 'decide to Attack enemy forces!', 4000);
 			setTimeout(() => {
-				playersGold.one -= 15;
 				battle(myArmy, enemyArmy);
 				attackCount++;
-				updateGold();
 				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 4) * 700);
 			}, 2000);
 		} else {
@@ -528,6 +166,58 @@ function renderButtons() {
 	}
 }
 
+//Decides the first turn of the game
+function decideTurn(player) {
+	diceThrowCount = 0;
+	attackCount = 0;
+
+	setTimeout(() => {
+		if (player === playerOne) {
+			isPlayerTurn = true;
+			yourTurnSound.play();
+			yourTurnText.style.visibility = 'visible';
+			enemyTurnText.style.visibility = 'hidden';
+		} else if (player === playerTwo) {
+			isPlayerTurn = false;
+			enemyTurnSound.currentTime = 0.8;
+			enemyTurnSound.play();
+			yourTurnText.style.visibility = 'hidden';
+			enemyTurnText.style.visibility = 'visible';
+			enemyTurn();
+		}
+	}, 3000);
+}
+
+//Renders message saying which player will have the first turn, runs decideTurn() after that.
+function whoGoesFirst() {
+	const vikingHealth = parseInt(totalHealthViking.innerText);
+	const saxonHealth = parseInt(totalHealthSaxon.innerText);
+	const message = document.createElement('h2');
+	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
+		setTimeout(() => {
+			message.innerText = 'You go first.';
+			diceRollText.appendChild(message);
+			decideTurn(playerOne);
+		}, 3000);
+	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
+		setTimeout(() => {
+			message.innerText = 'You go first.';
+			diceRollText.appendChild(message);
+			decideTurn(playerOne);
+		}, 3000);
+	} else {
+		isPlayerTurn = false;
+
+		setTimeout(() => {
+			decideTurn(playerTwo);
+			message.innerText = 'Enemy goes first.';
+			diceRollText.appendChild(message);
+		}, 3000);
+	}
+
+	setTimeout(() => message.remove(), 6000);
+}
+
 //Updates the health values of all the soldiers in both armies in the DOM.
 //It also removes any soldiers from the DOM whose health is zero or less.
 function updateArmies() {
@@ -596,6 +286,153 @@ function updateGold() {
 	const gold = document.querySelectorAll('h4');
 	gold[0].innerText = `Gold: ${playersGold.two}`;
 	gold[1].innerText = `Gold: ${playersGold.one}`;
+}
+
+//Rolls two dice and returns an array with the results.
+function rollDice() {
+	dice1 = Math.round(Math.random() * 5) + 1;
+	dice2 = Math.round(Math.random() * 5) + 1;
+
+	return [dice1, dice2];
+}
+
+//Ends the current player's turn and switches to the other player's turn.
+function endPlayerTurn() {
+	if (totalHealthSaxon.innerText == 0 || totalHealthViking.innerText == 0) {
+		return false;
+	} else {
+		isPlayerTurn = !isPlayerTurn;
+		if (isPlayerTurn) {
+			yourTurnSound.play();
+			yourTurnText.style.visibility = 'visible';
+			enemyTurnText.style.visibility = 'hidden';
+
+			diceThrowCount = 0;
+			attackCount = 0;
+		} else {
+			enemyTurnSound.currentTime = 0.7;
+			enemyTurnSound.play();
+			yourTurnText.style.visibility = 'hidden';
+			enemyTurnText.style.visibility = 'visible';
+			enemyTurn();
+		}
+	}
+}
+
+//Simulates the behavior of the enemy when it's their turn.
+function enemyTurn() {
+	const [dice1, dice2] = rollDice();
+	let gold = dice1 * dice2;
+	if (dice1 === dice2) {
+		gold = gold * 2;
+	}
+
+	setTimeout(() => {
+		const enemyRolled = document.createElement('h6');
+		const enemyGained = document.createElement('h6');
+
+		enemyRolled.innerText = `Enemy rolled ${dice1} and ${dice2} `;
+		enemyGained.innerText = `Enemy gained ${gold} gold.`;
+
+		playersGold.two += gold;
+
+		setTimeout(() => {
+			diceSound.play();
+			diceRollText.append(enemyRolled);
+		}, 100);
+		setTimeout(() => {
+			coinSound.play();
+			diceRollText.append(enemyGained);
+		}, 1200);
+
+		setTimeout(() => enemyRolled.remove(), 5000);
+		setTimeout(() => enemyGained.remove(), 5000);
+
+		setTimeout(() => updateGold(), 1200);
+	}, 2000);
+
+	setTimeout(() => {
+		if (playersGold.two >= 60) {
+			playersGold.two -= 60;
+			printMessage(playerTwo, 'decides to Summon Reinforcements!');
+			updateGold();
+			marchSound.play();
+			setTimeout(() => {
+				marchSound.pause();
+				marchSound.currentTime = 0;
+			}, 3000);
+			setTimeout(() => summonReinforcements(playerTwo), 2000);
+			setTimeout(() => endPlayerTurn(), 3000);
+		} else if (playersGold.two >= 50) {
+			playersGold.two -= 50;
+			printMessage(playerTwo, 'invokes Volatile Selection!', 4000);
+			updateGold();
+			volatileSelection(enemyArmy);
+			volatileSound.play();
+			setTimeout(() => {
+				volatileSound.pause();
+				volatileSound.currentTime = 0;
+			}, 7500);
+			setTimeout(() => endPlayerTurn(), 8000);
+		} else if (playersGold.two >= 30) {
+			playersGold.two -= 30;
+			printMessage(playerTwo, 'decides to Heal his soldiers!');
+			updateGold();
+			healSound.play();
+			setTimeout(() => {
+				healSound.pause();
+				healSound.currentTime = 0;
+			}, 2000);
+			healArmy(enemyArmy);
+			setTimeout(() => endPlayerTurn(), 4000);
+		} else if (playersGold.two >= 15) {
+			printMessage(playerTwo, 'decides to Attack your forces! ', 4000);
+			playersGold.two -= 15;
+			updateGold();
+			hornSound.play();
+			enemyAttack();
+		} else if (playersGold.two >= 10) {
+			playersGold.two -= 10;
+			updateGold();
+			printMessage(playerTwo, 'decides to Rain Arrows upon you!');
+			arrowBarrage(myArmy);
+			arrowBarrage(enemyArmy);
+			arrowVolley.currentTime = 2.8;
+			arrowVolley.play();
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 2000);
+			setTimeout(() => {
+				arrowVolley.play();
+			}, 2500);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 4000);
+			setTimeout(() => {
+				arrowVolley.play();
+			}, 4500);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 6000);
+			setTimeout(() => {
+				endPlayerTurn();
+			}, 9000);
+		} else endPlayerTurn();
+	}, 7000);
+}
+
+//Enemy calls the battle functions and ends his turn.
+function enemyAttack() {
+	setTimeout(() => {
+		battle(enemyArmy, myArmy);
+
+		updateGold();
+
+		setTimeout(() => endPlayerTurn(), (myArmy.length + 3) * 700);
+	}, 2000);
 }
 
 //Simulates a battle between two armies by randomly selecting targets for soldiers in one army
@@ -669,6 +506,7 @@ function battle(army1, army2) {
 		}, 500);
 	}, 2000);
 }
+
 //Prints either "Vikings win!" or "Saxons win!" when the game ends.
 function displayVictoryText(value) {
 	const h1 = document.createElement('h1');
@@ -677,63 +515,8 @@ function displayVictoryText(value) {
 	footer.appendChild(h1);
 }
 
-//Determines who will have the first turn based on whose army starts with less health
-function decideTurn() {
-	const vikingHealth = parseInt(totalHealthViking.innerText);
-	const saxonHealth = parseInt(totalHealthSaxon.innerText);
-
-	diceThrowCount = 0;
-	attackCount = 0;
-
-	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
-		isPlayerTurn = true;
-		yourTurnSound.play();
-		yourTurnText.style.visibility = 'visible';
-		enemyTurnText.style.visibility = 'hidden';
-	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
-		isPlayerTurn = true;
-		yourTurnSound.play();
-		yourTurnText.style.visibility = 'visible';
-		enemyTurnText.style.visibility = 'hidden';
-	} else {
-		isPlayerTurn = false;
-		enemyTurnSound.currentTime = 0.8;
-		enemyTurnSound.play();
-		yourTurnText.style.visibility = 'hidden';
-		enemyTurnText.style.visibility = 'visible';
-		enemyTurn();
-	}
-}
-
-//Determines who will have the first turn based on whose army starts with less health.
-function whoGoesFirst() {
-	const vikingHealth = parseInt(totalHealthViking.innerText);
-	const saxonHealth = parseInt(totalHealthSaxon.innerText);
-	const message = document.createElement('h2');
-	if (vikingHealth < saxonHealth && playerOne === 'Vikings') {
-		setTimeout(() => {
-			message.innerText = 'You go first.';
-			diceRollText.appendChild(message);
-		}, 3000);
-	} else if (saxonHealth < vikingHealth && playerOne === 'Saxons') {
-		setTimeout(() => {
-			message.innerText = 'You go first.';
-			diceRollText.appendChild(message);
-		}, 3000);
-	} else {
-		isPlayerTurn = false;
-
-		setTimeout(() => {
-			message.innerText = 'Enemy goes first.';
-			diceRollText.appendChild(message);
-		}, 3000);
-	}
-
-	setTimeout(() => message.remove(), 6000);
-}
-
 //Creates a new element with the provided message and appends it to the appropriate damage container.
-function renderDamageMessage(message, duration) {
+function printDamageMessage(message, duration) {
 	const damageElement = document.createElement('p');
 
 	if (isPlayerTurn && playerOne === 'Vikings') {
@@ -766,6 +549,19 @@ function renderDamageMessage(message, duration) {
 	setTimeout(() => {
 		damageElement.remove();
 	}, duration);
+}
+
+function printMessage(attacker, message, duration) {
+	const messageEl = document.createElement('h1');
+	if (attacker === playerOne) {
+		messageEl.innerText = `You ${message}`;
+	} else if (attacker === playerTwo) {
+		messageEl.innerText = `Enemy ${message}`;
+	}
+	diceRollText.append(messageEl);
+	setTimeout(() => {
+		messageEl.remove();
+	}, duration || 2000);
 }
 
 function arrowBarrage(army) {
@@ -949,6 +745,42 @@ function blockBoost(army) {
 	updateArmies();
 }
 
+function mute() {
+	isMuted = !isMuted;
+	vikingMusic.volume = 0;
+	saxonMusic.volume = 0;
+	battleSounds.volume = 0;
+	arrowVolley.volume = 0;
+	diceSound.volume = 0;
+	coinSound.volume = 0;
+	shopOpenSound.volume = 0;
+	shopCloseSound.volume = 0;
+	yourTurnSound.volume = 0;
+	enemyTurnSound.volume = 0;
+	healSound.volume = 0;
+	hornSound.volume = 0;
+	hornSound1.volume = 0;
+	volatileSound.volume = 0;
+}
+
+function unmute() {
+	isMuted = !isMuted;
+	vikingMusic.volume = 0.1;
+	saxonMusic.volume = 0.1;
+	battleSounds.volume = 0.3;
+	arrowVolley.volume = 0.4;
+	diceSound.volume = 0.5;
+	coinSound.volume = 0.5;
+	shopOpenSound.volume = 0.5;
+	shopCloseSound.volume = 0.5;
+	yourTurnSound.volume = 0.5;
+	enemyTurnSound.volume = 0.5;
+	healSound.volume = 0.5;
+	hornSound.volume = 0.5;
+	hornSound1.volume = 0.5;
+	volatileSound.volume = 0.5;
+}
+
 function idleAnimationSaxon() {
 	clearInterval(idleIntervalSaxon);
 	idleIntervalSaxon = setInterval(() => {
@@ -1019,53 +851,4 @@ function attackAnimationViking() {
 			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_6.png')"));
 		}, 1600);
 	}, 2000);
-}
-
-function mute() {
-	isMuted = !isMuted;
-	vikingMusic.volume = 0;
-	saxonMusic.volume = 0;
-	battleSounds.volume = 0;
-	arrowVolley.volume = 0;
-	diceSound.volume = 0;
-	coinSound.volume = 0;
-	shopOpenSound.volume = 0;
-	shopCloseSound.volume = 0;
-	yourTurnSound.volume = 0;
-	enemyTurnSound.volume = 0;
-	healSound.volume = 0;
-	hornSound.volume = 0;
-	hornSound1.volume = 0;
-	volatileSound.volume = 0;
-}
-
-function unmute() {
-	isMuted = !isMuted;
-	vikingMusic.volume = 0.1;
-	saxonMusic.volume = 0.1;
-	battleSounds.volume = 0.3;
-	arrowVolley.volume = 0.4;
-	diceSound.volume = 0.5;
-	coinSound.volume = 0.5;
-	shopOpenSound.volume = 0.5;
-	shopCloseSound.volume = 0.5;
-	yourTurnSound.volume = 0.5;
-	enemyTurnSound.volume = 0.5;
-	healSound.volume = 0.5;
-	hornSound.volume = 0.5;
-	hornSound1.volume = 0.5;
-	volatileSound.volume = 0.5;
-}
-
-function printMessage(attacker, message, duration) {
-	const messageEl = document.createElement('h1');
-	if (attacker === playerOne) {
-		messageEl.innerText = `You ${message}`;
-	} else if (attacker === playerTwo) {
-		messageEl.innerText = `Enemy ${message}`;
-	}
-	diceRollText.append(messageEl);
-	setTimeout(() => {
-		messageEl.remove();
-	}, duration || 2000);
 }
