@@ -38,7 +38,7 @@ class Soldier {
 			this.health -= damage;
 
 			if (this.health <= 0) {
-				renderDamageMessage(`${this.name}  died.`, duration);
+				renderDamageMessage(`${this.name} took ${damage} damage and died.`, duration);
 				this.health = 0;
 			} else {
 				renderDamageMessage(`${this.name} took damage! ( ${damage} ) `, duration);
@@ -99,15 +99,14 @@ class Viking extends Soldier {
 	}
 
 	berserk() {
-		this.strength = this.strength * 2;
-		this.blockChance = 0;
-		if (this.evasionChance < 0.7) {
+		if (this.strength < 75 && this.evasionChance < 0.4) {
+			this.strength = this.strength * 2;
+			this.blockChance = 0;
 			this.evasionChance += 0.2;
+			this.health -= Math.floor(this.health * 0.5);
+			renderDamageMessage(`${this.name} goes berserk!`, 800);
+			updateArmies();
 		}
-
-		this.health -= Math.floor(this.health * 0.5);
-		renderDamageMessage(`${this.name} goes berserk!`, 800);
-		updateArmies();
 	}
 }
 
@@ -262,5 +261,4 @@ const volatileSound = new Audio('./sound_effects/volatile.mp3');
 const marchSound = new Audio('./sound_effects/march.mp3');
 
 vikingMusic.loop = true;
-
 saxonMusic.loop = true;
