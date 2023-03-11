@@ -352,7 +352,9 @@ function enemyTurn() {
 	}, 2000);
 
 	setTimeout(() => {
-		if (playersGold.two >= 60) {
+		if (Math.random() < 0.25) {
+			endPlayerTurn();
+		} else if (playersGold.two >= 60 && Math.random() < 0.5) {
 			playersGold.two -= 60;
 			printMessage(playerTwo, 'decides to Summon Reinforcements!');
 			updateGold();
@@ -363,7 +365,7 @@ function enemyTurn() {
 			}, 3000);
 			setTimeout(() => summonReinforcements(playerTwo), 2000);
 			setTimeout(() => endPlayerTurn(), 3000);
-		} else if (playersGold.two >= 50) {
+		} else if (playersGold.two >= 50 && Math.random() < 0.5) {
 			playersGold.two -= 50;
 			printMessage(playerTwo, 'invokes Volatile Selection!', 4000);
 			updateGold();
@@ -374,7 +376,7 @@ function enemyTurn() {
 				volatileSound.currentTime = 0;
 			}, 7500);
 			setTimeout(() => endPlayerTurn(), 8000);
-		} else if (playersGold.two >= 30) {
+		} else if (playersGold.two >= 30 && Math.random() < 0.5) {
 			playersGold.two -= 30;
 			printMessage(playerTwo, 'decides to Heal his soldiers!');
 			updateGold();
@@ -385,13 +387,13 @@ function enemyTurn() {
 			}, 2000);
 			healArmy(enemyArmy);
 			setTimeout(() => endPlayerTurn(), 4000);
-		} else if (playersGold.two >= 15) {
+		} else if (playersGold.two >= 15 && Math.random() < 0.5) {
 			printMessage(playerTwo, 'decides to Attack your forces! ', 4000);
 			playersGold.two -= 15;
 			updateGold();
 			hornSound.play();
 			enemyAttack();
-		} else if (playersGold.two >= 10) {
+		} else if (playersGold.two >= 10 && Math.random() < 0.5) {
 			playersGold.two -= 10;
 			updateGold();
 			printMessage(playerTwo, 'decides to Rain Arrows upon you!');
@@ -403,23 +405,17 @@ function enemyTurn() {
 				arrowVolley.pause;
 				arrowVolley.currentTime = 8.3;
 			}, 2000);
-			setTimeout(() => {
-				arrowVolley.play();
-			}, 2500);
+			setTimeout(() => arrowVolley.play(), 2500);
 			setTimeout(() => {
 				arrowVolley.pause;
 				arrowVolley.currentTime = 8.3;
 			}, 4000);
-			setTimeout(() => {
-				arrowVolley.play();
-			}, 4500);
+			setTimeout(() => arrowVolley.play(), 4500);
 			setTimeout(() => {
 				arrowVolley.pause;
 				arrowVolley.currentTime = 8.3;
 			}, 6000);
-			setTimeout(() => {
-				endPlayerTurn();
-			}, 9000);
+			setTimeout(() => endPlayerTurn(), 9000);
 		} else endPlayerTurn();
 	}, 7000);
 }
@@ -491,7 +487,7 @@ function battle(army1, army2) {
 
 			const attacker = army1[Math.floor(Math.random() * army1.length)];
 			const target = army2[i];
-			if (attacker.constructor.name === 'Saxon' && randomNumber < 0.06) {
+			if (attacker.constructor.name === 'Saxon' && randomNumber < 0.05) {
 				attacker.poison(target, 300);
 			}
 			attacker.attack(target, 1600);
@@ -579,8 +575,13 @@ function arrowBarrage(army) {
 			const soldier = army[index];
 
 			if (soldier) {
+				if (soldier.constructor.name === 'Saxon' && Math.random() < 0.01) {
+					soldier.receiveDamage(20, 150);
+				}
 				soldier.receiveDamage(5, 150);
-				updateArmies();
+				if (soldier.constructor.name === 'Viking' && Math.random() < 0.01) {
+					poison(soldier);
+				}
 
 				if (soldier.health <= 0) {
 					army.splice(index, 1);
@@ -767,7 +768,7 @@ function unmute() {
 	isMuted = !isMuted;
 	vikingMusic.volume = 0.1;
 	saxonMusic.volume = 0.1;
-	battleSounds.volume = 0.3;
+	battleSounds.volume = 0.2;
 	arrowVolley.volume = 0.4;
 	diceSound.volume = 0.5;
 	coinSound.volume = 0.5;
@@ -851,4 +852,18 @@ function attackAnimationViking() {
 			vikingSprites.forEach((sprite) => (sprite.style.backgroundImage = "url('./images/viking/attack1_6.png')"));
 		}, 1600);
 	}, 2000);
+}
+
+function poison(soldier) {
+	const damage = 5;
+
+	const poisonInterval = setInterval(() => {
+		soldier.health -= damage;
+		updateArmies();
+		printDamageMessage(` ${soldier.name} takes poison damage! ( ${damage} )`, 200);
+	}, 250);
+
+	setTimeout(() => {
+		clearInterval(poisonInterval);
+	}, 2500);
 }
