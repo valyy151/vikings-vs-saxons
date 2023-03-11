@@ -352,9 +352,7 @@ function enemyTurn() {
 	}, 2000);
 
 	setTimeout(() => {
-		if (Math.random() < 0.25) {
-			endPlayerTurn();
-		} else if (playersGold.two >= 60 && Math.random() < 0.5) {
+		if (playersGold.two >= 60 && Math.random() < 0.5) {
 			playersGold.two -= 60;
 			printMessage(playerTwo, 'decides to Summon Reinforcements!');
 			updateGold();
@@ -387,13 +385,13 @@ function enemyTurn() {
 			}, 2000);
 			healArmy(enemyArmy);
 			setTimeout(() => endPlayerTurn(), 4000);
-		} else if (playersGold.two >= 15 && Math.random() < 0.5) {
+		} else if (playersGold.two >= 15 && Math.random() < 0.2) {
 			printMessage(playerTwo, 'decides to Attack your forces! ', 4000);
 			playersGold.two -= 15;
 			updateGold();
 			hornSound.play();
 			enemyAttack();
-		} else if (playersGold.two >= 10 && Math.random() < 0.5) {
+		} else if (playersGold.two >= 10 && Math.random() < 0.2) {
 			playersGold.two -= 10;
 			updateGold();
 			printMessage(playerTwo, 'decides to Rain Arrows upon you!');
@@ -460,7 +458,7 @@ function battle(army1, army2) {
 				setTimeout(() => {
 					idleAnimationSaxon();
 					idleAnimationViking();
-				}, 1000);
+				}, 500);
 
 				setTimeout(() => {
 					if (playerOne === 'Saxons') {
@@ -575,11 +573,11 @@ function arrowBarrage(army) {
 			const soldier = army[index];
 
 			if (soldier) {
-				if (soldier.constructor.name === 'Saxon' && Math.random() < 0.01) {
+				if (soldier.constructor.name === 'Saxon' && Math.random() < 0.02) {
 					soldier.receiveDamage(20, 150);
 				}
 				soldier.receiveDamage(5, 150);
-				if (soldier.constructor.name === 'Viking' && Math.random() < 0.01) {
+				if (soldier.constructor.name === 'Viking' && Math.random() < 0.02) {
 					poison(soldier);
 				}
 
@@ -632,6 +630,8 @@ function summonReinforcements(army) {
 				vikings.push(viking);
 				vikingArmy.appendChild(newSoldier);
 			});
+			vikings.forEach((viking) => (viking.strength += 5));
+			updateArmies();
 		}
 		if (playerOne === 'Saxons') {
 			saxonReinforcements.forEach((saxon) => {
@@ -651,6 +651,8 @@ function summonReinforcements(army) {
 				saxons.push(saxon);
 				saxonArmy.appendChild(newSoldier);
 			});
+			saxons.forEach((saxon) => (saxon.strength += 5));
+			updateArmies();
 		}
 		yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 	} else if (army === playerTwo) {
@@ -669,6 +671,8 @@ function summonReinforcements(army) {
 				vikings.push(viking);
 				vikingArmy.appendChild(newSoldier);
 			});
+			vikings.forEach((viking) => (viking.strength += 5));
+			updateArmies();
 		}
 		if (playerTwo === 'Saxons') {
 			saxonReinforcements.forEach((saxon) => {
@@ -686,10 +690,10 @@ function summonReinforcements(army) {
 				saxons.push(saxon);
 				saxonArmy.appendChild(newSoldier);
 			});
-		}
 
-		updateArmies();
-		updateGold();
+			saxons.forEach((saxon) => (saxon.strength += 5));
+			updateArmies();
+		}
 	}
 }
 
