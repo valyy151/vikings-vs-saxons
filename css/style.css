@@ -21,7 +21,6 @@ header {
 	margin: 2% auto;
 	background-image: url('../images/cover.jpg');
 	background-repeat: no-repeat;
-	background-size: cover;
 	justify-content: flex-start;
 	height: 90vh;
 	align-items: center;
@@ -64,20 +63,20 @@ header button {
 	font-size: 1.2em;
 	cursor: pointer;
 	border-radius: 10px;
-	font-weight: 600;
+	font-weight: 500;
 	margin: auto;
 	height: 5vh;
 	width: 15vw;
-	color: rgb(158, 121, 75);
-	border: 3px solid rgb(158, 121, 75);
-	background: rgb(252, 255, 205);
+	color: white;
+	border: 1px solid rgb(134, 108, 35);
+	background: linear-gradient(to bottom right, #e0a821, #bf7f02, #8b5202);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
 header button:hover {
-	color: rgb(255, 75, 75);
+	color: rgb(155, 34, 34);
 	transition: 250ms ease;
 }
 
@@ -243,21 +242,21 @@ p {
 }
 
 .red {
-	color: rgb(248, 99, 99);
+	color: rgb(156, 6, 6);
 }
 
 .red:hover {
-	color: rgb(189, 56, 56);
+	color: rgb(255, 0, 0);
 	transition: 100ms;
 }
 
 .yellow {
-	color: rgb(192, 173, 0);
+	color: rgb(145, 130, 1);
 }
 
 .yellow:hover {
 	transition: 100ms;
-	color: rgb(161, 148, 26);
+	color: rgb(223, 200, 1);
 }
 .dexterity {
 	color: rgb(117, 107, 15);
@@ -403,7 +402,7 @@ p {
 	background: transparent;
 	border: 3px solid;
 	border-radius: 10px;
-	background: rgb(255, 255, 255);
+	background: linear-gradient(to bottom right, #ffffff, #e6e6e6, #cccccc);
 	font-size: 1.3em;
 	font-weight: 600;
 }
@@ -522,15 +521,16 @@ p {
 }
 
 #instructionsButton {
+	font-weight: 500;
 	margin-top: 20%;
 	margin-bottom: 0;
-	color: rgb(158, 121, 75);
-	border-color: rgb(158, 121, 75);
-	background: rgb(252, 255, 205);
+	color: rgb(255, 255, 255);
+	border: 1px solid rgb(134, 108, 35);
+	background: linear-gradient(to bottom right, #e0a821, #bf7f02, #8b5202);
 }
 
 #instructionsButton:hover {
-	color: rgb(214, 149, 69);
+	color: rgb(255, 208, 0);
 }
 
 #warrior {
@@ -569,10 +569,14 @@ p {
 
 #credits {
 	margin: 1vh;
+	background: linear-gradient(to bottom right, #e0a821, #bf7f02, #8b5202);
+	color: white;
+	font-weight: 500;
+	border: 1px solid rgb(134, 108, 35);
 }
 
 #credits:hover {
-	color: rgb(214, 149, 69);
+	color: rgb(255, 208, 0);
 }
 
 #creditsArticle {
@@ -609,20 +613,21 @@ p {
 }
 
 #creditsArticle button {
-	height: 4vh;
-	width: 10vw;
+	height: 5vh;
+	width: 12vw;
 	font-size: 1.3em;
-	font-weight: 600;
+	font-weight: 400;
 	cursor: pointer;
 	margin-top: 4%;
-	color: rgb(158, 121, 75);
-	border-color: rgb(158, 121, 75);
-	background: rgb(252, 255, 205);
+	color: white;
+	border: 1px solid rgb(134, 108, 35);
+	background: linear-gradient(to bottom right, #e0a821, #bf7f02, #8b5202);
+
 	border-radius: 10px;
 }
 
 #creditsArticle button:hover {
-	color: rgb(214, 149, 69);
+	color: rgb(255, 208, 0);
 	transition: all ease 100ms;
 }
 
@@ -630,21 +635,15 @@ p {
 	display: none;
 	position: absolute;
 	bottom: 2vh;
-	left: 2.75vw;
+	right: 2.75vw;
 	width: 8vw;
 	height: 3.5vh;
 	font-size: 1.3em;
-	color: rgb(255, 244, 207);
-	font-weight: 600;
-	background-color: rgb(209, 186, 110);
+	color: rgb(255, 255, 255);
+	border: 1px solid rgb(134, 108, 35);
 	border: none;
 	cursor: pointer;
-	border: 2px solid rgb(126, 95, 59);
+	background: linear-gradient(to bottom right, #e0a821, #bf7f02, #8b5202);
+	border: 1px solid rgb(134, 108, 35);
 	border-radius: 10px;
-}
-
-#leaveGame:hover {
-	color: rgb(116, 96, 8);
-
-	transition: all ease 100ms;
 }
