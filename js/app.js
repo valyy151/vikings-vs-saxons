@@ -503,10 +503,12 @@ function battle(army1, army2) {
 
 //Prints either "Vikings win!" or "Saxons win!" when the game ends.
 function displayVictoryText(value) {
-	const h1 = document.createElement('h1');
-	h1.innerText = value;
-
-	footer.appendChild(h1);
+	if (victoryCount < 1) {
+		const h1 = document.createElement('h1');
+		h1.innerText = value;
+		victoryCount++;
+		footer.appendChild(h1);
+	}
 }
 
 //Creates a new element with the provided message and appends it to the appropriate damage container.

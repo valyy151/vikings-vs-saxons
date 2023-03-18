@@ -171,10 +171,14 @@ footer {
 	flex-direction: column-reverse;
 }
 
+footer h1 {
+	font-size: 3em;
+}
+
 footer button {
 	margin-top: 10vh;
 	padding: 5px 35px;
-	font-size: 1.2em;
+	font-size: 2em;
 	background: transparent;
 	cursor: pointer;
 	border: 1px solid black;
@@ -182,7 +186,7 @@ footer button {
 }
 
 footer button:hover {
-	color: rgb(247, 82, 82);
+	color: rgb(255, 125, 125);
 	transition: 250ms ease;
 }
 
@@ -470,16 +474,15 @@ p {
 #instructions {
 	width: 90vw;
 	height: 90vh;
-	background: rgb(236, 209, 85);
 }
 
 #mainInstructions {
+	color: white;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-evenly;
 	height: 100%;
-	color: black;
 }
 
 #mainInstructions div {
@@ -494,11 +497,10 @@ p {
 
 #soldiersInstructions {
 	display: none;
-	background: rgb(236, 209, 85);
+	color: white;
 	flex-direction: column;
 	font-size: 1.5em;
 	text-align: justify;
-	color: black;
 	justify-content: space-around;
 	height: 100%;
 }
@@ -533,9 +535,13 @@ p {
 
 #warrior {
 	position: absolute;
-	width: 30vw;
-	left: 40vw;
-	top: 5vh;
+	width: 25vw;
+	height: 40vh;
+	right: 5vw;
+	top: 4vh;
+	box-shadow: 0px 0px 20px black;
+	background-color: rgb(0, 0, 0, 0.4);
+	border-radius: 20px;
 }
 
 #wrapper {
