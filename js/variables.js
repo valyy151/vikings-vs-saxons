@@ -32,6 +32,7 @@ const mainInstructions = document.getElementById('mainInstructions');
 const soldiersInstructions = document.getElementById('soldiersInstructions');
 const instructionsInfo = document.getElementById('instructionsInfo');
 const creditsButton = document.getElementById('credits');
+const leaveButton = document.getElementById('leaveGame');
 
 const summonReinforcementsButton = document.getElementById('summonReinforcementsButton');
 const healButton = document.getElementById('healingButton');

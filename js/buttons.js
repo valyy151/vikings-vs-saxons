@@ -15,6 +15,7 @@ startBattleButton.addEventListener('click', () => {
 	section.style.display = 'flex';
 	muteButton.style.display = 'block';
 	span.style.display = 'inline';
+	leaveButton.style.display = 'block';
 
 	if (selectTeam.value === '0') {
 		isPlayerTurn = true;

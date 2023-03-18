@@ -625,3 +625,26 @@ p {
 	color: rgb(214, 149, 69);
 	transition: all ease 100ms;
 }
+
+#leaveGame {
+	display: none;
+	position: absolute;
+	bottom: 2vh;
+	left: 2.75vw;
+	width: 8vw;
+	height: 3.5vh;
+	font-size: 1.3em;
+	color: rgb(255, 244, 207);
+	font-weight: 600;
+	background-color: rgb(209, 186, 110);
+	border: none;
+	cursor: pointer;
+	border: 2px solid rgb(126, 95, 59);
+	border-radius: 10px;
+}
+
+#leaveGame:hover {
+	color: rgb(116, 96, 8);
+
+	transition: all ease 100ms;
+}
