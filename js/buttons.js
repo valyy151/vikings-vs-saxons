@@ -48,6 +48,14 @@ instructionsButton.addEventListener('click', () => {
 	shopOpenSound.play();
 });
 
+creditsButton.addEventListener('click', () => {
+	header.style.display = 'none';
+	creditsArticle.style.display = 'flex';
+	shopOpenSound.currentTime = 0.4;
+	shopOpenSound.volume = 0.5;
+	shopOpenSound.play();
+});
+
 instructionsInfo.addEventListener('click', () => {
 	mainInstructions.style.display = 'flex';
 	instructionsInfo.style.display = 'none';
@@ -68,13 +76,15 @@ soldiersInfoButton.addEventListener('click', () => {
 	shopCloseSound.play();
 });
 
-backButton.addEventListener('click', () => {
-	shopOpenSound.currentTime = 0.4;
-	shopOpenSound.volume = 0.5;
-	shopOpenSound.play();
-	article.style.display = 'none';
-	header.style.display = 'flex';
-});
+for (button of backButtons)
+	button.addEventListener('click', () => {
+		shopOpenSound.currentTime = 0.4;
+		shopOpenSound.volume = 0.5;
+		shopOpenSound.play();
+		article.style.display = 'none';
+		creditsArticle.style.display = 'none';
+		header.style.display = 'flex';
+	});
 
 //Buttons located in the Shop
 summonReinforcementsButton.addEventListener('click', () => {

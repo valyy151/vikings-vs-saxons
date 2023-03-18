@@ -19,12 +19,14 @@ header {
 	flex-direction: column;
 	width: 100vw;
 	margin: 2% auto;
-	background-image: url('../images/cover.png');
+	background-image: url('../images/cover.jpg');
 	background-repeat: no-repeat;
 	background-size: cover;
 	justify-content: flex-start;
 	height: 90vh;
 	align-items: center;
+	background-position: 0 -12vh;
+	background-size: cover;
 }
 
 header h1 {
@@ -36,16 +38,16 @@ header h1 {
 select {
 	font-size: 2em;
 	text-align: center;
-	margin: 5vh auto;
 	cursor: pointer;
 	background: none;
 	border: none;
-	font-weight: 700;
-	color: black;
+	font-weight: 500;
+	color: rgb(0, 0, 0);
 	outline: none;
 	border: 2px solid black;
 	border-radius: 10px;
 	width: 20vw;
+	margin-bottom: 8vh;
 }
 
 select:hover {
@@ -60,13 +62,9 @@ select:focus {
 header button {
 	padding: 1%;
 	font-size: 1.2em;
-	background: transparent;
 	cursor: pointer;
-
 	border-radius: 10px;
-
 	font-weight: 600;
-
 	margin: auto;
 	height: 5vh;
 	width: 15vw;
@@ -523,6 +521,7 @@ p {
 
 #instructionsButton {
 	margin-top: 20%;
+	margin-bottom: 0;
 	color: rgb(158, 121, 75);
 	border-color: rgb(158, 121, 75);
 	background: rgb(252, 255, 205);
@@ -560,4 +559,63 @@ p {
 	background-repeat: no-repeat;
 	opacity: 0.4;
 	bottom: 0;
+}
+
+#credits {
+	margin: 1vh;
+}
+
+#credits:hover {
+	color: rgb(214, 149, 69);
+}
+
+#creditsArticle {
+	display: none;
+	font-size: larger;
+}
+
+#creditsArticle h1 {
+	font-size: 3em;
+}
+
+#creditsArticle a {
+	position: static;
+	scale: 1;
+	color: white;
+	padding-bottom: 1vh;
+	font-size: 1.25em;
+}
+
+#creditsArticle a:hover {
+	color: skyblue;
+	transition: all ease 100ms;
+}
+
+.credit {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid rgb(212, 212, 212);
+	width: 30vw;
+}
+
+.credit p {
+	font-size: 1.5em;
+}
+
+#creditsArticle button {
+	height: 4vh;
+	width: 10vw;
+	font-size: 1.3em;
+	font-weight: 600;
+	cursor: pointer;
+	margin-top: 4%;
+	color: rgb(158, 121, 75);
+	border-color: rgb(158, 121, 75);
+	background: rgb(252, 255, 205);
+	border-radius: 10px;
+}
+
+#creditsArticle button:hover {
+	color: rgb(214, 149, 69);
+	transition: all ease 100ms;
 }

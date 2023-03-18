@@ -8,6 +8,7 @@ const section = document.querySelector('section');
 const footer = document.querySelector('footer');
 const article = document.querySelector('article');
 const span = document.querySelector('span');
+const creditsArticle = document.getElementById('creditsArticle');
 
 const vikingDiv = document.getElementById('vikingDiv');
 const saxonDiv = document.getElementById('saxonDiv');
@@ -30,11 +31,12 @@ const shopDiv = document.getElementById('shop');
 const mainInstructions = document.getElementById('mainInstructions');
 const soldiersInstructions = document.getElementById('soldiersInstructions');
 const instructionsInfo = document.getElementById('instructionsInfo');
+const creditsButton = document.getElementById('credits');
 
 const summonReinforcementsButton = document.getElementById('summonReinforcementsButton');
 const healButton = document.getElementById('healingButton');
 const arrowBarrageButton = document.getElementById('arrowBarrageButton');
 const volatileButton = document.getElementById('volatileButton');
 const soldiersInfoButton = document.getElementById('soldiersInfo');
-const backButton = document.getElementById('back');
+const backButtons = document.getElementsByClassName('back');
 const muteButton = document.getElementById('sound');
