@@ -117,7 +117,7 @@ function renderButtons() {
 	});
 
 	endTurnButton.addEventListener('click', () => {
-		if (isPlayerTurn) {
+		if (isPlayerTurn && !barrageActive) {
 			endPlayerTurn();
 		}
 	});
@@ -352,7 +352,7 @@ function enemyTurn() {
 	}, 2000);
 
 	setTimeout(() => {
-		if (playersGold.two >= 60 && Math.random() < 0.5) {
+		if (playersGold.two >= 60 && Math.random() > 0.5) {
 			playersGold.two -= 60;
 			printMessage(playerTwo, 'decides to Summon Reinforcements!');
 			updateGold();
@@ -363,7 +363,7 @@ function enemyTurn() {
 			}, 3000);
 			setTimeout(() => summonReinforcements(playerTwo), 2000);
 			setTimeout(() => endPlayerTurn(), 3000);
-		} else if (playersGold.two >= 50 && Math.random() < 0.5) {
+		} else if (playersGold.two >= 50 && Math.random() > 0.5) {
 			playersGold.two -= 50;
 			printMessage(playerTwo, 'invokes Volatile Selection!', 4000);
 			updateGold();
@@ -374,7 +374,7 @@ function enemyTurn() {
 				volatileSound.currentTime = 0;
 			}, 7500);
 			setTimeout(() => endPlayerTurn(), 8000);
-		} else if (playersGold.two >= 30 && Math.random() < 0.5) {
+		} else if (playersGold.two >= 30 && Math.random() > 0.5) {
 			playersGold.two -= 30;
 			printMessage(playerTwo, 'decides to Heal his soldiers!');
 			updateGold();
@@ -385,13 +385,13 @@ function enemyTurn() {
 			}, 2000);
 			healArmy(enemyArmy);
 			setTimeout(() => endPlayerTurn(), 4000);
-		} else if (playersGold.two >= 15 && Math.random() < 0.2) {
+		} else if (playersGold.two >= 15 && Math.random() > 0.1) {
 			printMessage(playerTwo, 'decides to Attack your forces! ', 4000);
 			playersGold.two -= 15;
 			updateGold();
 			hornSound.play();
 			enemyAttack();
-		} else if (playersGold.two >= 10 && Math.random() < 0.2) {
+		} else if (playersGold.two >= 10 && Math.random() > 0.25) {
 			playersGold.two -= 10;
 			updateGold();
 			printMessage(playerTwo, 'decides to Rain Arrows upon you!');
@@ -770,19 +770,19 @@ function mute() {
 
 function unmute() {
 	isMuted = !isMuted;
-	vikingMusic.volume = 0.1;
-	saxonMusic.volume = 0.1;
+	vikingMusic.volume = 0.3;
+	saxonMusic.volume = 0.3;
 	battleSounds.volume = 0.2;
 	arrowVolley.volume = 0.4;
-	diceSound.volume = 0.5;
+	diceSound.volume = 1;
 	coinSound.volume = 0.5;
 	shopOpenSound.volume = 0.5;
 	shopCloseSound.volume = 0.5;
-	yourTurnSound.volume = 0.5;
+	yourTurnSound.volume = 1;
 	enemyTurnSound.volume = 0.5;
 	healSound.volume = 0.5;
-	hornSound.volume = 0.5;
-	hornSound1.volume = 0.5;
+	hornSound.volume = 1;
+	hornSound1.volume = 1;
 	volatileSound.volume = 0.5;
 }
 

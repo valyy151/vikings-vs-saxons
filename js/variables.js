@@ -37,4 +37,4 @@ const arrowBarrageButton = document.getElementById('arrowBarrageButton');
 const volatileButton = document.getElementById('volatileButton');
 const soldiersInfoButton = document.getElementById('soldiersInfo');
 const backButton = document.getElementById('back');
-const muteButton = document.querySelector('a');
+const muteButton = document.getElementById('sound');

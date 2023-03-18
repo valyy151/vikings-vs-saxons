@@ -3,7 +3,6 @@ body {
 	font-family: sans-serif;
 	text-align: center;
 	font-variant: small-caps;
-
 	z-index: 1;
 	cursor: default;
 	color: white;
@@ -111,9 +110,18 @@ li {
 
 span {
 	position: absolute;
-	top: 2vh;
-	right: 3vw;
+	top: 0vh;
+	right: 7vw;
 	font-weight: 700;
+	display: none;
+	width: 11vw;
+}
+
+#gitHub {
+	color: white;
+}
+
+#sound {
 	display: none;
 }
 
@@ -123,7 +131,6 @@ a {
 	left: 3.5vw;
 	scale: 2;
 	text-decoration: none;
-	display: none;
 }
 
 ul li:nth-child(3) {

@@ -115,6 +115,10 @@ healButton.addEventListener('click', () => {
 
 arrowBarrageButton.addEventListener('click', () => {
 	if (isPlayerTurn && playersGold.one >= 10) {
+		barrageActive = !barrageActive;
+		setTimeout(() => {
+			barrageActive = !barrageActive;
+		}, 10000);
 		playersGold.one -= 10;
 		updateGold();
 		printMessage(playerOne, 'decide to Rain Arrows upon the enemy!');

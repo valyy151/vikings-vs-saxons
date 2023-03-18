@@ -15,6 +15,8 @@ let shopClosed = true;
 let idleIntervalSaxon;
 let idleIntervalViking;
 
+let barrageActive = false;
+
 let isMuted = false;
 
 const playersGold = {
@@ -81,10 +83,10 @@ const vikings = vikingNames.map((name) => new Viking(name, getRandomNumber(150, 
 const saxons = saxonNames.map((name) => new Saxon(name, getRandomNumber(150, 175), getRandomNumber(15, 25)));
 
 const vikingReinforcements = vikingsOtherNames.map(
-	(name) => new Viking(name, getRandomNumber(150, 175), getRandomNumber(15, 25))
+	(name) => new Viking(name, getRandomNumber(150, 175), getRandomNumber(15, 25)),
 );
 const saxonReinforcements = saxonsOtherNames.map(
-	(name) => new Saxon(name, getRandomNumber(150, 175), getRandomNumber(15, 25))
+	(name) => new Saxon(name, getRandomNumber(150, 175), getRandomNumber(15, 25)),
 );
 
 const players = [

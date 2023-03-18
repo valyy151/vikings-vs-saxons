@@ -32,6 +32,9 @@ class Soldier {
 			printDamageMessage(`${this.name} evaded! ( ${damage} )`, duration);
 		} else if (blocked) {
 			damage = Math.floor(damage * this.blockDamageReduction);
+			if (damage < 0) {
+				damage = 0;
+			}
 			this.health -= damage;
 			printDamageMessage(`${this.name} blocked! ( ${damage} )`, duration);
 		} else {
