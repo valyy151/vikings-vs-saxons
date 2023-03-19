@@ -36,6 +36,7 @@ const damageContainerPlayer = document.getElementById('damageContainerPlayer');
 const damageContainerEnemy = document.getElementById('damageContainerEnemy');
 
 const shopDiv = document.getElementById('shop');
+const showWrapper = document.getElementById('shopWrapper');
 const mainInstructions = document.getElementById('mainInstructions');
 const soldiersInstructions = document.getElementById('soldiersInstructions');
 const instructionsInfo = document.getElementById('instructionsInfo');

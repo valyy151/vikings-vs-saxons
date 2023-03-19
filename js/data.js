@@ -17,6 +17,11 @@ let idleIntervalViking;
 
 let barrageActive = false;
 
+let barrageCount = 0;
+let healCount = 0;
+let volatileCount = 0;
+let reinforcementsCount = 0;
+
 let isMuted = false;
 
 const playersGold = {
@@ -97,7 +102,6 @@ const players = [
 		playerTwo: 'Saxons',
 		yourArmyDiv: vikingDiv,
 		myArmy: vikings,
-
 		enemyArmy: saxons,
 	},
 	{
@@ -105,7 +109,6 @@ const players = [
 		playerTwo: 'Vikings',
 		yourArmyDiv: saxonDiv,
 		myArmy: saxons,
-
 		enemyArmy: vikings,
 	},
 ];

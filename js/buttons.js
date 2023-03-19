@@ -40,6 +40,7 @@ startBattleButton.addEventListener('click', () => {
 	setTimeout(() => decideTurn(), 6000);
 });
 
+//Gameplay buttons
 attackButton.addEventListener('click', () => {
 	if (isPlayerTurn && attackCount === 0 && playersGold.one >= 15) {
 		playersGold.one -= 15;
@@ -105,11 +106,13 @@ shopButton.addEventListener('click', () => {
 		shopOpenSound.currentTime = 0.4;
 		shopOpenSound.play();
 		shopDiv.classList.toggle('hidden');
+		showWrapper.classList.toggle('hidden');
 		shopClosed = !shopClosed;
 	} else if (!shopClosed) {
 		shopCloseSound.currentTime = 0.3;
 		shopCloseSound.play();
 		shopDiv.classList.toggle('hidden');
+		showWrapper.classList.toggle('hidden');
 		shopClosed = !shopClosed;
 	}
 });
@@ -153,92 +156,104 @@ soldiersInfoButton.addEventListener('click', () => {
 
 //Buttons located in the Shop
 summonReinforcementsButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 60) {
-		playersGold.one -= 60;
-		updateGold();
-		printMessage(playerOne, 'decide to Summon Reinforcements!');
-		marchSound.play();
-		setTimeout(() => {
-			marchSound.pause();
-			marchSound.currentTime = 0;
-		}, 3000);
-		setTimeout(() => {
-			summonReinforcements(playerOne);
-		}, 2000);
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	} else return false;
+	if (healCount === 0) {
+		healCount++;
+		if (isPlayerTurn && playersGold.one >= 60) {
+			playersGold.one -= 60;
+			updateGold();
+			printMessage(playerOne, 'decide to Summon Reinforcements!');
+			marchSound.play();
+			setTimeout(() => {
+				marchSound.pause();
+				marchSound.currentTime = 0;
+			}, 3000);
+			setTimeout(() => {
+				summonReinforcements(playerOne);
+			}, 2000);
+			shopCloseSound.currentTime = 0.3;
+			shopCloseSound.play();
+			shopDiv.classList.toggle('hidden');
+		} else return false;
+	}
 });
 
 healButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 30) {
-		playersGold.one -= 30;
-		updateGold();
-		printMessage(playerOne, 'decide to Heal your soldiers!');
-		healSound.play();
-		setTimeout(() => {
-			healSound.pause();
-			healSound.currentTime = 0;
-		}, 2000);
-		healArmy(myArmy);
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	} else return false;
+	if (healCount === 0) {
+		healCount++;
+		if (isPlayerTurn && playersGold.one >= 30) {
+			playersGold.one -= 30;
+			updateGold();
+			printMessage(playerOne, 'decide to Heal your soldiers!');
+			healSound.play();
+			setTimeout(() => {
+				healSound.pause();
+				healSound.currentTime = 0;
+			}, 2000);
+			healArmy(myArmy);
+			shopCloseSound.currentTime = 0.3;
+			shopCloseSound.play();
+			shopDiv.classList.toggle('hidden');
+		} else return false;
+	}
 });
 
 arrowBarrageButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 10) {
-		barrageActive = !barrageActive;
-		setTimeout(() => {
+	if (barrageCount === 0) {
+		barrageCount++;
+		if (isPlayerTurn && playersGold.one >= 10) {
 			barrageActive = !barrageActive;
-		}, 10000);
-		playersGold.one -= 10;
-		updateGold();
-		printMessage(playerOne, 'decide to Rain Arrows upon the enemy!');
-		arrowBarrage(enemyArmy);
-		arrowVolley.currentTime = 2.8;
-		arrowVolley.play();
-		setTimeout(() => {
-			arrowVolley.pause;
-			arrowVolley.currentTime = 8.3;
-		}, 2000);
-		setTimeout(() => {
+			setTimeout(() => {
+				barrageActive = !barrageActive;
+			}, 9000);
+			playersGold.one -= 10;
+			updateGold();
+			printMessage(playerOne, 'decide to Rain Arrows upon the enemy!');
+			arrowBarrage(enemyArmy);
+			arrowVolley.currentTime = 2.8;
 			arrowVolley.play();
-		}, 2500);
-		setTimeout(() => {
-			arrowVolley.pause;
-			arrowVolley.currentTime = 8.3;
-		}, 4000);
-		setTimeout(() => {
-			arrowVolley.play();
-		}, 4500);
-		setTimeout(() => {
-			arrowVolley.pause;
-			arrowVolley.currentTime = 8.3;
-		}, 6000);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 2000);
+			setTimeout(() => {
+				arrowVolley.play();
+			}, 2500);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 4000);
+			setTimeout(() => {
+				arrowVolley.play();
+			}, 4500);
+			setTimeout(() => {
+				arrowVolley.pause;
+				arrowVolley.currentTime = 8.3;
+			}, 6000);
 
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
-	} else return false;
+			shopCloseSound.currentTime = 0.3;
+			shopCloseSound.play();
+			shopDiv.classList.toggle('hidden');
+		} else return false;
+	}
 });
 
 volatileButton.addEventListener('click', () => {
-	if (isPlayerTurn && playersGold.one >= 50) {
-		playersGold.one -= 50;
-		updateGold();
-		printMessage(playerOne, 'invoke Volatile Selection!', 4000);
-		volatileSound.play();
-		setTimeout(() => {
-			volatileSound.pause();
-			volatileSound.currentTime = 0;
-		}, 7500);
-		volatileSelection(myArmy);
-		shopCloseSound.currentTime = 0.3;
-		shopCloseSound.play();
-		shopDiv.classList.toggle('hidden');
+	if (volatileCount === 0) {
+		volatileCount++;
+		if (isPlayerTurn && playersGold.one >= 50) {
+			playersGold.one -= 50;
+			updateGold();
+			printMessage(playerOne, 'invoke Volatile Selection!', 4000);
+			volatileSound.play();
+			setTimeout(() => {
+				volatileSound.pause();
+				volatileSound.currentTime = 0;
+			}, 7500);
+			volatileSelection(myArmy);
+			shopCloseSound.currentTime = 0.3;
+			shopCloseSound.play();
+			shopDiv.classList.toggle('hidden');
+		}
 	}
 });
 

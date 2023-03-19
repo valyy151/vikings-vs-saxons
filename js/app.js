@@ -217,6 +217,10 @@ function endPlayerTurn() {
 
 			diceThrowCount = 0;
 			attackCount = 0;
+			barrageCount = 0;
+			healCount = 0;
+			volatileCount = 0;
+			reinforcementsCount = 0;
 		} else {
 			enemyTurnSound.currentTime = 0.7;
 			enemyTurnSound.play();
@@ -693,7 +697,7 @@ function unmute() {
 	healSound.volume = 0.5;
 	hornSound.volume = 1;
 	hornSound1.volume = 1;
-	volatileSound.volume = 0.5;
+	volatileSound.volume = 0.3;
 }
 
 function idleAnimationSaxon() {
