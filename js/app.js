@@ -50,102 +50,10 @@ function renderSoldiers(army) {
 	yourArmyDiv.querySelectorAll('ul').forEach((ul) => (ul.style.flexDirection = 'column-reverse'));
 }
 
-//Creates four buttons for a game interface, and gold counter on the side.
+//Renders the colors of the buttons and the gold depending on which team you play
 function renderButtons() {
-	const attackButton = document.createElement('button');
-	const rollDiceButton = document.createElement('button');
-	const endTurnButton = document.createElement('button');
-	const shopButton = document.createElement('button');
-
-	attackButton.textContent = 'Attack (15)';
-	rollDiceButton.textContent = 'Roll Dice';
-	endTurnButton.textContent = 'End Turn';
-	shopButton.textContent = 'Shop';
-
-	attackButton.addEventListener('click', () => {
-		if (isPlayerTurn && attackCount === 0 && playersGold.one >= 15) {
-			playersGold.one -= 15;
-			updateGold();
-			hornSound1.volume = 0.5;
-			hornSound1.play();
-			printMessage(playerOne, 'decide to Attack enemy forces!', 4000);
-			setTimeout(() => {
-				battle(myArmy, enemyArmy);
-				attackCount++;
-				setTimeout(() => endPlayerTurn(), (enemyArmy.length + 4) * 700);
-			}, 2000);
-		} else {
-			console.log('Not enough gold');
-		}
-	});
-
-	rollDiceButton.addEventListener('click', () => {
-		if (diceThrowCount === 0 && isPlayerTurn) {
-			const [dice1, dice2] = rollDice();
-			let gold = dice1 * dice2;
-			if (dice1 === dice2) {
-				gold = gold * 2;
-			}
-			playersGold.one += gold;
-
-			//  DOM element to hold the sentences
-			const youRolled = document.createElement('h5');
-			const youGained = document.createElement('h5');
-
-			youRolled.innerText = `You rolled ${dice1} and ${dice2} `;
-			youGained.innerText = `You gained ${gold} gold.`;
-
-			setTimeout(() => {
-				diceSound.play();
-				diceRollText.append(youRolled);
-			}, 100);
-			setTimeout(() => {
-				coinSound.play();
-				diceRollText.append(youGained);
-			}, 1200);
-
-			setTimeout(() => {
-				youRolled.remove();
-			}, 4100);
-			setTimeout(() => {
-				youGained.remove();
-			}, 4100);
-
-			diceThrowCount++;
-			setTimeout(() => updateGold(), 1200);
-		}
-	});
-
-	endTurnButton.addEventListener('click', () => {
-		if (isPlayerTurn && !barrageActive) {
-			endPlayerTurn();
-		}
-	});
-
-	shopButton.addEventListener('click', () => {
-		if (shopClosed) {
-			shopOpenSound.currentTime = 0.4;
-			shopOpenSound.play();
-			shopDiv.classList.toggle('hidden');
-			shopClosed = !shopClosed;
-		} else if (!shopClosed) {
-			shopCloseSound.currentTime = 0.3;
-			shopCloseSound.play();
-			shopDiv.classList.toggle('hidden');
-			shopClosed = !shopClosed;
-		}
-	});
-
-	const playerGold = document.createElement('h4');
-	const enemyGold = document.createElement('h4');
-
 	playerGold.innerText = `Gold: ${playersGold.one}`;
 	enemyGold.innerText = `Gold: ${playersGold.two}`;
-
-	document.getElementById('pointsDiv').append(playerGold, enemyGold);
-
-	const buttonContainer = document.getElementById('buttonContainer');
-	buttonContainer.append(attackButton, rollDiceButton, shopButton, endTurnButton);
 
 	if (playerOne === 'Vikings') {
 		rollDiceButton.classList.add('red');
@@ -775,7 +683,7 @@ function unmute() {
 	vikingMusic.volume = 0.3;
 	saxonMusic.volume = 0.3;
 	battleSounds.volume = 0.2;
-	arrowVolley.volume = 0.4;
+	arrowVolley.volume = 0.6;
 	diceSound.volume = 1;
 	coinSound.volume = 0.5;
 	shopOpenSound.volume = 0.5;

@@ -40,6 +40,80 @@ startBattleButton.addEventListener('click', () => {
 	setTimeout(() => decideTurn(), 6000);
 });
 
+attackButton.addEventListener('click', () => {
+	if (isPlayerTurn && attackCount === 0 && playersGold.one >= 15) {
+		playersGold.one -= 15;
+		updateGold();
+		hornSound1.volume = 0.5;
+		hornSound1.play();
+		printMessage(playerOne, 'decide to Attack enemy forces!', 4000);
+		setTimeout(() => {
+			battle(myArmy, enemyArmy);
+			attackCount++;
+			setTimeout(() => endPlayerTurn(), (enemyArmy.length + 4) * 700);
+		}, 2000);
+	} else {
+		console.log('Not enough gold');
+	}
+});
+
+rollDiceButton.addEventListener('click', () => {
+	if (diceThrowCount === 0 && isPlayerTurn) {
+		const [dice1, dice2] = rollDice();
+		let gold = dice1 * dice2;
+		if (dice1 === dice2) {
+			gold = gold * 2;
+		}
+		playersGold.one += gold;
+
+		//  DOM element to hold the sentences
+		const youRolled = document.createElement('h5');
+		const youGained = document.createElement('h5');
+
+		youRolled.innerText = `You rolled ${dice1} and ${dice2} `;
+		youGained.innerText = `You gained ${gold} gold.`;
+
+		setTimeout(() => {
+			diceSound.play();
+			diceRollText.append(youRolled);
+		}, 100);
+		setTimeout(() => {
+			coinSound.play();
+			diceRollText.append(youGained);
+		}, 1200);
+
+		setTimeout(() => {
+			youRolled.remove();
+		}, 4100);
+		setTimeout(() => {
+			youGained.remove();
+		}, 4100);
+
+		diceThrowCount++;
+		setTimeout(() => updateGold(), 1200);
+	}
+});
+
+endTurnButton.addEventListener('click', () => {
+	if (isPlayerTurn && !barrageActive) {
+		endPlayerTurn();
+	}
+});
+
+shopButton.addEventListener('click', () => {
+	if (shopClosed) {
+		shopOpenSound.currentTime = 0.4;
+		shopOpenSound.play();
+		shopDiv.classList.toggle('hidden');
+		shopClosed = !shopClosed;
+	} else if (!shopClosed) {
+		shopCloseSound.currentTime = 0.3;
+		shopCloseSound.play();
+		shopDiv.classList.toggle('hidden');
+		shopClosed = !shopClosed;
+	}
+});
+
 //Homepage butons for instructions
 instructionsButton.addEventListener('click', () => {
 	header.style.display = 'none';
@@ -76,16 +150,6 @@ soldiersInfoButton.addEventListener('click', () => {
 	shopCloseSound.volume = 0.5;
 	shopCloseSound.play();
 });
-
-for (button of backButtons)
-	button.addEventListener('click', () => {
-		shopOpenSound.currentTime = 0.4;
-		shopOpenSound.volume = 0.5;
-		shopOpenSound.play();
-		article.style.display = 'none';
-		creditsArticle.style.display = 'none';
-		header.style.display = 'flex';
-	});
 
 //Buttons located in the Shop
 summonReinforcementsButton.addEventListener('click', () => {
@@ -189,3 +253,13 @@ muteButton.addEventListener('click', () => {
 		muteButton.innerHTML = '&#128266;';
 	}
 });
+
+for (button of backButtons)
+	button.addEventListener('click', () => {
+		shopOpenSound.currentTime = 0.4;
+		shopOpenSound.volume = 0.5;
+		shopOpenSound.play();
+		article.style.display = 'none';
+		creditsArticle.style.display = 'none';
+		header.style.display = 'flex';
+	});

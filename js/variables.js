@@ -3,6 +3,11 @@ const startBattleButton = document.getElementById('startBattle');
 const newGameButton = document.getElementById('newGame');
 const selectTeam = document.getElementById('selectTeam');
 
+const attackButton = document.getElementById('attackButton');
+const rollDiceButton = document.getElementById('rollDiceButton');
+const endTurnButton = document.getElementById('endTurnButton');
+const shopButton = document.getElementById('shopButton');
+
 const header = document.querySelector('header');
 const section = document.querySelector('section');
 const footer = document.querySelector('footer');
@@ -15,6 +20,9 @@ const saxonDiv = document.getElementById('saxonDiv');
 
 const vikingArmy = document.getElementById('vikingArmy');
 const saxonArmy = document.getElementById('saxonArmy');
+
+const playerGold = document.getElementById('playerGold');
+const enemyGold = document.getElementById('enemyGold');
 
 const totalHealthViking = document.getElementById('totalHealthViking');
 const totalHealthSaxon = document.getElementById('totalHealthSaxon');
