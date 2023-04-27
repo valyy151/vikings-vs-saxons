@@ -55,4 +55,4 @@ The game ends when one army is destroyed. The player with the remaining army win
 
 ## Setup
 ### To run this project, go to:
-https://valyy151.github.io/Vikings-vs-Saxons/
+https://valyy151.github.io/vikings-vs-saxons
